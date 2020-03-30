@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
+from allauth.account.models import EmailAddress
 
 
 admin.site.site_header = 'DraftHub admin panel'
@@ -27,4 +28,5 @@ class MyUserAdmin(UserAdmin):
 
 
 admin.site.unregister(User)
+admin.site.unregister(EmailAddress)
 admin.site.register(User, MyUserAdmin)

@@ -37,12 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites',
 
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.github',
+    'social_django',
 
     'drafthub.apps.core',
 ]
@@ -127,13 +123,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# Allauth
+
+# Social auth
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
+    'social_core.backends.github.GithubOAuth2',
 )
 
-SITE_ID = 1
-
+SOCIAL_AUTH_GITHUB_KEY = '7d8639e8eff3fd36d459'
+SOCIAL_AUTH_GITHUB_SECRET = '01d899bc2f63aa109f73d29229c3cd0cbcc4efb0'
 LOGIN_REDIRECT_URL = 'home'

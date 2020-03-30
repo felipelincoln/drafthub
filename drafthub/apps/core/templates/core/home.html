@@ -1,9 +1,9 @@
 {% load markdown_extras %}
-{% load socialaccount %}
 
 <h1>DraftHub</h1>
+
 {% if user.is_authenticated %}
-<p> Welcome {{ user.username }}</p>
+welcome!!!
 {% else %}
-<a href="{% provider_login_url 'github' %}">Sign up</a>
+<a href="{% url "social:begin" "github" %}">Login with GitHub</a>
 {% endif %}

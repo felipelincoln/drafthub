@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from allauth.account.models import EmailAddress
+from social_django.models import Nonce, Association
 
 
 admin.site.site_header = 'DraftHub admin panel'
@@ -11,13 +11,13 @@ admin.site.unregister(Group)
 
 class MyUserAdmin(UserAdmin):
     fieldsets = (
-        ('Credentials',{
+        (None,{
             'fields': ('username', 'password'),
         }),
-        ('Information',{
+        (None,{
             'fields': ('last_login', 'date_joined'),
         }),
-        ('User status',{
+        ('Status',{
             'classes': ('collapse',),
             'fields': ('is_active', 'is_staff', 'is_superuser'),
         }),
@@ -27,6 +27,7 @@ class MyUserAdmin(UserAdmin):
     list_display = ('username', 'last_login', 'date_joined', 'is_active', 'is_staff', 'is_superuser')
 
 
+admin.site.unregister(Nonce)
+admin.site.unregister(Association)
 admin.site.unregister(User)
-admin.site.unregister(EmailAddress)
 admin.site.register(User, MyUserAdmin)

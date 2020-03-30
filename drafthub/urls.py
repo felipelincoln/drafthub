@@ -5,6 +5,6 @@ from drafthub.apps.core.views import Home # provisional
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('allauth.urls')),
+    path('', include('social_django.urls'), name='social'),
     path('', Home.as_view(), name='home'), # provisional
 ]

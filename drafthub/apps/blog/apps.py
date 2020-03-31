@@ -2,4 +2,7 @@ from django.apps import AppConfig
 
 
 class BlogConfig(AppConfig):
-    name = 'blog'
+    name = 'drafthub.apps.blog'
+
+    def ready(self):
+        import drafthub.apps.blog.signals

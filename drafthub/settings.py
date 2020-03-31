@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'social_django',
 
     'drafthub.apps.core',
+    'drafthub.apps.blog',
 ]
 
 MIDDLEWARE = [

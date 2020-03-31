@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     'drafthub.apps.core',
     'drafthub.apps.blog',
+    'drafthub.apps.post',
 ]
 
 MIDDLEWARE = [

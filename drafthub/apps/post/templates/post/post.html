@@ -1,0 +1,5 @@
+{% load markdown_extras %}
+
+<p><a href="{% url "home" %}">Voltar</a></p>
+
+{{ object.get_github_content | markdown | safe }} 

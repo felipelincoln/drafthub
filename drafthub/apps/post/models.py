@@ -6,8 +6,9 @@ import requests
 class Post(models.Model):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
     raw_content_url = models.URLField(max_length=1100)
-    slug = models.SlugField(max_length=255)
-
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255,
+                            editable=False,)
 
     @property
     def get_github_content(self):

@@ -2,4 +2,7 @@ from django.apps import AppConfig
 
 
 class PostConfig(AppConfig):
-    name = 'post'
+    name = 'drafthub.apps.post'
+
+    def ready(self):
+        import drafthub.apps.post.signals

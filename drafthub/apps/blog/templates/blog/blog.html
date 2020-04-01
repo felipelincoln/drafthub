@@ -1,19 +1,19 @@
 {% extends 'core/base.html' %}
 {% load drafthub_extras %}
 
+{% block nav %}<h2>{{ request.path }}</h2>{% endblock%}
+
+
 
 {% block content %}
-
 <p>Pagination</p>
-{% for page in page_obj.paginator.num_pages|n_range  %}
+    {% for page in page_obj.paginator.num_pages|n_range  %}
     <a href="?page={{ page|add:"1"  }}"> {{ page|add:"1" }} </a>
 {% endfor %}
-
 <hr>
 
 {% for post in page_obj %}
     {% url "post" post.blog.author post.slug as post_url %}
     <p><a href="{{ post_url }}"> {{ post.slug }} </a></p>
 {% endfor %}
-
 {% endblock %}

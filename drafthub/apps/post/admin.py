@@ -8,3 +8,4 @@ class PostAdmin(admin.ModelAdmin):
     readonly_fields = ('slug',)
 
     list_display = ('blog', 'title',)
+    list_filter = ('blog',)

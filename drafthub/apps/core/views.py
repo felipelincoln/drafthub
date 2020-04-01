@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView, ListView
+from django.views.generic import ListView
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from drafthub.apps.post.models import Post

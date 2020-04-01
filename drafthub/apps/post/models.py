@@ -10,6 +10,9 @@ class Post(models.Model):
     slug = models.SlugField(max_length=255,
                             editable=False,)
 
+    def __str__(self):
+        return self.title
+
     @property
     def get_github_content(self):
         raw_content = requests.get(self.raw_content_url)

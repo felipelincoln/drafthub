@@ -1,5 +1,5 @@
-{% load markdown_extras %}
+{% load drafthub_extras %}
 
-<p><a href="{% url "home" %}">Voltar</a></p>
+<p><a href="{% url "home" %}?page={{ request.GET.prev }}">Voltar</a></p>
 
 {{ object.get_github_content | markdown | safe }} 

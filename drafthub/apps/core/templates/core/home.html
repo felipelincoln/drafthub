@@ -1,4 +1,4 @@
-{% load markdown_extras %}
+{% load drafthub_extras %}
 
 <h1>DraftHub</h1>
 
@@ -9,9 +9,15 @@
 <p><a href="{% url "social:begin" "github" %}">Login with GitHub</a></p>
 {% endif %}
 
+<p>Pagination</p>
+{% for page in page_obj.paginator.num_pages|n_range  %}
+<a href="?page={{ page|add:"1"  }}"> {{ page|add:"1" }} </a>
+{% endfor %}
 
-{% for post in object_list %}
+<hr>
+
+{% for post in page_obj %}
 {% url "post" post.blog.author post.slug as post_url %}
 
-<p><a href="{{ post_url }}"> {{ post.slug }} </a></p>
+<p><a href="{{ post_url }}?prev={{ page_obj.number }}"> {{ post.slug }} </a></p>
 {% endfor %}

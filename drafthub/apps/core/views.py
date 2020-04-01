@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from drafthub.apps.post.models import Post
 
 class HomeView(ListView):
+    paginate_by = 5
     model = Post
     template_name = 'core/home.html'
 

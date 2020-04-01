@@ -12,10 +12,8 @@ admin.site.unregister(Group)
 class MyUserAdmin(UserAdmin):
     fieldsets = (
         (None,{
-            'fields': ('username', 'password'),
-        }),
-        (None,{
-            'fields': ('last_login', 'date_joined'),
+            'fields': ('username', 'password','last_login',
+                       'date_joined'),
         }),
         ('Status',{
             'classes': ('collapse',),

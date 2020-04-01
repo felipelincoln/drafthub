@@ -21,7 +21,7 @@ def add_unique_slug(sender, instance, *args, **kwargs):
 
         slug = non_unique_slug
         while Post.objects.filter(slug=slug, blog__author__username=post_author):
-            unique = generate_random_string()
+            unique = generate_random_string(size=UNIQUE_LENGTH)
             slug = non_unique_slug + '-' + unique
 
         instance.slug = slug

@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.urls import path, include
-# from drafthub.apps.core.views import HomeView, logout_view
 
 
 urlpatterns = [
@@ -8,7 +7,3 @@ urlpatterns = [
     path('', include('social_django.urls'), name='social'),
     path('', include('drafthub.apps.core.urls')),
 ]
-#    path('', HomeView.as_view(), name='home'),
-#    path('logout/', logout_view, name='logout'),
-#    path('blog/', include('drafthub.apps.blog.urls')),
-#    path('new/', include('drafthub.apps.post.urls')),

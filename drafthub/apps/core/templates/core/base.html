@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<h1> DraftHub </h1>
+<h1><a href="{% url 'home' %}">DraftHub</a></h1>
 {% block nav %}{% endblock %}
 {% if user.is_authenticated %}
     <p>welcome {{ user }}

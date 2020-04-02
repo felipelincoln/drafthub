@@ -1,8 +1,8 @@
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
 from django.views.generic import ListView
+from django.views.generic.edit import CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from drafthub.apps.post.models import Post
-from .forms import NewPostForm
+from drafthub.apps.core.utils import set_post_unique_slug
 
 class BlogView(ListView):
     paginate_by = 5
@@ -13,22 +13,11 @@ class BlogView(ListView):
         return self.model.objects.filter(
             blog__author__username=self.kwargs['username'])
 
-@login_required
-def new_post_view(request):
-    form = NewPostForm(request.POST or None)
-    context = {'form': form}
+class PostCreateView(LoginRequiredMixin, CreateView):
+    model = Post
+    fields = ['raw_content_url', 'title']
 
-    if form.is_valid():
-        new_post = form.save(commit=False)
-        new_post.blog = request.user.blog
-        new_post.save()
-
-        form = NewPostForm()
-        context = {'form': form}
-
-        return redirect(
-            'post',
-            username=request.user.username,
-            slug=new_post.slug,)
-
-    return render(request, 'blog/new.html', context)
+    def form_valid(self, form):
+        form.instance.blog = self.request.user.blog
+        set_post_unique_slug(form.instance)
+        return super().form_valid(form)

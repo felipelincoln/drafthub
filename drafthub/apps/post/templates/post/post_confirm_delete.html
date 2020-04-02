@@ -1,0 +1,9 @@
+<a href="{% url 'home' %}">Home</a>
+
+<p>Are you sure that you want to delete <b>{{ object }}</b></p>
+
+<form action="" method="POST">
+{% csrf_token %}
+{{ form }}
+<input type="submit" value="Confirm">
+</form>

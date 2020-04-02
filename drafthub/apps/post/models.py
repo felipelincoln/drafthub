@@ -7,8 +7,11 @@ class Post(models.Model):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
     raw_content_url = models.URLField(max_length=1100)
     title = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255,
-                            editable=False,)
+    slug = models.SlugField(max_length=255, editable=False,)
+    published_at = models.DateField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-published_at',]
 
     def __str__(self):
         return self.title

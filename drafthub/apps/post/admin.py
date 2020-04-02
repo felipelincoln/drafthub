@@ -4,8 +4,8 @@ from .models import Post
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    fields = ('blog', 'raw_content_url', 'title', 'slug',)
-    readonly_fields = ('slug',)
+    fields = ('blog', 'raw_content_url', 'title', 'slug', 'published_at')
+    readonly_fields = ('slug', 'published_at')
 
-    list_display = ('blog', 'title',)
-    list_filter = ('blog',)
+    list_display = ('blog', 'title', 'slug', 'published_at',)
+    list_filter = ('blog', 'published_at')

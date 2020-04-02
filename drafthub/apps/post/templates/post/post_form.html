@@ -1,5 +1,5 @@
 <a href="{% url 'home' %}">Home</a>
-<form action="{% url 'new' %}" method="POST">
+<form action="" method="POST">
 {% csrf_token %}
 {{ form.as_p }}
 <input type="submit" value="Submit">

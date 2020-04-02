@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from drafthub.apps.post.models import Post
 from drafthub.apps.core.utils import set_post_unique_slug
 
+
 class BlogView(ListView):
     paginate_by = 5
     model = Post
@@ -12,6 +13,7 @@ class BlogView(ListView):
     def get_queryset(self):
         return self.model.objects.filter(
             blog__author__username=self.kwargs['username'])
+
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post

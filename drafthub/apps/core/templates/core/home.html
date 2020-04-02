@@ -12,8 +12,7 @@
 <hr>
 
 {% for post in page_obj %}
-    {% url "post" post.blog.author post.slug as post_url %}
-    <p><a href="{{ post_url }}"> {{ post.slug }} </a></p>
+    <p><a href="{{ post.get_absolute_url }}"> {{ post.slug }} </a></p>
 {% endfor %}
 
 {% endblock %}

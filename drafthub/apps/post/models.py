@@ -6,13 +6,10 @@ import requests
 
 class Post(models.Model):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
-    raw_content_url = models.URLField(max_length=1100)
+    github_url = models.CharField(max_length=1100)
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255)
     published_at = models.DateField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['-published_at',]
 
     def __str__(self):
         return self.title
@@ -25,6 +22,11 @@ class Post(models.Model):
         return reverse('post', kwargs=kwargs)
 
     @property
-    def get_github_content(self):
-        raw_content = requests.get(self.raw_content_url)
+    def content(self):
+        raw_content = requests.get(self.github_url)
         return raw_content.text
+
+
+    class Meta:
+        ordering = ['-published_at',]
+

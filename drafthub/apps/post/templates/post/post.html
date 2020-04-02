@@ -5,4 +5,4 @@
 <p><a href="{{ object.get_absolute_url  }}edit/">Edit</a></p>
 <p><a href="{{ object.get_absolute_url  }}delete/">Delete</a></p>
 
-{{ object.get_github_content | markdown | safe }} 
+{{ object.content | markdown | safe }} 

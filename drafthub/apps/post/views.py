@@ -19,7 +19,7 @@ class PostView(DetailView):
 
 class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
-    fields = ['raw_content_url', 'title']
+    fields = ['github_url', 'title']
 
     def get_queryset(self):
         return self.model.objects.filter(
@@ -29,14 +29,14 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
         set_post_unique_slug(form.instance)
         return super().form_valid(form)
 
-    def user_passes_test(self, request):
+    def user_has_access(self, request):
         if request.user.is_authenticated:
             self.object = self.get_object()
             return request.user == self.object.blog.author
         return redirect_to_login(request.get_full_path())
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.user_passes_test(request):
+        if not self.user_has_access(request):
             return redirect(self.object)
         return super().dispatch(request, *args, **kwargs)
 
@@ -51,14 +51,14 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
         return self.model.objects.filter(
             blog__author__username=self.kwargs['username'])
 
-    def user_passes_test(self, request):
+    def user_has_access(self, request):
         if request.user.is_authenticated:
             self.object = self.get_object()
             return request.user == self.object.blog.author
         return redirect_to_login(request.get_full_path())
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.user_passes_test(request):
+        if not self.user_has_access(request):
             return redirect(self.object)
         return super().dispatch(request, *args, **kwargs)
 

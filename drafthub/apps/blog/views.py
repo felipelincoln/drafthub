@@ -17,7 +17,7 @@ class BlogView(ListView):
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    fields = ['raw_content_url', 'title']
+    fields = ['github_url', 'title']
 
     def form_valid(self, form):
         form.instance.blog = self.request.user.blog

@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '6zfo=*kv^l=55y$s^!u0rf^(m^(t)!wbm8kc5ec%z_17=ddj+c'
+SECRET_KEY = '&d3b2mg6&=twp3q*!n9f!1#(zp($j34m5ds=e7v2@+t7m&3z4o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,12 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # third parties
     'django_extensions',
     'social_django',
 
-    'drafthub.apps.core',
-    'drafthub.apps.blog',
-    'drafthub.apps.post',
+    # our apps
+    'drafthub.core',
+    'drafthub.blog',
 ]
 
 MIDDLEWARE = [
@@ -61,7 +62,7 @@ ROOT_URLCONF = 'drafthub.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

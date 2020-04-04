@@ -1,8 +1,0 @@
-{% load drafthub_extras %}
-
-<p><a href="{% url 'home' %}">Home</a></p>
-<p><a href="{{ object.blog.get_absolute_url }}">{{ object.blog  }}</a></p>
-<p><a href="{{ object.get_absolute_url  }}edit/">Edit</a></p>
-<p><a href="{{ object.get_absolute_url  }}delete/">Delete</a></p>
-
-{{ object.content | markdown | safe }} 

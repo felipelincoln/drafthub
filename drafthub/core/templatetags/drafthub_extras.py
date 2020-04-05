@@ -1,18 +1,22 @@
 import requests
 from django import template
-from django.template.defaultfilters import stringfilter
+from django.utils.html import escape
+from django.utils.safestring import mark_safe 
 import markdown as md
 
 register = template.Library()
 
 
-@register.filter()
-@stringfilter
-def markdown(url):
+@register.filter
+@mark_safe
+def markdown(instance):
+    url = instance.github_url
     content = requests.get(url)
     content = content.text
-    return md.markdown(content, extensions=['markdown.extensions.fenced_code'])
+    content = escape(content)
+    return md.markdown(content, extensions=['markdown.extensions.codehilite'])
 
-@register.filter()
+
+@register.filter
 def n_range(n):
     return range(n)

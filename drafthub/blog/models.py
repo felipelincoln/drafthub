@@ -26,8 +26,8 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            from .utils import set_post_unique_slug
-            self.slug = set_post_unique_slug(self)
+            from .utils import get_post_unique_slug
+            self.slug = get_post_unique_slug(self)
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):

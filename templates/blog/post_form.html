@@ -1,6 +1,13 @@
 <a href="{% url 'home' %}">Home</a>
 <form action="" method="POST">
 {% csrf_token %}
-{{ form.as_p }}
+
+    <p>{{ form.github_url.errors }}</p>
+    <p>{{ form.github_url.label_tag }}</p>
+    <p>https://github.com/{{ user }}/{{ form.github_url }}</p>
+    <p>{{ form.title.errors }}</p>
+    <p>{{ form.title.label_tag }}</p>
+    <p>{{ form.title }}</p>
+
 <input type="submit" value="Submit">
 </form>

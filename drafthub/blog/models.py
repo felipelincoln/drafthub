@@ -1,3 +1,4 @@
+from django import forms
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -16,19 +17,13 @@ class Blog(models.Model):
 
 class Post(models.Model):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
-    github_url = models.CharField(max_length=1100)
+    github_url = models.URLField(max_length=1100)
     title = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255, editable=False)
+    slug = models.SlugField(max_length=255)
     pub_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            from .utils import get_post_unique_slug
-            self.slug = get_post_unique_slug(self)
-        super().save(*args, **kwargs)
 
     def get_absolute_url(self):
         kwargs = {

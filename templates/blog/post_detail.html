@@ -5,4 +5,8 @@
 <p><a href="{{ object.get_absolute_url  }}edit/">Edit</a></p>
 <p><a href="{{ object.get_absolute_url  }}delete/">Delete</a></p>
 
+<hr>
+<p><b>{{ object.title }}</b> [<a href="{{ object.github_url }}">edit on github</a>]</p>
+<span>{{ object.blog }}, {{ object.pub_date }}</span>
+
 {{ object | markdown }} 

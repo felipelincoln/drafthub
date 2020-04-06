@@ -12,7 +12,7 @@
 <hr>
 
 {% for post in page_obj %}
-    <p><a href="{{ post.get_absolute_url }}"> {{ post.slug }} </a></p>
+    <p><a href="{{ post.get_absolute_url }}"> {{ post.title }} </a></p>
 {% endfor %}
 
 {% endblock %}

@@ -5,6 +5,7 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import redirect_to_login
 from .models import Blog, Post
+from .forms import PostForm
 
 
 class BlogView(ListView):
@@ -25,20 +26,53 @@ class PostView(DetailView):
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
-    model = Post
-    fields = ['github_url', 'title',]
+    form_class = PostForm
+    template_name = 'blog/post_form.html'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+
+        return kwargs
 
     def form_valid(self, form):
         form.instance.blog = self.request.user.blog
+        form.instance.slug = self.get_post_unique_slug(form.instance)
+
         return super().form_valid(form)
+
+    def get_post_unique_slug(self, instance, unique_len=6):
+        from django.utils.text import slugify
+        from .utils import generate_random_string
+
+        max_length = Post._meta.get_field('slug').max_length
+        author = instance.blog.author.username
+        non_unique_slug = slugify(instance.title)
+        non_unique_slug = non_unique_slug[: max_length - unique_len - 1]
+
+        if non_unique_slug.endswith('-'):
+            non_unique_slug = non_unique_slug[:-1]
+
+        slug = non_unique_slug
+        while Post.objects.filter(slug=slug, blog__author__username=author):
+            unique = generate_random_string()
+            slug = non_unique_slug + '-' + unique
+
+        return slug
 
 
 class PostUpdateView(LoginRequiredMixin, UpdateView):
-    model = Post
-    fields = ['github_url', 'title',]
+    form_class = PostForm
+    template_name = 'blog/post_form.html'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+
+        return kwargs
 
     def get_queryset(self):
-        return self.model.objects.filter(
+        return Post.objects.filter(
             blog__author__username=self.kwargs['username'])
 
     def user_has_access(self, request):

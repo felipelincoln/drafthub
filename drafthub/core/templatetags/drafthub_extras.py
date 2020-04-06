@@ -1,8 +1,9 @@
+import re
 import requests
 from django import template
 from django.utils.html import escape
 from django.utils.safestring import mark_safe 
-import markdown as md
+import markdown as pymd
 
 register = template.Library()
 
@@ -10,21 +11,17 @@ register = template.Library()
 @register.filter
 @mark_safe
 def markdown(instance):
-    raw_start = r'https://raw.githubusercontent.com/'
-    raw_end = instance.github_url.lstrip('/')
+    regex_expr = '^https:\/\/github\.com\/(.+?)\/(.+?)\/blob\/(.*\.md)$'
+    regex_tester = re.compile(regex_expr)
+    regex_results = regex_tester.match(instance.github_url)
 
-    # getting rid of /blob/
-    _ = raw_end.split('/')
-    del _[1]
-    raw_end = '/'.join(['', *_])
+    handle, repo, md = regex_results.groups()
+    raw_github_url = f'https://raw.githubusercontent.com/{handle}/{repo}/{md}'
 
-    url = raw_start + instance.blog.author.username + raw_end
-
-    print(url)
-    content = requests.get(url)
+    content = requests.get(raw_github_url)
     content = content.text
     content = escape(content)
-    return md.markdown(content, extensions=['markdown.extensions.codehilite'])
+    return pymd.markdown(content)
 
 
 @register.filter

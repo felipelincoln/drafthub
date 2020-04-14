@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # third parties
-    'django_extensions',
     'social_django',
 
     # our apps
@@ -143,3 +142,4 @@ LOGIN_REDIRECT_URL = 'home'
 # Auth
 
 LOGIN_URL = 'home'
+AUTH_USER_MODEL = 'core.Blog'

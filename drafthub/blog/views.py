@@ -4,8 +4,14 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import redirect_to_login
-from .models import Blog, Post
+from django.contrib.auth import get_user_model
+
+
+from .models import Post
 from .forms import PostForm
+
+
+MyUser = get_user_model()
 
 
 class BlogView(ListView):
@@ -14,7 +20,7 @@ class BlogView(ListView):
 
     def get_queryset(self):
         return self.model.objects.filter(
-            blog__author__username=self.kwargs['username'])
+            blog__username=self.kwargs['username'])
 
 
 class PostView(DetailView):
@@ -22,7 +28,7 @@ class PostView(DetailView):
 
     def get_queryset(self):
         return self.model.objects.filter(
-            blog__author__username=self.kwargs['username'])
+            blog__username=self.kwargs['username'])
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
@@ -36,7 +42,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         return kwargs
 
     def form_valid(self, form):
-        form.instance.blog = self.request.user.blog
+        form.instance.blog = self.request.user
         form.instance.slug = self.get_post_unique_slug(form.instance)
 
         return super().form_valid(form)
@@ -46,7 +52,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         from .utils import generate_random_string
 
         max_length = Post._meta.get_field('slug').max_length
-        author = instance.blog.author.username
+        author = instance.blog.username
         non_unique_slug = slugify(instance.title)
         non_unique_slug = non_unique_slug[: max_length - unique_len - 1]
 
@@ -54,7 +60,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
             non_unique_slug = non_unique_slug[:-1]
 
         slug = non_unique_slug
-        while Post.objects.filter(slug=slug, blog__author__username=author):
+        while Post.objects.filter(slug=slug, blog__username=author):
             unique = generate_random_string()
             slug = non_unique_slug + '-' + unique
 
@@ -73,12 +79,12 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_queryset(self):
         return Post.objects.filter(
-            blog__author__username=self.kwargs['username'])
+            blog__username=self.kwargs['username'])
 
     def user_has_access(self, request):
         if request.user.is_authenticated:
             self.object = self.get_object()
-            return request.user == self.object.blog.author
+            return request.user == self.object.blog
         return redirect_to_login(request.get_full_path())
 
     def dispatch(self, request, *args, **kwargs):
@@ -92,12 +98,12 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_queryset(self):
         return self.model.objects.filter(
-            blog__author__username=self.kwargs['username'])
+            blog__username=self.kwargs['username'])
 
     def user_has_access(self, request):
         if request.user.is_authenticated:
             self.object = self.get_object()
-            return request.user == self.object.blog.author
+            return request.user == self.object.blog
         return redirect_to_login(request.get_full_path())
 
     def dispatch(self, request, *args, **kwargs):

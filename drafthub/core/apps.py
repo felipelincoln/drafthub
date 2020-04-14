@@ -1,7 +1,7 @@
 from django.apps import AppConfig
 
 
-class BlogConfig(AppConfig):
+class CoreConfig(AppConfig):
     name = 'drafthub.core'
 
     def ready(self):

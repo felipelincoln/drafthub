@@ -5,5 +5,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('social_django.urls'), name='social'),
     path('', include('drafthub.core.urls')),
-    path('', include('drafthub.blog.urls')),
+    path('', include('drafthub.draft.urls')),
 ]

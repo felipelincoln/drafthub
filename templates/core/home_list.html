@@ -11,8 +11,8 @@
 
 <hr>
 
-{% for post in page_obj %}
-    <p><a href="{{ post.get_absolute_url }}"> {{ post.title }} </a></p>
+{% for draft in page_obj %}
+    <p><a href="{{ draft.get_absolute_url }}"> {{ draft.title }} </a></p>
 {% endfor %}
 
 {% endblock %}

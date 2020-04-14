@@ -1,11 +1,11 @@
 from django.views.generic import ListView
 from django.contrib.auth import logout
 from django.shortcuts import redirect
-from drafthub.blog.models import Post
+from drafthub.draft.models import Draft
 
 class HomeView(ListView):
     paginate_by = 5
-    model = Post
+    model = Draft
     template_name = 'core/home_list.html'
 
 

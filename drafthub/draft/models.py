@@ -4,11 +4,11 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 
 
-MyUser = get_user_model()
+Blog = get_user_model()
 
 
-class Post(models.Model):
-    blog = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+class Draft(models.Model):
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
     github_url = models.URLField(max_length=1100)
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255)
@@ -22,7 +22,9 @@ class Post(models.Model):
             'username': self.blog.username,
             'slug': self.slug,
         }
-        return reverse('post', kwargs=kwargs)
+        return reverse('draft', kwargs=kwargs)
 
     class Meta:
         ordering = ['-pub_date',]
+        verbose_name = 'draft'
+        verbose_name_plural = 'drafties'

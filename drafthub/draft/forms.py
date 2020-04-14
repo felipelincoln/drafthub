@@ -1,9 +1,9 @@
 from django.core.exceptions import ValidationError
 from django import forms
-from .models import Post
+from .models import Draft
 
 
-class PostForm(forms.ModelForm):
+class DraftForm(forms.ModelForm):
     def __init__(self, request, *args, **kwargs):
         self.request = request
         super().__init__(*args, **kwargs)
@@ -32,5 +32,5 @@ class PostForm(forms.ModelForm):
 
 
     class Meta:
-        model = Post
+        model = Draft
         fields = ['title', 'github_url']

@@ -1,9 +1,8 @@
 from django.contrib import admin
-from .models import Post
+from .models import Draft
 
-#admin.site.register(Blog)
 
-@admin.register(Post)
+@admin.register(Draft)
 class PostAdmin(admin.ModelAdmin):
     fields = ('blog', 'github_url', 'title', 'slug', 'pub_date',)
     readonly_fields = ('slug', 'pub_date',)

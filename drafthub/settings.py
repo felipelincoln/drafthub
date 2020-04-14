@@ -70,8 +70,12 @@ WSGI_APPLICATION = 'drafthub.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'db',
+        'PORT': 5432,
     }
 }
 
@@ -118,7 +122,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # prod
 
 
 # Social auth
-
+SOCIAL_AUTH_POSTGRES_JSONFIELD = True
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'social_core.backends.github.GithubOAuth2',

@@ -1,2 +1,3 @@
 *.pyc
 staticfiles/
+docker-compose-prod.yml

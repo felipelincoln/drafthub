@@ -7,7 +7,7 @@ if ENVIRONMENT == 'production':
     SECRET_KEY = os.environ.get('SECRET_KEY')
     ADMIN_URL = os.environ.get('ADMIN_URL')
     DEBUG = 0
-    ALLOWED_HOSTS = ['.herokuapp.com', 'localhost', '127.0.0.1']
+    ALLOWED_HOSTS = ['powerful-island-35104.herokuapp.com', 'localhost', '127.0.0.1']
     SECURE_BROWSER_XSS_FILTER = True
     X_FRAME_OPTIONS = 'DENY'
     SECURE_SSL_REDIRECT = True
@@ -18,6 +18,7 @@ if ENVIRONMENT == 'production':
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_REFERRER_POLICY = 'origin-when-cross-origin'
+    SECURE_PROXY_SSL_HEADER=('HTTP_X_FORWARDED_PROTO','https')
 
 elif ENVIRONMENT == 'development':
     SECRET_KEY = '&d3b2mg6&=twp3q*!n9f!1#(zp($j34m5ds=e7v2@+t7m&3z4o' # dev key

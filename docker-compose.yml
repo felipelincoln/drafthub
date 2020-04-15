@@ -3,9 +3,13 @@ version: '3.7'
 services:
     web:
         build: .
-        command: gunicorn drafthub.wsgi -b 0.0.0.0:8000
+        command: python manage.py runserver 0.0.0.0:8000 
         environment:
             - ENVIRONMENT=development
+            - SECRET_KEY=&d3b2mg6&=twp3q*!n9f!1#(zp($$j34m5ds=e7v2@+t7m&3z4o
+            - ADMIN_URL=admin/
+            - SOCIAL_AUTH_GITHUB_KEY=7d8639e8eff3fd36d459
+            - SOCIAL_AUTH_GITHUB_SECRET=168227076fdb096fe92ec8de97180168169874f7
         volumes:
             - .:/code
         ports:

@@ -1,13 +1,16 @@
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 ENVIRONMENT = os.environ.get('ENVIRONMENT')
+SECRET_KEY = os.environ.get('SECRET_KEY')
+ADMIN_URL = os.environ.get('ADMIN_URL')
+SOCIAL_AUTH_GITHUB_KEY = os.environ.get('SOCIAL_AUTH_GITHUB_KEY')
+SOCIAL_AUTH_GITHUB_SECRET = os.environ.get('SOCIAL_AUTH_GITHUB_SECRET')
 
 if ENVIRONMENT == 'production':
-    SECRET_KEY = os.environ.get('SECRET_KEY')
-    ADMIN_URL = os.environ.get('ADMIN_URL')
     DEBUG = 0
-    ALLOWED_HOSTS = ['powerful-island-35104.herokuapp.com', 'localhost', '127.0.0.1']
+    ALLOWED_HOSTS = ['drafthub.herokuapp.com',]
     SECURE_BROWSER_XSS_FILTER = True
     X_FRAME_OPTIONS = 'DENY'
     SECURE_SSL_REDIRECT = True
@@ -21,8 +24,6 @@ if ENVIRONMENT == 'production':
     SECURE_PROXY_SSL_HEADER=('HTTP_X_FORWARDED_PROTO','https')
 
 elif ENVIRONMENT == 'development':
-    SECRET_KEY = '&d3b2mg6&=twp3q*!n9f!1#(zp($j34m5ds=e7v2@+t7m&3z4o' # dev key
-    ADMIN_URL = 'admin/'
     DEBUG = 1
     ALLOWED_HOSTS = []
     
@@ -142,8 +143,6 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.github.GithubOAuth2',
 )
 
-SOCIAL_AUTH_GITHUB_KEY = '7d8639e8eff3fd36d459'
-SOCIAL_AUTH_GITHUB_SECRET = '01d899bc2f63aa109f73d29229c3cd0cbcc4efb0'
 LOGIN_REDIRECT_URL = 'home'
 
 

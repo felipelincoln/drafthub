@@ -4,7 +4,6 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 RUN mkdir /code
-RUN mkdir /code/static
 WORKDIR /code
 
 COPY Pipfile Pipfile.lock /code/

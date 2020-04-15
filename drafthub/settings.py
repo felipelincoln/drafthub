@@ -2,8 +2,9 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-ENVIRONMENT = os.environ.get('ENVIRONMENT', default='production')
-SECRET_KEY = '&d3b2mg6&=twp3q*!n9f!1#(zp($j34m5ds=e7v2@+t7m&3z4o' # public key
+ENVIRONMENT = os.environ.get('ENVIRONMENT')
+ADMIN_URL = os.environ.get('ADMIN_URL')
+SECRET_KEY = '&d3b2mg6&=twp3q*!n9f!1#(zp($j34m5ds=e7v2@+t7m&3z4o' # dev key
 DEBUG = 1
 
 ALLOWED_HOSTS = []

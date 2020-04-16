@@ -19,7 +19,7 @@ def markdown(instance):
     content = requests.get(url_raw)
     content = content.text
     
-    re_links = '\[(.*)\]\((?!http)(.+)\)'
+    re_links = '\[(.*)\]\((?!https?:\/\/)(.+)\)'
     match_links = re.compile(re_links)
     content_transform = match_links.sub(
         r'[\1](' + url_origin + r'\2)', content)

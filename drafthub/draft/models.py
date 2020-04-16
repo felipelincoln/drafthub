@@ -12,6 +12,7 @@ class Draft(models.Model):
     github_url = models.URLField(max_length=1100)
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255)
+    abstract = models.TextField(max_length=255, blank=True)
     pub_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -14,5 +14,7 @@
 
 {% for draft in blog_content %}
     <p><a href="{{ draft.get_absolute_url }}"> {{ draft.title }} </a></p>
+    <p>{{ draft.abstract }}</p>
+    <br>
 {% endfor %}
 {% endblock %}

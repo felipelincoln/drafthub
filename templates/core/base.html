@@ -17,6 +17,10 @@
     <p><a href="{% url 'social:begin' 'github' %}?next={{request.GET.next}}">Login with GitHub</a></p>
 {% endif %}
 
+<form action="{% url 'search' %}" method="GET">
+    <input type="text" placeholder="Search" name="q">
+</form>
+
 {% block content %}{% endblock %}
 
 </body>

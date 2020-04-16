@@ -1,0 +1,12 @@
+{% load drafthub_extras %}
+
+<p><a href="{% url 'home' %}">Home</a></p>
+<p><a href="{{ draft.blog.get_absolute_url }}">{{ draft.blog  }}</a></p>
+<p><a href="{{ draft.get_absolute_url  }}edit/">Edit</a></p>
+<p><a href="{{ draft.get_absolute_url  }}delete/">Delete</a></p>
+
+<hr>
+<p><b>{{ draft.title }}</b> [<a href="{{ draft.github_url }}">edit on github</a>]</p>
+<span>{{ draft.blog }}, {{ draft.pub_date }}</span>
+
+{{ draft | markdown }} 

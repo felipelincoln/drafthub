@@ -12,19 +12,19 @@ class DraftForm(forms.ModelForm):
         import re
         import requests
 
-        regex_expr = '^https:\/\/github\.com\/(.+?)\/(.+?)\/blob\/(.*\.md)$'
-        regex_tester = re.compile(regex_expr)
-        regex_results = regex_tester.match(self.cleaned_data['github_url'])
+        re_url = '^https?:\/\/github\.com\/(.+)\/(.+)\/blob\/(.*\.md)$'
+        match_url = re.compile(re_url)
+        match_results = match_url.match(self.cleaned_data['github_url'])
     
-        if not regex_results:
+        if not match_results:
             raise ValidationError('url must be a github .md file.')
 
-        handle, repo, md = regex_results.groups()
+        handle, repo, md = match_results.groups()
         if handle != self.request.user.username:
             raise ValidationError('url must be from your repositories.')
 
-        raw_github_url = f'https://raw.githubusercontent.com/{handle}/{repo}/{md}'
-        head_response = requests.head(raw_github_url)
+        url_raw = f'https://raw.githubusercontent.com/{handle}/{repo}/{md}'
+        head_response = requests.head(url_raw)
         if head_response.status_code != 200:
             raise ValidationError('not found in your repositories.')
 

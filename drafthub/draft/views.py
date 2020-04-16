@@ -4,8 +4,8 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import redirect_to_login
+from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
-
 
 from .models import Draft
 from .forms import DraftForm
@@ -14,26 +14,46 @@ from .forms import DraftForm
 Blog = get_user_model()
 
 
+class QueryFromBlog:
+    def get_queryset(self):
+        return Draft.objects.filter(
+            blog__username=self.kwargs['username'])
+ 
+
+class AccessRequired:
+    def user_has_access(self, request):
+        if request.user.is_authenticated:
+            self.object = self.get_object()
+            return request.user == self.object.blog
+        return redirect_to_login(request.get_full_path())
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.user_has_access(request):
+            return redirect(self.object)
+        return super().dispatch(request, *args, **kwargs)
+
+
 class BlogListView(ListView):
     paginate_by = 5
     model = Draft
+    template_name = 'draft/blog.html'
+    context_object_name = 'blog_content'
 
     def get_queryset(self):
-        return self.model.objects.filter(
-            blog__username=self.kwargs['username'])
+        self.blog = get_object_or_404(Blog, username=self.kwargs['username'])
+        return self.model.objects.filter(blog=self.blog)
 
 
-class DraftDetailView(DetailView):
+class DraftDetailView(QueryFromBlog, DetailView):
     model = Draft
+    template_name = 'draft/draft.html'
+    context_object_name = 'draft'
 
-    def get_queryset(self):
-        return self.model.objects.filter(
-            blog__username=self.kwargs['username'])
 
 
 class DraftCreateView(LoginRequiredMixin, CreateView):
     form_class = DraftForm
-    template_name = 'draft/draft_form.html'
+    template_name = 'draft/form.html'
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -67,9 +87,9 @@ class DraftCreateView(LoginRequiredMixin, CreateView):
         return slug
 
 
-class DraftUpdateView(LoginRequiredMixin, UpdateView):
+class DraftUpdateView(QueryFromBlog, AccessRequired, LoginRequiredMixin, UpdateView):
     form_class = DraftForm
-    template_name = 'draft/draft_form.html'
+    template_name = 'draft/form.html'
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -77,39 +97,11 @@ class DraftUpdateView(LoginRequiredMixin, UpdateView):
 
         return kwargs
 
-    def get_queryset(self):
-        return Draft.objects.filter(
-            blog__username=self.kwargs['username'])
 
-    def user_has_access(self, request):
-        if request.user.is_authenticated:
-            self.object = self.get_object()
-            return request.user == self.object.blog
-        return redirect_to_login(request.get_full_path())
-
-    def dispatch(self, request, *args, **kwargs):
-        if not self.user_has_access(request):
-            return redirect(self.object)
-        return super().dispatch(request, *args, **kwargs)
-
-
-class DraftDeleteView(LoginRequiredMixin, DeleteView):
+class DraftDeleteView(QueryFromBlog, AccessRequired, LoginRequiredMixin, DeleteView):
     model = Draft
-
-    def get_queryset(self):
-        return self.model.objects.filter(
-            blog__username=self.kwargs['username'])
-
-    def user_has_access(self, request):
-        if request.user.is_authenticated:
-            self.object = self.get_object()
-            return request.user == self.object.blog
-        return redirect_to_login(request.get_full_path())
-
-    def dispatch(self, request, *args, **kwargs):
-        if not self.user_has_access(request):
-            return redirect(self.object)
-        return super().dispatch(request, *args, **kwargs)
+    template_name = 'draft/delete.html'
+    context_object_name = 'draft'
 
     def get_success_url(self):
         args = (self.kwargs['username'],)

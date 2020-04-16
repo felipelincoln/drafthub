@@ -145,12 +145,13 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.github.GithubOAuth2',
 )
 
-LOGIN_REDIRECT_URL = 'home'
 
 
 # Auth
 
-LOGIN_URL = 'home'
+LOGIN_REDIRECT_URL = 'home'
+LOGIN_URL = 'login'
+LOGOUT_REDIRECT_URL = 'home'
 AUTH_USER_MODEL = 'core.Blog'
 
 

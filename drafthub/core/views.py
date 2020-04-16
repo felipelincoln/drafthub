@@ -1,14 +1,12 @@
+from django.contrib.auth import views as auth_views
 from django.views.generic import ListView
-from django.contrib.auth import logout
-from django.shortcuts import redirect
 from drafthub.draft.models import Draft
 
 class HomeView(ListView):
     paginate_by = 5
     model = Draft
-    template_name = 'core/home_list.html'
+    template_name = 'core/home.html'
 
-
-def logout_view(request):
-    logout(request)
-    return redirect('home')
+class LoginView(auth_views.LoginView):
+    template_name = 'core/login.html'
+    redirect_authenticated_user = True

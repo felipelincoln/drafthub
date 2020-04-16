@@ -9,7 +9,6 @@ from .forms import BlogCreationForm, BlogChangeForm
 
 Blog = get_user_model()
 
-
 admin.site.site_header = 'DraftHub admin panel'
 admin.site.unregister(Group)
 admin.site.unregister(Nonce)

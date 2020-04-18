@@ -8,6 +8,19 @@ class DraftForm(forms.ModelForm):
         self.request = request
         super().__init__(*args, **kwargs)
 
+    def clean_title(self):
+        from django.utils.text import slugify
+        slug = slugify(self.cleaned_data['title'])
+
+        if slug == '-':
+            slug = ''
+
+        if not slug:
+            raise ValidationError('invalid title')
+        
+        return self.cleaned_data['title']
+        
+
     def clean_github_url(self):
         import re
         import requests

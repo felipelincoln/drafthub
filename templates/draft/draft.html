@@ -1,4 +1,26 @@
 {% load drafthub_extras %}
+{% load static %}
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/github-markdown.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/PhilipTrauner/pygments-github-css@master/github.css" />
+    <style>
+	.markdown-body {
+		box-sizing: border-box;
+		min-width: 200px;
+		max-width: 980px;
+		margin: 0 auto;
+		padding: 45px;
+	}
+
+	@media (max-width: 767px) {
+		.markdown-body {
+			padding: 15px;
+		}
+	}
+	</style>
+</head>
+<body>
 
 <p><a href="{% url 'home' %}">Home</a></p>
 <p><a href="{{ draft.blog.get_absolute_url }}">{{ draft.blog  }}</a></p>
@@ -10,4 +32,13 @@
 <span>{{ draft.blog }}, {{ draft.pub_date }}</span>
 <p>{{ draft.abstract }}</p>
 
-{{ draft | markdown }} 
+<div class="markdown-body">
+	{{ draft | markdown }}
+</div>
+
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+</body>
+</html>

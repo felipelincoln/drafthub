@@ -6,6 +6,9 @@ import markdown as _markdown
 import bleach
 from pymdownx import emoji
 
+from drafthub.draft.utils import get_data_from_url
+
+
 markdown_kwargs = {
     'extensions':[
         'pymdownx.superfences',
@@ -63,32 +66,29 @@ register = template.Library()
 @mark_safe
 def markdown(instance):
     url = instance.github_url
-    url_origin = url.rsplit('/', 1)[0] + '/'
-    url_noblob = url.replace('blob/', '')
-    url_stripped = url_noblob.lstrip('https://github.com/')
-    url_raw = 'https://raw.githubusercontent.com/' + url_stripped
+    data = get_data_from_url(url)
 
-    re_url = '^https?:\/\/github\.com\/(.+)\/(.+)\/blob\/.*$'
-    match_url = re.compile(re_url)
-    match_results = match_url.match(url)
-    handle, repo = match_results.groups()
-
-    url_response = requests.get(url_raw)
-    unsafe_content = url_response.text
-
-    re_links = '\[(.*)\]\((?!https?:\/\/|#)(.+)\)'
-    match_links = re.compile(re_links)
-    content_transform = match_links.sub(
-        r'[\1](' + url_origin + r'\2)', unsafe_content)
+    raw = data['raw']
+    login = data['login']
+    repo = data['repo']
+    parent = data['parent']
 
     markdown_kwargs['extension_configs']['pymdownx.magiclink'] = {
         'repo_url_shortener': True,
         'repo_url_shorthand': True,
         'social_url_shorthand': True,
         'provider': 'github',
-        'user': handle,
+        'user': login,
         'repo': repo,
     }
+
+    url_response = requests.get(raw)
+    unsafe_content = url_response.text
+
+    re_links = '\[(.*)\]\((?!https?:\/\/|#)(.+)\)'
+    match_links = re.compile(re_links)
+    content_transform = match_links.sub(
+        r'[\1](' + parent + r'\2)', unsafe_content)
 
     markdown_content = _markdown.markdown(content_transform, **markdown_kwargs)
     sanitized_content = bleach.clean(markdown_content, **bleach_kwargs)

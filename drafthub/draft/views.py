@@ -21,14 +21,14 @@ class QueryFromBlog:
  
 
 class AccessRequired:
-    def user_has_access(self, request):
+    def _user_has_access(self, request):
         if request.user.is_authenticated:
             self.object = self.get_object()
             return request.user == self.object.blog
         return redirect_to_login(request.get_full_path())
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.user_has_access(request):
+        if not self._user_has_access(request):
             return redirect(self.object)
         return super().dispatch(request, *args, **kwargs)
 
@@ -49,6 +49,87 @@ class DraftDetailView(QueryFromBlog, DetailView):
     template_name = 'draft/draft.html'
     context_object_name = 'draft'
 
+    def get_object(self):
+        obj = super().get_object()
+        if self.request.user.is_authenticated:
+            try:
+                obj.last_update = self._get_draft_last_update(obj)
+                obj.save()
+            except:
+                pass
+
+        return obj
+
+    def _get_draft_last_update(self, obj):
+        import requests
+        import json
+        from django.utils.dateparse import parse_datetime
+        from .utils import get_data_from_url
+
+        user = self.request.user
+        social_user = self.request.user.social_auth.get()
+        extra_data = social_user.extra_data
+        token = extra_data['access_token']
+        data = get_data_from_url(obj.github_url) 
+
+        endpoint = 'https://api.github.com/graphql'
+        query = f"""query {{
+  viewer {{
+    login
+  }}
+  rateLimit {{
+    limit
+    cost
+    remaining
+  }}
+  repository(owner: "{data['login']}", name: "{data['repo']}"){{
+    object(expression: "{data['branch']}"){{
+      ... on Commit {{
+        history(path: "{data['name']}", first:1){{
+          edges {{
+            node {{
+              message
+              oid
+              author {{
+                date
+                user {{
+                  name
+                  url
+                  login
+                  isViewer
+                }}
+              }}
+            }}
+          }}
+        }}
+      }}
+    }}
+  }}
+}}"""
+
+        headers = {'Authorization': f'bearer {token}'}
+        GraphiQL_connect = requests.post(
+            endpoint,
+            json={'query': query},
+            headers=headers
+        )
+        api_data = json.loads(GraphiQL_connect.text)
+
+        last_commit = api_data['data']['repository']['object']['history']
+        last_commit = last_commit['edges'][0]['node']['author']['date']
+        last_commit = parse_datetime(last_commit)
+        pub_date = obj.pub_date
+        last_update = obj.last_update
+
+        tzinfo = last_commit.tzinfo
+        last_commit = last_commit.replace(tzinfo=tzinfo).astimezone(tz=None)
+
+        if last_commit > pub_date:
+            return last_commit
+
+        return None
+        
+
 
 
 class DraftCreateView(LoginRequiredMixin, CreateView):
@@ -63,11 +144,11 @@ class DraftCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.blog = self.request.user
-        form.instance.slug = self.get_draft_unique_slug(form.instance)
+        form.instance.slug = self._get_draft_unique_slug(form.instance)
 
         return super().form_valid(form)
 
-    def get_draft_unique_slug(self, instance, unique_len=6):
+    def _get_draft_unique_slug(self, instance, unique_len=6):
         from django.utils.text import slugify
         from .utils import generate_random_string
 

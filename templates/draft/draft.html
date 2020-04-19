@@ -30,6 +30,9 @@
 <hr>
 <p><b>{{ draft.title }}</b> [<a href="{{ draft.github_url }}">edit on github</a>]</p>
 <span>{{ draft.blog }}, {{ draft.pub_date }}</span>
+{% if draft.last_update %}
+(Last update: {{ draft.last_update }})
+{% endif %}
 <p>{{ draft.abstract }}</p>
 
 <div class="markdown-body">

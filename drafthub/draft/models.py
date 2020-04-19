@@ -14,7 +14,7 @@ class Draft(models.Model):
     slug = models.SlugField(max_length=255)
     abstract = models.TextField(max_length=255, blank=True)
     pub_date = models.DateTimeField(auto_now_add=True)
-    last_update = models.DateField(blank=True, null=True)
+    last_update = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
         return self.title

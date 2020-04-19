@@ -14,6 +14,9 @@ def get_data_from_url(url):
     match_url = re.compile(re_url)
     match_results = match_url.match(url)
 
+    if not match_results:
+        return None
+
     login, repo, branch, name = match_results.groups()
     raw = '/'.join([raw_origin, *match_results.groups()])
     parent = url.rstrip(name)

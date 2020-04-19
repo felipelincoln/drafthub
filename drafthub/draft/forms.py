@@ -24,20 +24,19 @@ class DraftForm(forms.ModelForm):
     def clean_github_url(self):
         import re
         import requests
+        from .utils import get_data_from_url
 
-        re_url = '^https?:\/\/github\.com\/(.+)\/(.+)\/blob\/(.*\.md)$'
-        match_url = re.compile(re_url)
-        match_results = match_url.match(self.cleaned_data['github_url'])
-    
-        if not match_results:
+        data = get_data_from_url(self.cleaned_data['github_url'])
+
+        if not data:
             raise ValidationError('url must be a github .md file.')
 
-        handle, repo, md = match_results.groups()
-        if handle != self.request.user.username:
+        login = data['login']
+        if login != self.request.user.username:
             raise ValidationError('url must be from your repositories.')
 
-        url_raw = f'https://raw.githubusercontent.com/{handle}/{repo}/{md}'
-        head_response = requests.head(url_raw)
+        raw = data['raw']
+        head_response = requests.head(raw)
         if head_response.status_code != 200:
             raise ValidationError('not found in your repositories.')
 

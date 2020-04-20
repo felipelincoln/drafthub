@@ -29,7 +29,8 @@
 
 <hr>
 <p><b>{{ draft.title }}</b> [<a href="{{ draft.github_url }}">edit on github</a>]</p>
-<span>{{ draft.blog }}, {{ draft.pub_date }}</span>
+<p> {{ draft.view_count }} views</p>
+<p><span>{{ draft.blog }}, {{ draft.pub_date }}</span></p>
 
 <p>
 {% for tag in draft.tags.all %}

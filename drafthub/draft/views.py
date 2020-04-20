@@ -51,10 +51,14 @@ class DraftDetailView(QueryFromBlog, DetailView):
 
     def get_object(self):
         obj = super().get_object()
+
+        obj.view_count += 1
+        obj.save(update_fields=['view_count'])
+
         if self.request.user.is_authenticated:
             try:
                 obj.last_update = self._get_draft_last_update(obj)
-                obj.save()
+                obj.save(update_fields=['last_update'])
             except:
                 pass
 

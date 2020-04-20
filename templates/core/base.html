@@ -12,6 +12,16 @@
 {% if user.is_authenticated %}
     <p>welcome {{ user }}
     <a href ="{% url 'logout' %}">Logout</a></p>
+
+    {% if user.bio == 'get_from_github' %}
+    <p>Bio: {{ user.social_auth.get.extra_data.bio }}</p>
+
+    {% else %}
+    <p>Bio: {{ user.bio }}</p>
+
+    {% endif %}
+
+
     <p><a href="{% url 'new' %}">Publish an article</a></p>
 {% else %}
     <p><a href="{% url 'social:begin' 'github' %}?next={{request.GET.next}}">Login with GitHub</a></p>

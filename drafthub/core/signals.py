@@ -7,8 +7,12 @@ from social_django.models import UserSocialAuth
 def update_username(sender, instance, created, **kwargs):
     if not created:
         user = instance.user
-        github_username = instance.extra_data['login']
-        drafthub_username = user.username
-        if github_username != drafthub_username:
-            user.username = github_username
-            user.save()
+        github = instance.extra_data
+
+        if github['login'] != user.username:
+            user.username = github['login']
+            user.save(update_fields=['username'])
+
+        if not user.avatar:
+            user.avatar = github['avatar_url']
+            user.save(update_fields=['avatar'])

@@ -1,8 +1,12 @@
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 from django.urls import reverse
 
 
 class Blog(AbstractUser):
+    bio = models.TextField(max_length=160, default='get_from_github')
+    avatar = models.URLField(null=True)
+
     def __str__(self):
         return self.username
 

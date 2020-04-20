@@ -23,7 +23,7 @@ class MyUserAdmin(UserAdmin):
 
     fieldsets = (
         (None,{
-            'fields': ('username', 'password','last_login',
+            'fields': ('username', 'password', 'bio', 'avatar', 'last_login',
                        'date_joined'),
         }),
         ('Status',{
@@ -31,6 +31,6 @@ class MyUserAdmin(UserAdmin):
             'fields': ('is_active', 'is_staff', 'is_superuser'),
         }),
     )
-    readonly_fields = ('last_login', 'date_joined')
+    readonly_fields = ('avatar', 'last_login', 'date_joined')
     list_filter = ('is_active', 'date_joined', 'last_login')
     list_display = ('username', 'last_login', 'date_joined', 'is_active', 'is_staff', 'is_superuser')

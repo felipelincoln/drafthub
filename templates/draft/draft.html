@@ -30,6 +30,7 @@
 <hr>
 <p><b>{{ draft.title }}</b> [<a href="{{ draft.github_url }}">edit on github</a>]</p>
 <p> {{ draft.view_count }} views</p>
+<p> <a href="{{ draft.get_absolute_url }}like/">like</a> {{ draft.likes.count }} likes</p>
 <p><span>{{ draft.blog }}, {{ draft.pub_date }}</span></p>
 
 <p>
@@ -41,11 +42,38 @@
 {% if draft.last_update %}
 (Last update: {{ draft.last_update }})
 {% endif %}
+
+<p>
+{% if draft in user.favorites.all %}
+<a href="{{ drag.get_absolute_url }}favorite/">Unfavorite</a>
+{% else %}
+<a href="{{ draft.get_absolute_url }}favorite/">Favorite</a>
+{% endif %}
+</p>
+
+
 <p>{{ draft.abstract }}</p>
 
 <div class="markdown-body">
 	{{ draft | markdown }}
 </div>
+
+{% for comment in draft.comments.all %}
+<p> {{ comment }}
+
+{% if comment.blog == user %}
+<a href="{{ draft.get_absolute_url }}comment/{{ comment.pk }}/edit/">[Edit]</a>
+<a href="{{ draft.get_absolute_url }}comment/{{ comment.pk }}/delete/">[Delete]</a>
+{% endif %}
+
+{{ comment.created }}
+
+</p>
+<p> {{ comment.content }} </p>
+<br>
+{% endfor %}
+
+<a href="{{ draft.get_absolute_url }}comment/">Make a comment</a>
 
 
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>

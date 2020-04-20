@@ -1,13 +1,13 @@
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, RedirectView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import redirect_to_login
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 
-from .models import Draft, Tag
+from .models import Draft, Tag, Comment
 from .forms import DraftForm
 
 
@@ -208,3 +208,76 @@ class DraftDeleteView(QueryFromBlog, AccessRequired, LoginRequiredMixin, DeleteV
     def get_success_url(self):
         args = (self.kwargs['username'],)
         return reverse_lazy('blog', args=args)
+
+
+class LikeRedirectView(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        slug = self.kwargs.get('slug')
+        username = self.kwargs.get('username')
+        obj = get_object_or_404(Draft, slug=slug, blog__username=username)
+
+        user = self.request.user
+        if user.is_authenticated:
+            if user.likes.filter(slug=slug, blog__username=username).exists():
+                obj.likes.remove(user)
+            else:
+                obj.likes.add(user)
+
+        return obj.get_absolute_url()
+
+
+class FavoriteRedirectView(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        slug = self.kwargs.get('slug')
+        username = self.kwargs.get('username')
+        obj = get_object_or_404(Draft, slug=slug, blog__username=username)
+
+        user = self.request.user
+        if user.is_authenticated:
+            if user.favorites.filter(slug=slug, blog__username=username).exists():
+                obj.favorites.remove(user)
+            else:
+                obj.favorites.add(user)
+
+        return obj.get_absolute_url()
+
+
+
+from .utils import generate_random_string
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    fields = ['content']
+    template_name = 'draft/form.html'
+
+    def form_valid(self, form):
+        form.instance.blog = self.request.user
+        form.save()
+        obj = get_object_or_404(
+            Draft,
+            slug=self.kwargs['slug'],
+            blog__username=self.kwargs['username']
+        )
+        comment = form.instance
+        obj.comments.add(comment)
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        args = (self.kwargs['username'], self.kwargs['slug'])
+        return reverse_lazy('draft', args=args)
+
+
+class CommentEditView(AccessRequired, LoginRequiredMixin, UpdateView):
+    model = Comment
+    template_name = 'draft/form.html'
+    fields = ['content']
+
+
+class CommentDeleteView(AccessRequired, LoginRequiredMixin, DeleteView):
+    model = Comment
+    template_name = 'draft/delete.html'
+    context_object_name = 'draft'
+
+    def get_success_url(self):
+        args = (self.kwargs['username'], self.kwargs['slug'])
+        return reverse_lazy('draft', args=args)

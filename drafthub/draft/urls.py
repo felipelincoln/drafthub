@@ -1,7 +1,8 @@
 from django.urls import path
 from .views import (
     BlogListView, DraftDetailView, DraftCreateView, DraftUpdateView,
-    DraftDeleteView,
+    DraftDeleteView, LikeRedirectView, FavoriteRedirectView,
+    CommentCreateView, CommentEditView, CommentDeleteView,
 )
 
 
@@ -17,4 +18,19 @@ urlpatterns = [
     path('<str:username>/<slug:slug>/delete/',
          DraftDeleteView.as_view(),
          name='delete'),
+    path('<str:username>/<slug:slug>/like/',
+         LikeRedirectView.as_view(),
+         name='like'),
+    path('<str:username>/<slug:slug>/favorite/',
+         FavoriteRedirectView.as_view(),
+         name='favorite'),
+    path('<str:username>/<slug:slug>/comment/',
+         CommentCreateView.as_view(),
+         name='comment'),
+    path('<str:username>/<slug:slug>/comment/<int:pk>/edit/',
+         CommentEditView.as_view(),
+         name='comment-edit'),
+    path('<str:username>/<slug:slug>/comment/<int:pk>/delete/',
+         CommentDeleteView.as_view(),
+         name='comment-delete'),
 ]

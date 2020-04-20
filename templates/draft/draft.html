@@ -30,6 +30,13 @@
 <hr>
 <p><b>{{ draft.title }}</b> [<a href="{{ draft.github_url }}">edit on github</a>]</p>
 <span>{{ draft.blog }}, {{ draft.pub_date }}</span>
+
+<p>
+{% for tag in draft.tags.all %}
+<span> {{ tag }} </span>
+{% endfor %}
+</p>
+
 {% if draft.last_update %}
 (Last update: {{ draft.last_update }})
 {% endif %}

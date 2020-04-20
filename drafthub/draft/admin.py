@@ -1,11 +1,15 @@
 from django.contrib import admin
-from .models import Draft
+from .models import Draft, Tag
 
 
 @admin.register(Draft)
-class PostAdmin(admin.ModelAdmin):
-    fields = ('blog', 'github_url', 'title', 'abstract', 'slug', 'pub_date', 'last_update')
+class DraftAdmin(admin.ModelAdmin):
+    fields = ('blog', 'github_url', 'title', 'abstract', 'tags', 'slug', 'pub_date', 'last_update')
     readonly_fields = ('slug', 'pub_date', 'last_update')
 
     list_display = ('blog', 'title', 'slug', 'pub_date', 'last_update')
-    list_filter = ('blog', 'pub_date', 'last_update')
+    list_filter = ('blog', 'pub_date', 'last_update', 'tags')
+
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    pass

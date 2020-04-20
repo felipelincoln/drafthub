@@ -9,6 +9,7 @@ Blog = get_user_model()
 
 class Draft(models.Model):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    tags = models.ManyToManyField('draft.tag')
     github_url = models.URLField(max_length=1100)
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255)
@@ -30,3 +31,10 @@ class Draft(models.Model):
         ordering = ['-pub_date',]
         verbose_name = 'draft'
         verbose_name_plural = 'drafties'
+
+
+class Tag(models.Model):
+    name = models.SlugField(max_length=25)
+
+    def __str__(self):
+        return self.name

@@ -7,7 +7,7 @@ from django.contrib.auth.views import redirect_to_login
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 
-from .models import Draft
+from .models import Draft, Tag
 from .forms import DraftForm
 
 
@@ -128,8 +128,6 @@ class DraftDetailView(QueryFromBlog, DetailView):
             return last_commit
 
         return None
-        
-
 
 
 class DraftCreateView(LoginRequiredMixin, CreateView):
@@ -145,6 +143,8 @@ class DraftCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.blog = self.request.user
         form.instance.slug = self._get_draft_unique_slug(form.instance)
+        form.save()
+        self._set_tags(form)
 
         return super().form_valid(form)
 
@@ -166,6 +166,23 @@ class DraftCreateView(LoginRequiredMixin, CreateView):
             slug = non_unique_slug + '-' + unique
 
         return slug
+    
+    def _set_tags(self, form):
+        from django.utils.text import slugify
+
+        tag_str = form.cleaned_data['tags']
+        draft = form.instance
+
+        tag_names = tag_str.split(',')
+        tag_names = [slugify(x) for x in tag_names[:5]]
+
+        for tag_name in tag_names:
+            tag_query = Tag.objects.filter(name__exact=tag_name)
+            if tag_query.exists():
+                tag = tag_query[0]
+                draft.tags.add(tag)
+            else:
+                draft.tags.create(name=tag_name)
 
 
 class DraftUpdateView(QueryFromBlog, AccessRequired, LoginRequiredMixin, UpdateView):

@@ -9,7 +9,7 @@ Blog = get_user_model()
 
 class Draft(models.Model):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
-    tags = models.ManyToManyField('draft.tag')
+    tags = models.ManyToManyField('draft.tag', related_name='tagged_drafts')
     comments = models.ManyToManyField('draft.comment', related_name='draft')
     likes = models.ManyToManyField(Blog, related_name='likes')
     favorites = models.ManyToManyField(Blog, related_name='favorites')

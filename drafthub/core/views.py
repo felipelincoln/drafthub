@@ -1,13 +1,20 @@
 from django.contrib.auth import views as auth_views
 from django.views.generic import ListView
-from drafthub.draft.models import Draft
-from django.db.models import Q
+from drafthub.draft.models import Draft, Tag
+from django.db.models import Q, Count
 
 class HomeView(ListView):
     paginate_by = 5
     model = Draft
-    context_object_name = 'blog_content'
+    context_object_name = 'home_drafts'
     template_name = 'core/home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        tags = Tag.objects.annotate(num_drafts=Count('tagged_drafts'))
+        context['tags'] = tags.order_by('-num_drafts')[:15]
+
+        return context
 
 
 class LoginView(auth_views.LoginView):

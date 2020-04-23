@@ -2,12 +2,13 @@ from django.urls import path
 from .views import (
     BlogListView, DraftDetailView, DraftCreateView, DraftUpdateView,
     DraftDeleteView, LikeRedirectView, FavoriteRedirectView,
-    CommentCreateView, CommentEditView, CommentDeleteView,
+    CommentCreateView, CommentEditView, CommentDeleteView, TagListView
 )
 
 
 urlpatterns = [
     path('new/', DraftCreateView.as_view(), name='new'),
+    path('tag/<str:tag>/', TagListView.as_view(), name='tag'),
     path('<str:username>/', BlogListView.as_view(), name='blog'),
     path('<str:username>/<slug:slug>/',
          DraftDetailView.as_view(),

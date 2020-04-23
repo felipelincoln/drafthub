@@ -33,6 +33,22 @@ class AccessRequired:
         return super().dispatch(request, *args, **kwargs)
 
 
+class TagListView(ListView):
+    model = Draft
+    template_name = 'draft/tag.html'
+    context_object_name = 'tag_drafts'
+
+    def get_queryset(self):
+        self.tag = get_object_or_404(Tag, name=self.kwargs['tag'])
+        return self.model.objects.filter(tags=self.tag)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tag'] = self.tag
+
+        return context
+
+
 class BlogListView(ListView):
     model = Draft
     template_name = 'draft/blog.html'

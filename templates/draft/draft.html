@@ -1,83 +1,182 @@
-{% load drafthub_extras %}
 {% load static %}
-<html>
-<head>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/github-markdown.css' %}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/PhilipTrauner/pygments-github-css@master/github.css" />
-    <style>
-	.markdown-body {
-		box-sizing: border-box;
-		min-width: 200px;
-		max-width: 980px;
-		margin: 0 auto;
-		padding: 45px;
-	}
+{% load drafthub_extras %}
+<!doctype html>
+<html lang="en">
+	<head>
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	@media (max-width: 767px) {
-		.markdown-body {
-			padding: 15px;
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+		<link rel="stylesheet" href="{% static 'css/github-markdown.css' %}">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/PhilipTrauner/pygments-github-css@master/github.css" />
+		<style>
+		.quote-hidden-btn {
+			visibility: hidden;
+			opacity: 0;
 		}
-	}
-	</style>
-</head>
-<body>
 
-<p><a href="{% url 'home' %}">Home</a></p>
-<p><a href="{{ draft.blog.get_absolute_url }}">{{ draft.blog  }}</a></p>
-<p><a href="{{ draft.get_absolute_url  }}edit/">Edit</a></p>
-<p><a href="{{ draft.get_absolute_url  }}delete/">Delete</a></p>
+		.tr-hidden-btn:hover > td > .quote-hidden-btn {
+			visibility: visible;
+			opacity: 1;
+		}
+		</style>
 
-<hr>
-<p><b>{{ draft.title }}</b> [<a href="{{ draft.github_url }}">edit on github</a>]</p>
-<p> {{ draft.view_count }} views</p>
-<p> <a href="{{ draft.get_absolute_url }}like/">like</a> {{ draft.likes.count }} likes</p>
-<p><span>{{ draft.blog }}, {{ draft.pub_date }}</span></p>
+	</head>
+	<body>
 
-<p>
-{% for tag in draft.tags.all %}
-<span> {{ tag }} </span>
-{% endfor %}
-</p>
+	<!-- navbar -->
+		<nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
+			<a class="navbar-brand mr-3" href="#">DraftHub</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
 
-{% if draft.last_update %}
-(Last update: {{ draft.last_update }})
-{% endif %}
-
-<p>
-{% if draft in user.favorites.all %}
-<a href="{{ drag.get_absolute_url }}favorite/">Unfavorite</a>
-{% else %}
-<a href="{{ draft.get_absolute_url }}favorite/">Favorite</a>
-{% endif %}
-</p>
-
-
-<p>{{ draft.abstract }}</p>
-
-<div class="markdown-body">
-	{{ draft | markdown }}
-</div>
-
-{% for comment in draft.comments.all %}
-<p> {{ comment }}
-
-{% if comment.blog == user %}
-<a href="{{ draft.get_absolute_url }}comment/{{ comment.pk }}/edit/">[Edit]</a>
-<a href="{{ draft.get_absolute_url }}comment/{{ comment.pk }}/delete/">[Delete]</a>
-{% endif %}
-
-{{ comment.created }}
-
-</p>
-<p> {{ comment.content }} </p>
-<br>
-{% endfor %}
-
-<a href="{{ draft.get_absolute_url }}comment/">Make a comment</a>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-3">
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Favorites
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="#">Albion blackmarket tool</a>
+							<a class="dropdown-item" href="#">Competitive programming algorithms</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="#">Show all</a>
+						</div>
+					</li>
+				</ul>
+				<form class="form-inline my-2 my-lg-0">
+						<input class="form-control" type="search" placeholder="Search" aria-label="Search">
+				</form>
+				  <form class="form-inline ml-auto">
+					<button class="btn btn-outline-info" type="button"><i class="fab fa-github mr-2"></i>Enter with GitHub</button>
+				</form>
+			</div>
+		</nav>
 
 
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+	<!-- first content -->
+		<div class="container-lg ">
+			<div class="row">
+				<div class="col-auto">
+					<h1>{{ draft.title }}</h1>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<p>{{ draft.abstract }}</p>
+				</div>
+			</div>
+			<div class="row align-items-end line-height-1">
+				<div class="col-auto mr-auto mt-3">
+					<div class="row">
+						<div class="col-auto">
+							by <a href="#">{{ draft.blog }}</a>
+						</div>
+						<div class="col-auto">
+							{{ draft.pub_date }}
+						</div>
+						<div class="col-auto">
+							{{ draft.view_count }} views
+						</div>
+					</div>
+				</div>
+				<div class="col-auto ml-3 mt-3">
+					<div class="row">
+						<div class="col-auto pr-3 pl-0">
+							<button class="btn btn-sm btn-outline-info"><i class="far fa-heart mr-2"></i>
+								Like
+								<span class="badge badge-info ml-2">10</span>
+								</button>
+						</div>
+						<div class="col-auto pr-3 pl-0">
+							<button class="btn btn-sm btn-outline-info"><i class="far fa-star mr-2"></i>Favorite</button>
+						</div>
+						<div class="col-auto pr-3 pl-0">
+							<button class="btn btn-sm btn-outline-info"><i class="fab fa-github mr-2"></i>Edit on GitHub</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			</div>
 
-</body>
+	<!-- second content -->
+
+		<hr>
+		<div class="container-lg my-5">
+			<div class="markdown-body">
+				{{ draft | markdown }}
+			</div>
+		</div>
+
+	<!-- third content -->
+
+		<hr>
+		<div class="container-lg">
+			<div class="row align-items-top">
+				<div class="col ml-3">
+					<div class="row">
+						{% for tag in draft.tags.all %}
+						<div class="col-auto p-0 mr-2 mb-2">
+						<span class="badge badge-light border p-2">{{ tag }}</span>
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+				<div class="col-auto ml-3">
+					<div class="row">
+						<div class="col-auto pr-3 pl-0">
+							<button class="btn btn-sm btn-outline-info"><i class="far fa-heart mr-2"></i>
+								Like
+								<span class="badge badge-info ml-2">10</span>
+								</button>
+						</div>
+						<div class="col-auto pr-3 pl-0">
+							<button class="btn btn-sm btn-outline-info"><i class="far fa-star mr-2"></i>Favorite</button>
+						</div>
+						<div class="col-auto pr-3 pl-0">
+							<button class="btn btn-sm btn-outline-info"><i class="fab fa-github mr-2"></i>Edit on GitHub</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	<!-- forth content -->
+		<div class="container-lg mt-5">
+			<h2>Comments</h2>
+			<table class="table">
+				<tbody>
+					{% for comment in draft.comments.all %}
+						<tr class="tr-hidden-btn">
+							<th scope="row">{{ comment.blog }}</th>
+							<td>
+								{{ comment.content }}
+								<span class="text-muted">- {{ comment.created }}</span>
+                <button class="quote-hidden-btn btn btn-sm btn-outline-secondary py-0 ml-1">Quote</button>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+
+
+
+		<div class="my-5" style="height:300px"></div>
+
+
+
+
+		<!-- JavaScript -->
+		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+		<script src="{% static 'js/bootstrap.min.js' %}"></script>
+		<script src="https://kit.fontawesome.com/c17adb2a33.js" crossorigin="anonymous"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+	</body>
 </html>

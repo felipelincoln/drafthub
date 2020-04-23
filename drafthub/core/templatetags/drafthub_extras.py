@@ -97,5 +97,5 @@ def markdown(instance):
 
 
 @register.filter
-def n_range(n):
-    return range(n)
+def count_range(n):
+    return range(1,n+1)

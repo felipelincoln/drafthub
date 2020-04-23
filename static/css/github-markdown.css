@@ -102,6 +102,7 @@
 .markdown-body pre {
   font-family: monospace,monospace;
   font-size: 1em;
+  color: #24292e;
 }
 
 .markdown-body hr {

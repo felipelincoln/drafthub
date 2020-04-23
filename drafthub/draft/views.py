@@ -34,14 +34,20 @@ class AccessRequired:
 
 
 class BlogListView(ListView):
-    paginate_by = 5
     model = Draft
     template_name = 'draft/blog.html'
-    context_object_name = 'blog_content'
+    context_object_name = 'blog_drafts'
 
     def get_queryset(self):
         self.blog = get_object_or_404(Blog, username=self.kwargs['username'])
         return self.model.objects.filter(blog=self.blog)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['blog'] = self.blog
+        context['github'] = self.blog.social_auth.get().extra_data
+
+        return context
 
 
 class DraftDetailView(QueryFromBlog, DetailView):

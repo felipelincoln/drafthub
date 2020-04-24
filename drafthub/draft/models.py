@@ -12,7 +12,7 @@ class Draft(models.Model):
     tags = models.ManyToManyField('draft.tag', related_name='tagged_drafts')
     comments = models.ManyToManyField('draft.comment', related_name='draft')
     likes = models.ManyToManyField(Blog, related_name='likes')
-    favorites = models.ManyToManyField(Blog, related_name='favorites')
+    favorited_by = models.ManyToManyField(Blog, blank=True, related_name='favorited_drafts')
 
     github_url = models.URLField(max_length=1100)
     title = models.CharField(max_length=255)
@@ -31,6 +31,15 @@ class Draft(models.Model):
             'slug': self.slug,
         }
         return reverse('draft', kwargs=kwargs)
+
+    def get_short_title(self):
+        short = self.title
+        if len(short) > 45:
+            short = short[:45]
+            short = short.rstrip()
+            short = short + '...'
+
+        return short
 
     class Meta:
         ordering = ['-pub_date',]

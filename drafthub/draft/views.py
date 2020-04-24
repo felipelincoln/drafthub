@@ -256,10 +256,10 @@ class FavoriteRedirectView(RedirectView):
 
         user = self.request.user
         if user.is_authenticated:
-            if user.favorites.filter(slug=slug, blog__username=username).exists():
-                obj.favorites.remove(user)
+            if user.favorited_drafts.filter(slug=slug, blog__username=username).exists():
+                obj.favorited_by.remove(user)
             else:
-                obj.favorites.add(user)
+                obj.favorited_by.add(user)
 
         return obj.get_absolute_url()
 

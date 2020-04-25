@@ -1,20 +1,14 @@
 {% extends "core/base.html" %}
 {% block search %}
-  {% if search_filter %}
-  {{ search_filter }}:&nbsp;
-  {% endif %}
+  XXXXXXXXX&nbsp;
 {% endblock search %}
 {% block content %}
 
-{{ search_content }}
 <div class="container-lg my-5">
   <h2>
   {{ search_content.count }} results
-  {% if search_query %} for "{{ search_query }}" {% endif %}
-  {% if search_filter %} in {{ search_filter }} {% endif %}
   </h2>
 
-  {% if not search_filter or search_filter == "favorites" %}
   {% for draft in search_content %}
   <div class="card">
   <div class="card-body">
@@ -26,16 +20,13 @@
   </div>
   {% endfor %}
 
-  {% elif search_filter == "tags" %}
   {% for tag in search_content %}
     <a href="{{ tag.get_absolute_url }}">{{ tag }}</a><br>
   {% endfor %}
 
-  {% elif search_filter == "blogs" %}
   {% for blog in search_content %}
     <a href="{{ blog.get_absolute_url }}">{{ blog }}</a><br>
   {% endfor %}
-  {% endif %}
 </div>
 
 {% endblock content %}

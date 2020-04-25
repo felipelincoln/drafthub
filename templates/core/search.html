@@ -1,65 +1,41 @@
-{% extends 'core/base.html' %}
+{% extends "core/base.html" %}
+{% block search %}
+  {% if search_filter %}
+  {{ search_filter }}:&nbsp;
+  {% endif %}
+{% endblock search %}
 {% block content %}
 
-	<div class="container-lg my-5">
-		<div class="row my-3">
-			<div class="col">
-				<h2>Search results for "Python"</h2>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col">
-				<div class="row my-3">
-					<div class="col">
-						<h2>{{ tag_drafts.count }}0 blogs</h2>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col">
-				<div class="row my-3">
-					<div class="col">
-						<h2>{{ tag_drafts.count }}0 tags</h2>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col">
-				<div class="row my-3">
-					<div class="col">
-						<h2>{{ tag_drafts.count }}0 articles</h2>
-					</div>
-				</div>
-				<div class="row row-cols-1">
-					{% for draft in tag_drafts %}
-					<div class="col mb-5">
-						<div class="row">
-							<div class="col">
-								<h2> {{ draft.title }} </h2>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col">
-								{{ draft.abstract }}
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-auto text-muted">
-								{{ draft.pub_date }}
-							</div>
-							{% for tag in draft.tags.all %}
-								<div class="col-auto pr-2 pl-0">
-									<span class="badge badge-info">{{ tag }}</span>
-								</div>
-							{% endfor %}
-						</div>
-					</div>
-				</div>
-			</div>
-			{% endfor %}
-		</div>
-	</div>
+{{ search_content }}
+<div class="container-lg my-5">
+  <h2>
+  {{ search_content.count }} results
+  {% if search_query %} for "{{ search_query }}" {% endif %}
+  {% if search_filter %} in {{ search_filter }} {% endif %}
+  </h2>
+
+  {% if not search_filter or search_filter == "favorites" %}
+  {% for draft in search_content %}
+  <div class="card">
+  <div class="card-body">
+    <h5 class="card-title">{{ draft.title }}</h5>
+    <h6 class="card-subtitle mb-2 text-muted">{{ draft.blog }}, {{ draft.pub_date }}</h6>
+    <p class="card-text">{{ draft.abstract }}</p>
+    <a href="{{ draft.get_absolute_url }}" class="card-link">View</a>
+  </div>
+  </div>
+  {% endfor %}
+
+  {% elif search_filter == "tags" %}
+  {% for tag in search_content %}
+    <a href="{{ tag.get_absolute_url }}">{{ tag }}</a><br>
+  {% endfor %}
+
+  {% elif search_filter == "blogs" %}
+  {% for blog in search_content %}
+    <a href="{{ blog.get_absolute_url }}">{{ blog }}</a><br>
+  {% endfor %}
+  {% endif %}
+</div>
 
 {% endblock content %}

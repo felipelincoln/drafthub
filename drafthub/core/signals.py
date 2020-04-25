@@ -12,7 +12,3 @@ def update_username(sender, instance, created, **kwargs):
         if github['login'] != user.username:
             user.username = github['login']
             user.save(update_fields=['username'])
-
-        if not user.avatar:
-            user.avatar = github['avatar_url']
-            user.save(update_fields=['avatar'])

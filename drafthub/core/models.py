@@ -5,7 +5,7 @@ from django.urls import reverse
 
 class Blog(AbstractUser):
     bio = models.TextField(max_length=160, default='get_from_github')
-    avatar = models.URLField(null=True)
+    favorited_drafts = models.ManyToManyField('draft.draft', blank=True, related_name='favorited_by')
 
     def __str__(self):
         return self.username

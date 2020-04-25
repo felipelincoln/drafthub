@@ -6,9 +6,9 @@ from .models import Draft, Tag, Comment
 class DraftAdmin(admin.ModelAdmin):
     fields = (
         'blog', 'github_url', 'title', 'view_count', 'abstract', 'tags',
-        'slug', 'pub_date', 'last_update', 'likes', 'favorited_by', 'comments'
+        'slug', 'pub_date', 'last_update', 'likes', 'comments'
     )
-    readonly_fields = ('view_count', 'slug', 'pub_date', 'last_update', 'favorited_by', )
+    readonly_fields = ('view_count', 'slug', 'pub_date', 'last_update', )
     list_display = (
         'blog', 'title', 'view_count', 'slug', 'pub_date',
         'last_update'

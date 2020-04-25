@@ -1,32 +1,36 @@
 {% extends "core/base.html" %}
 {% block search %}
-  XXXXXXXXX&nbsp;
+"{% if search_where %}{{ search_where }}{% endif %}
+{% if search_who %}.{{ search_who }}{% endif %}
+{% if search_where or search_who %}:&nbsp;{% endif %}"
 {% endblock search %}
 {% block content %}
+
+where: {{ search_where }}<br>
+who: {{ search_who }}<br>
+what: {{ search_what }}<br>
+multi_who: {{ search_multi_who}}
 
 <div class="container-lg my-5">
   <h2>
   {{ search_content.count }} results
+  {% if search_where == 'tags' %}
+    in tags
+    {% for tag in search_multi_who %}
+			<span class="badge badge-secondary">{{ tag }}</span>
+    {% endfor %}
+  {% elif search_where == 'blogs' %}
+    in blogs
+    {% for blog in search_multi_who %}
+			<a href="#">{{ blog }}</a>
+    {% endfor %}
+  {% endif %}
   </h2>
 
-  {% for draft in search_content %}
-  <div class="card">
-  <div class="card-body">
-    <h5 class="card-title">{{ draft.title }}</h5>
-    <h6 class="card-subtitle mb-2 text-muted">{{ draft.blog }}, {{ draft.pub_date }}</h6>
-    <p class="card-text">{{ draft.abstract }}</p>
-    <a href="{{ draft.get_absolute_url }}" class="card-link">View</a>
-  </div>
-  </div>
-  {% endfor %}
-
-  {% for tag in search_content %}
-    <a href="{{ tag.get_absolute_url }}">{{ tag }}</a><br>
-  {% endfor %}
-
-  {% for blog in search_content %}
-    <a href="{{ blog.get_absolute_url }}">{{ blog }}</a><br>
-  {% endfor %}
+	{% for obj in search_content %}
+	<p><a href="{{ obj.get_absolute_url }}">{{ obj }}</a></p>
+	{% endfor %}
+	
 </div>
 
 {% endblock content %}

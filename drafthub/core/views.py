@@ -36,6 +36,8 @@ class SearchEngine:
     what = []
     content = Draft.objects
 
+    multi_who = []
+
     def __init__(self, request):
         self.request = request
         q = request.GET.get('q')
@@ -47,6 +49,21 @@ class SearchEngine:
         self._set_content_from_where()
         self._filter_content_from_who()
         self._filter_content_from_what()
+
+
+    def get_content(self):
+        return self.content.all()
+
+    @property
+    def get_metadata(self):
+        meta = {
+            'search_where': self.where,
+            'search_who': self.who,
+            'search_what': self.what,
+            'search_multi_who': self.multi_who,
+        }
+        return meta
+
 
     def _set_content_from_where(self):
         if not self.who:
@@ -64,6 +81,7 @@ class SearchEngine:
             if self.where in ['favorites', 'blogs']:
                 blogs = Blog.objects.filter(username__icontains=self.who)
                 if blogs.exists():
+                    self.multi_who = [blog.username for blog in blogs]
                     if self.where == 'favorites':
                         querysets = [x.favorited_drafts.all() for x in blogs]
                     elif self.where == 'blogs':
@@ -77,6 +95,7 @@ class SearchEngine:
             elif self.where == 'tags':
                 drafts = Draft.objects.filter(tags__name__icontains=self.who)
                 if drafts.exists():
+                    self.multi_who = [tag.name for tag in Tag.objects.filter(name__icontains=self.who)]
                     content = drafts
                 else:
                     content = self._filter_not_found()
@@ -121,10 +140,12 @@ class SearchListView(ListView):
     template_name = 'core/search.html'
 
     def get_queryset(self):
-        a = SearchEngine(self.request)
-        return a.content.all()
+        self.search = SearchEngine(self.request)
+        search_content = self.search.get_content()
+        return search_content
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context.update(self.search.get_metadata)
         context['search_content'] = context['search_content'][:25]
         return context

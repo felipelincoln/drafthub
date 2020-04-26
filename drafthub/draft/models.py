@@ -1,7 +1,9 @@
 from django import forms
 from django.db import models
+from django.db.models import Case, When, Value, Count
 from django.urls import reverse
 from django.contrib.auth import get_user_model
+from . import onlinedata
 
 
 Blog = get_user_model()
@@ -46,8 +48,28 @@ class Draft(models.Model):
         verbose_name_plural = 'drafties'
 
 
+class AnnotatedTagManager(models.Manager):
+    online_data = onlinedata.TAG_ONLINE_DATA
+
+    def get_queryset(self):
+        queryset = super().get_queryset().annotate(
+            icon=Case(
+            *[When(name=k, then=Value(v['icon'])) for k, v in self.online_data.items()],
+            output_field=models.CharField()
+            ),
+            description=Case(
+            *[When(name=k, then=Value(v['description'])) for k, v in self.online_data.items()],
+            output_field=models.CharField()
+            ),
+            num_drafts=Count('tagged_drafts')
+        )
+        return queryset
+
+
 class Tag(models.Model):
     name = models.SlugField(max_length=25)
+
+    objects = AnnotatedTagManager()
 
     def __str__(self):
         return self.name

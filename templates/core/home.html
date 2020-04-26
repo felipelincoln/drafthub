@@ -9,13 +9,15 @@
 		</div>
 		<hr>
 		<div class="row">
-			{% for tag in tags %}
-				<div class="col-auto pr-0" ass="col-12 col-sm-6 col-md-4 col-lg-3">
-					<h3 class=""><span class="badge badge-secondary">
-						<i class="fab fa-python"></i>
-						{{ tag }} 
-						{{ tag.tagged_drafts.all.count }}
-						</span></h3>
+			{% for tag in home_tags %}
+				<div class="col-auto pr-0">
+					<h3 class=""><a href="{{ tag.get_absolute_url }}" class="badge badge-secondary">
+                        {% if tag.icon %}
+						<i class="{{ tag.icon }}"></i>
+                        {% endif %}
+						{{ tag }}
+						{{ tag.num_drafts }}
+						</a></h3>
 				</div>
 			{% endfor %}
 		</div>

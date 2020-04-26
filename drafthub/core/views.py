@@ -2,7 +2,6 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth import views as auth_views
 from django.views.generic import ListView
 from drafthub.draft.models import Draft, Tag
-from django.db.models import Q, Count
 import re
 
 Blog = get_user_model()
@@ -16,9 +15,9 @@ class HomeView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        tags = Tag.objects.annotate(num_drafts=Count('tagged_drafts'))
+        tags = Tag.objects.all()
         context.update({
-            'tags': tags.order_by('-num_drafts')[:15],
+            'home_tags':tags.order_by('-num_drafts')[:15],
         })
 
         return context

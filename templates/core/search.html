@@ -1,15 +1,8 @@
 {% extends "core/base.html" %}
-{% block search %}
-"{% if search_where %}{{ search_where }}{% endif %}
-{% if search_who %}.{{ search_who }}{% endif %}
-{% if search_where or search_who %}:&nbsp;{% endif %}"
-{% endblock search %}
-{% block content %}
 
-where: {{ search_where }}<br>
-who: {{ search_who }}<br>
-what: {{ search_what }}<br>
-multi_who: {{ search_multi_who}}
+{% block search %}{{ search_input_value }}{% endblock search %}
+
+{% block content %}
 
 <div class="container-lg my-5">
   <h2>
@@ -19,16 +12,22 @@ multi_who: {{ search_multi_who}}
     {% for tag in search_multi_who %}
 			<span class="badge badge-secondary">{{ tag }}</span>
     {% endfor %}
-  {% elif search_where == 'blogs' %}
+  {% elif search_where == 'blogs' or search_where == 'favorites' and search_who %}
     in blogs
     {% for blog in search_multi_who %}
 			<a href="#">{{ blog }}</a>
     {% endfor %}
+    {% if search_where == 'favorites' %}
+    favorites
+    {% endif %}
+  {% endif %}
+  {% if search_what %}
+    for "{{ search_what|join:" " }}"
   {% endif %}
   </h2>
 
 	{% for obj in search_content %}
-	<p><a href="{{ obj.get_absolute_url }}">{{ obj }}</a></p>
+	<h3><a href="{{ obj.get_absolute_url }}">{{ obj }}</a></h3>
 	{% endfor %}
 	
 </div>

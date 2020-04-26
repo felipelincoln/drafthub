@@ -56,11 +56,20 @@ class SearchEngine:
 
     @property
     def get_metadata(self):
+        input_value = ''
+        if self.where:
+            input_value += self.where
+        if self.who:
+            input_value += '.' + self.who
+        if input_value:
+            input_value += ':'
+
         meta = {
             'search_where': self.where,
             'search_who': self.who,
             'search_what': self.what,
             'search_multi_who': self.multi_who,
+            'search_input_value': input_value
         }
         return meta
 

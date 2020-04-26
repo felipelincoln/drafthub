@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Draft, Tag, Comment
+from .models import Draft, Tag, Comment, Activity
 
 
 @admin.register(Draft)
@@ -24,3 +24,11 @@ class TagAdmin(admin.ModelAdmin):
 @admin.register(Comment)
 class Comment(admin.ModelAdmin):
     pass
+
+
+@admin.register(Activity)
+class Activity(admin.ModelAdmin):
+    fields = (
+        'blog', 'draft', 'favorited', 'liked', 'viewed',
+    )
+    readonly_fields = ('viewed',)

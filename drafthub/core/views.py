@@ -8,7 +8,6 @@ Blog = get_user_model()
 
 
 class HomeView(ListView):
-    paginate_by = 5
     model = Draft
     context_object_name = 'home_drafts'
     template_name = 'core/home.html'
@@ -17,7 +16,8 @@ class HomeView(ListView):
         context = super().get_context_data(**kwargs)
         tags = Tag.objects.all()
         context.update({
-            'home_tags':tags.order_by('-num_drafts')[:15],
+            'home_tags': tags.order_by('-last_drafts', '-num_drafts'),
+            'home_drafts': context['home_drafts'].order_by('-last_likes','-last_views', '-pub_date')
         })
 
         return context

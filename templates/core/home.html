@@ -12,17 +12,16 @@
 			{% for tag in home_tags %}
 				<div class="col-auto pr-0">
 					<h3 class=""><a href="{{ tag.get_absolute_url }}" class="badge badge-secondary">
-                        {% if tag.icon %}
+						{% if tag.icon %}
 						<i class="{{ tag.icon }}"></i>
-                        {% endif %}
+						{% endif %}
 						{{ tag }}
-						{{ tag.num_drafts }}
+						{{ tag.num_drafts }} (+{{ tag.last_drafts }})
 						</a></h3>
 				</div>
 			{% endfor %}
 		</div>
 	</div>
-
 
 	<div class="container-lg my-5">
 		<div class="row">
@@ -31,28 +30,26 @@
 			</div>
 		</div>
 		<hr>
-		<div class="row row-cols-1">
+		<div class="row row-cols-1 row-cols-md-2">
 			{% for draft in home_drafts %}
 			<div class="col mb-5">
-				<div class="row">
-					<div class="col">
-						<h2> {{ draft.title }} </h2>
+				<div class="card">
+					<div class="card-body">
+                        +{{ draft.last_favorites }} favorites, +{{ draft.last_likes }} likes, +{{ draft.last_views }} views in the last week
+						<h5 class="card-title"><a class="inherit-color" href="{{ draft.get_absolute_url }}">{{ draft.title }}</a></h5>
+						<h6 class="card-subtitle mb-2 text-muted">
+							<a class="inherit-color" href="{{ draft.blog.get_absolute_url }}">{{ draft.blog }}</a>
+							, <a class="inherit-color" href="{{ draft.get_absolute_url }}">{{ draft.pub_date|date:"M d, Y" }}</a></h6>
+						<p class="card-text">{{ draft.abstract }}</p>
+						{% for tag in draft.tags.all %}
+							<a href="{{ tag.get_absolute_url }}" class="card-link badge badge-pill badge-light border">
+								{% if tag.icon %}
+								<i class="{{ tag.icon }}"></i>
+								{% endif %}
+								{{ tag }}
+								</a>
+						{% endfor %}
 					</div>
-				</div>
-				<div class="row">
-					<div class="col">
-						{{ draft.abstract }}
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-auto text-muted">
-						{{ draft.pub_date }}
-					</div>
-					{% for tag in draft.tags.all %}
-						<div class="col-auto pr-2 pl-0">
-							<span class="badge badge-info">{{ tag }}</span>
-						</div>
-					{% endfor %}
 				</div>
 			</div>
 			{% endfor %}

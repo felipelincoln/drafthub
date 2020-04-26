@@ -1,13 +1,11 @@
 from django import forms
 from django.db import models
-from django.db.models import Case, When, Value, Count
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from . import onlinedata
 
+from .managers import DraftManager, TagManager
 
 Blog = get_user_model()
-
 
 class Draft(models.Model):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='my_drafts')
@@ -22,6 +20,8 @@ class Draft(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
     last_update = models.DateTimeField(blank=True, null=True)
     view_count = models.IntegerField(default=0)
+
+    objects = DraftManager()
 
     def __str__(self):
         return self.title
@@ -48,28 +48,10 @@ class Draft(models.Model):
         verbose_name_plural = 'drafties'
 
 
-class AnnotatedTagManager(models.Manager):
-    online_data = onlinedata.TAG_ONLINE_DATA
-
-    def get_queryset(self):
-        queryset = super().get_queryset().annotate(
-            icon=Case(
-            *[When(name=k, then=Value(v['icon'])) for k, v in self.online_data.items()],
-            output_field=models.CharField()
-            ),
-            description=Case(
-            *[When(name=k, then=Value(v['description'])) for k, v in self.online_data.items()],
-            output_field=models.CharField()
-            ),
-            num_drafts=Count('tagged_drafts')
-        )
-        return queryset
-
-
 class Tag(models.Model):
     name = models.SlugField(max_length=25)
 
-    objects = AnnotatedTagManager()
+    objects = TagManager()
 
     def __str__(self):
         return self.name
@@ -97,3 +79,29 @@ class Comment(models.Model):
         ordering = ['created',]
         verbose_name = 'comment'
         verbose_name_plural = 'comments'
+
+
+class Activity(models.Model):
+    blog = models.ForeignKey(
+        Blog, 
+        on_delete=models.CASCADE,
+        related_name='my_activities'
+    )
+    draft = models.ForeignKey(
+        Draft,
+        on_delete=models.CASCADE,
+        related_name='activities'
+    )
+
+    favorited = models.DateTimeField(blank=True, null=True)
+    liked = models.DateTimeField(blank=True, null=True)
+    viewed = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+
+    def __str__(self):
+        return str(self.blog) + ' -> ' + str(self.draft)
+
+
+    class Meta:
+        verbose_name = 'activity'
+        verbose_name_plural = 'activities'

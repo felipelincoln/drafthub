@@ -6,8 +6,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import redirect_to_login
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
-from .models import Draft, Tag, Comment
+from .models import Draft, Tag, Comment, Activity
 from .forms import DraftForm
 
 
@@ -73,16 +74,20 @@ class DraftDetailView(QueryFromBlog, DetailView):
 
     def get_object(self):
         obj = super().get_object()
-
         obj.view_count += 1
         obj.save(update_fields=['view_count'])
 
         if self.request.user.is_authenticated:
-            try:
-                obj.last_update = self._get_draft_last_update(obj)
-                obj.save(update_fields=['last_update'])
-            except:
-                pass
+            activity = Activity.objects.filter(blog=self.request.user, draft=obj)
+            if activity.exists():
+                activity = activity.get()
+                activity.save(update_fields=['viewed'])
+            else:
+                activity = Activity(blog=self.request.user, draft=obj)
+                activity.save()
+
+            obj.last_update = self._get_draft_last_update(obj)
+            obj.save(update_fields=['last_update'])
 
         return obj
 
@@ -205,7 +210,7 @@ class DraftCreateView(LoginRequiredMixin, CreateView):
         for tag_name in tag_names:
             tag_query = Tag.objects.filter(name__exact=tag_name)
             if tag_query.exists():
-                tag = tag_query[0]
+                tag = tag_query.get()
                 draft.tags.add(tag)
             else:
                 draft.tags.create(name=tag_name)
@@ -245,6 +250,21 @@ class LikeRedirectView(RedirectView):
             else:
                 obj.likes.add(user)
 
+        if self.request.user.is_authenticated:
+            activity = Activity.objects.filter(blog=self.request.user, draft=obj)
+            if activity.exists():
+                activity = activity.get()
+                if activity.liked:
+                    activity.liked = None
+                else:
+                    activity.liked = timezone.now()
+
+                activity.save(update_fields=['liked'])
+            else:
+                activity = Activity(blog=self.request.user, draft=obj)
+                activity.liked = timezone.now()
+                activity.save()
+
         return obj.get_absolute_url()
 
 
@@ -260,6 +280,21 @@ class FavoriteRedirectView(RedirectView):
                 obj.favorited_by.remove(user)
             else:
                 obj.favorited_by.add(user)
+
+        if self.request.user.is_authenticated:
+            activity = Activity.objects.filter(blog=self.request.user, draft=obj)
+            if activity.exists():
+                activity = activity.get()
+                if activity.favorited:
+                    activity.favorited = None
+                else:
+                    activity.favorited = timezone.now()
+
+                activity.save(update_fields=['favorited'])
+            else:
+                activity = Activity(blog=self.request.user, draft=obj)
+                activity.favorited = timezone.now()
+                activity.save()
 
         return obj.get_absolute_url()
 

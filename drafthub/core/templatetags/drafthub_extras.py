@@ -99,3 +99,11 @@ def markdown(instance):
 @register.filter
 def count_range(n):
     return range(1,n+1)
+
+@register.filter
+def get_favorited_activities(user):
+    return user.my_activities.filter(favorited__isnull=False)
+
+@register.filter
+def count_favorited_activities(user):
+    return user.my_activities.filter(favorited__isnull=False).count()

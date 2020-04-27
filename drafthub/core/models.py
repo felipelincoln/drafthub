@@ -15,7 +15,7 @@ class Blog(AbstractUser):
         return Draft.objects.filter(
             activities__blog=self,
             activities__favorited__isnull=False
-        )
+        ).order_by('-activities__favorited')
 
     @property
     def liked_drafts(self):
@@ -23,7 +23,7 @@ class Blog(AbstractUser):
         return Draft.objects.filter(
             activities__blog=self,
             activities__liked__isnull=False
-        )
+        ).order_by('-activities__liked')
 
     @property
     def viewed_drafts(self):
@@ -31,7 +31,7 @@ class Blog(AbstractUser):
         return Draft.objects.filter(
             activities__blog=self,
             activities__viewed__isnull=False
-        )
+        ).order_by('-activities__viewed')
 
     def get_absolute_url(self):
         args = (self.username,)

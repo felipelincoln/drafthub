@@ -68,12 +68,15 @@
 					<li class="navbar-item mr-3 mt-2 mt-md-0">
 						<a class="btn btn-light" role="button" href="{{ user.get_absolute_url }}">{{ user }}</a>
 					</li>
+					<li class="navbar-item mr-3 mt-2 mt-md-0">
+						<a class="btn btn-info" role="button" href="{% url 'new' %}">New Draft</a>
+					</li>
 					<li class="navbar-item mt-2 mt-md-0">
-						<a class="btn btn-outline-danger" href="{% url 'logout' %}" role="button">Logout</a>
+						<a class="btn btn-outline-danger" href="{% url 'logout' %}?next={{ request.path }}" role="button">Logout</a>
 					</li>
 					{% else %}
 					<li class="navbar-item">
-						<a class="btn btn-outline-info" role="button" href="{% url 'social:begin' 'github' %}?next={{ request.GET.next }}"><i class="fab fa-github mr-2"></i>Enter with GitHub</a>
+						<a class="btn btn-outline-info" role="button" href="{% url 'social:begin' 'github' %}?next={{ request.path }}"><i class="fab fa-github mr-2"></i>Enter with GitHub</a>
 					</li>
 					{% endif %}
 				</ul>

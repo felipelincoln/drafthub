@@ -8,10 +8,21 @@ from .managers import DraftManager, TagManager
 Blog = get_user_model()
 
 class Draft(models.Model):
-    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='my_drafts')
-    tags = models.ManyToManyField('draft.tag', related_name='tagged_drafts')
-    comments = models.ManyToManyField('draft.comment', related_name='draft')
-    likes = models.ManyToManyField(Blog, related_name='likes')
+    blog = models.ForeignKey(
+        Blog,
+        on_delete=models.CASCADE,
+        related_name='my_drafts'
+    )
+    tags = models.ManyToManyField(
+        'draft.tag',
+        blank=True,
+        related_name='tagged_drafts'
+    )
+    comments = models.ManyToManyField(
+        'draft.comment',
+        blank=True,
+        related_name='draft'
+    )
 
     github_url = models.URLField(max_length=1100)
     title = models.CharField(max_length=255)
@@ -19,12 +30,31 @@ class Draft(models.Model):
     abstract = models.TextField(max_length=255, blank=True)
     pub_date = models.DateTimeField(auto_now_add=True)
     last_update = models.DateTimeField(blank=True, null=True)
-    view_count = models.IntegerField(default=0)
+    hits = models.IntegerField(default=0)
 
     objects = DraftManager()
 
     def __str__(self):
         return self.title
+
+    @property
+    def favorites(self):
+        return Blog.objects.filter(
+            my_activities__draft=self,
+            my_activities__favorited__isnull=False
+        )
+
+    def likes(self):
+        return Blog.objects.filter(
+            my_activities__draft=self,
+            my_activities__liked__isnull=False
+        )
+
+    def views(self):
+        return Blog.objects.filter(
+            my_activities__draft=self,
+            my_activities__viewed__isnull=False
+        )
 
     def get_absolute_url(self):
         kwargs = {
@@ -45,7 +75,7 @@ class Draft(models.Model):
     class Meta:
         ordering = ['-pub_date',]
         verbose_name = 'draft'
-        verbose_name_plural = 'drafties'
+        verbose_name_plural = 'drafts'
 
 
 class Tag(models.Model):
@@ -63,7 +93,7 @@ class Comment(models.Model):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
     content = models.TextField(max_length=255)
     created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
         return self.blog.username + "'s comment (#{})".format(self.id)

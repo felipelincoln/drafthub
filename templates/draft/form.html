@@ -1,8 +1,51 @@
-<a href="{% url 'home' %}">Home</a>
-<form action="" method="POST">
-{% csrf_token %}
+{% extends 'core/base.html' %}
+{% load drafthub_extras %}
+{% block content %}
 
-{{ form.as_p }}
+<div class="container-lg">
+	<div class="row justify-content-center">
+		<div class="col-auto">
+			<form action="" method="POST">
+				{% csrf_token %}
 
-<input type="submit" value="Submit">
-</form>
+				<div class="form-group">
+					{% if form_type == 'comment_create' %}
+					{{ form.content.errors }}
+					<label for="{{ form.content.id_for_label }}">
+						Make a comment to <b>{{ comment_draft }}</b> <a href="{{ comment_draft.get_absolute_url }}#third-content">(back)</a>
+					</label>
+					<textarea style="resize:none;" name="content" class="form-control" id="form.content.id_for_label" rows="10" cols="60" required>{{ form.content.value|default:"" }}</textarea>
+					<input type="submit" class="btn btn-info" value="Submit">
+
+					{% elif form_type == 'comment_edit' %}
+					{{ form.content.errors }}
+					<label for="{{ form.content.id_for_label }}">
+						Edit your comment <a href="{{ comment_draft.get_absolute_url }}#third-content">(back)</a>
+					</label>
+					<textarea style="resize:none;" name="content" class="form-control" id="form.content.id_for_label" rows="10" cols="60" required>{{ form.content.value|default:"" }}</textarea>
+					<input type="submit" class="btn btn-info" value="Submit">
+
+					{% elif form_type == 'comment_delete' %}
+					Are you sure you want delete your comment? <a href="{{ comment_draft.get_absolute_url }}#third-content">(back)</a><br>
+					<input type="submit" class="btn btn-danger mt-2" value="Confirm">
+
+					{% elif form_type == 'draft_edit'%}
+					<a href="{{ form.instance.get_absolute_url }}">(back)</a><br>
+					{{ form.as_p }}
+					<input type="submit" class="btn btn-info" value="Submit">
+
+					{% elif form_type == 'draft_create'%}
+					{{ form.as_p }}
+					<input type="submit" class="btn btn-info" value="Submit">
+
+					{% elif form_type == 'draft_delete' %}
+					Are you sure you want delete your draft? <a href="{{ draft.get_absolute_url }}">(back)</a><br>
+					<input type="submit" class="btn btn-danger mt-2" value="Confirm">
+					{% endif %}
+				</div>
+
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock content %}

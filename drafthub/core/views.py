@@ -45,10 +45,9 @@ class SearchEngine:
         self.where, self.who, self.what = re_object.match(q).groups()
         self.what = self.what.split()
 
-        if self.request.user.is_authenticated:
-            self._set_content_from_where()
-            self._filter_content_from_who()
-            self._filter_content_from_what()
+        self._set_content_from_where()
+        self._filter_content_from_who()
+        self._filter_content_from_what()
 
 
     def get_content(self):
@@ -82,7 +81,8 @@ class SearchEngine:
             elif self.where == 'tags':
                 content = Tag.objects
             elif self.where == 'favorites':
-                content = self.request.user.favorited_drafts 
+                if self.request.user.is_authenticated:
+                    content = self.request.user.favorited_drafts 
             self.content = content
 
     def _filter_content_from_who(self):

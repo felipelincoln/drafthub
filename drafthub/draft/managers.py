@@ -32,6 +32,8 @@ class TagManager(models.Manager):
             output_field=models.CharField()
             ),
             num_drafts=Count('tagged_drafts'),
-            last_drafts=Count('tagged_drafts', filter=Q(tagged_drafts__pub_date__gte=latest_date))
+            last_drafts=Count('tagged_drafts', filter=Q(tagged_drafts__pub_date__gte=latest_date)
+                |Q(tagged_drafts__last_update__gte=latest_date)
+            )
         )
         return queryset

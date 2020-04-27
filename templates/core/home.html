@@ -35,11 +35,14 @@
 			<div class="col mb-5">
 				<div class="card">
 					<div class="card-body">
-                        +{{ draft.last_favorites }} favorites, +{{ draft.last_likes }} likes, +{{ draft.last_views }} views in the last week
+						+{{ draft.last_favorites }} favorites, +{{ draft.last_likes }} likes, +{{ draft.last_views }} views in the last week
 						<h5 class="card-title"><a class="inherit-color" href="{{ draft.get_absolute_url }}">{{ draft.title }}</a></h5>
 						<h6 class="card-subtitle mb-2 text-muted">
 							<a class="inherit-color" href="{{ draft.blog.get_absolute_url }}">{{ draft.blog }}</a>
-							, <a class="inherit-color" href="{{ draft.get_absolute_url }}">{{ draft.pub_date|date:"M d, Y" }}</a></h6>
+							, <a class="inherit-color" href="{{ draft.get_absolute_url }}">
+								{{ draft.pub_date|date:"M d, Y" }}
+								{% if draft.last_update %} (updated {{ draft.last_update|date:"M d, Y" }}){% endif %}
+							</a></h6>
 						<p class="card-text">{{ draft.abstract }}</p>
 						{% for tag in draft.tags.all %}
 							<a href="{{ tag.get_absolute_url }}" class="card-link badge badge-pill badge-light border">

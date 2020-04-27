@@ -7,6 +7,14 @@
 			<div class="col-auto">
 				<h1>{{ draft.title }}</h1>
 			</div>
+			{% if user == draft.blog %}
+			<div class="col-auto my-auto pr-0">
+				<a href="{{ draft.get_absolute_url }}edit/" role="button" class="btn btn-outline-danger">Edit</a>
+			</div>
+			<div class="col-auto my-auto">
+				<a href="{{ draft.get_absolute_url }}delete/" role="button" class="btn btn-outline-danger">Delete</a>
+			</div>
+			{% endif %}
 		</div>
 		<div class="row">
 			<div class="col">
@@ -17,29 +25,42 @@
 			<div class="col-auto mr-auto mt-3">
 				<div class="row">
 					<div class="col-auto">
-						by <a href="#">{{ draft.blog }}</a>
+						by <a href="{{ draft.blog.get_absolute_url }}">{{ draft.blog }}</a>
 					</div>
 					<div class="col-auto">
 						{{ draft.pub_date }}
+						{% if draft.last_update %} (updated {{ draft.last_update|date:"M d, Y" }}){% endif %}
 					</div>
 					<div class="col-auto">
-						{{ draft.view_count }} views
+						{{ draft.views.count }} views
 					</div>
 				</div>
 			</div>
 			<div class="col-auto ml-3 mt-3">
 				<div class="row">
-					<div class="col-auto pr-3 pl-0">
-						<button class="btn btn-sm btn-outline-info"><i class="far fa-heart mr-2"></i>
+					<div class="col-auto pr-0 pl-0 mr-3">
+						{% if request.user|in_queryset:draft.likes %}<button class="btn btn-sm btn-info">
+						{% else %}<button class="btn btn-sm btn-outline-info">
+						{% endif %}
+							<i class="far fa-heart mr-2"></i>
 							Like
-							<span class="badge badge-info ml-2">10</span>
-							</button>
+							<span class="badge badge-info ml-2">{{ draft.likes.count }}</span>
+							<a href="{{ draft.get_absolute_url }}like/" class="stretched-link"></a>
+						</button>
 					</div>
-					<div class="col-auto pr-3 pl-0">
-						<button class="btn btn-sm btn-outline-info"><i class="far fa-star mr-2"></i>Favorite</button>
+					<div class="col-auto pr-0 pl-0 mr-3">
+						{% if request.user|in_queryset:draft.favorites %}<button class="btn btn-sm btn-info">
+						{% else %}<button class="btn btn-sm btn-outline-info">
+						{% endif %}
+							<i class="far fa-star mr-2"></i>
+							Favorite
+							<span class="badge badge-info ml-2">{{ draft.favorites.count }}</span>
+							<a href="{{ draft.get_absolute_url }}favorite/" class="stretched-link"></a>
+						</button>
 					</div>
-					<div class="col-auto pr-3 pl-0">
+					<div class="col-auto pr-0 pl-0 mr-3">
 						<button class="btn btn-sm btn-outline-info"><i class="fab fa-github mr-2"></i>Edit on GitHub</button>
+						<a href="{{ draft.github_url }}" target="_blank" class="stretched-link"></a>
 					</div>
 				</div>
 			</div>
@@ -58,30 +79,47 @@
 <!-- third content -->
 
 	<hr>
-	<div class="container-lg">
+	<div class="container-lg" id="third-content">
 		<div class="row align-items-top">
 			<div class="col ml-3">
 				<div class="row">
 					{% for tag in draft.tags.all %}
 					<div class="col-auto p-0 mr-2 mb-2">
-					<span class="badge badge-light border p-2">{{ tag }}</span>
+						<a href="{{ tag.get_absolute_url }}" class="card-link badge badge-light border p-2">
+							{% if tag.icon %}
+							<i class="{{ tag.icon }}"></i>
+							{% endif %}
+							{{ tag }}
+						</a>
 					</div>
 					{% endfor %}
 				</div>
 			</div>
 			<div class="col-auto ml-3">
 				<div class="row">
-					<div class="col-auto pr-3 pl-0">
-						<button class="btn btn-sm btn-outline-info"><i class="far fa-heart mr-2"></i>
+					<div class="col-auto pr-0 pl-0 mr-3">
+						{% if request.user|in_queryset:draft.likes %}<button class="btn btn-sm btn-info">
+						{% else %}<button class="btn btn-sm btn-outline-info">
+						{% endif %}
+							<i class="far fa-heart mr-2"></i>
 							Like
-							<span class="badge badge-info ml-2">10</span>
-							</button>
+							<span class="badge badge-info ml-2">{{ draft.likes.count }}</span>
+							<a href="{{ draft.get_absolute_url }}like/#third-content" class="stretched-link"></a>
+						</button>
 					</div>
-					<div class="col-auto pr-3 pl-0">
-						<button class="btn btn-sm btn-outline-info"><i class="far fa-star mr-2"></i>Favorite</button>
+					<div class="col-auto pr-0 pl-0 mr-3">
+						{% if request.user|in_queryset:draft.favorites %}<button class="btn btn-sm btn-info">
+						{% else %}<button class="btn btn-sm btn-outline-info">
+						{% endif %}
+							<i class="far fa-star mr-2"></i>
+							Favorite
+							<span class="badge badge-info ml-2">{{ draft.favorites.count }}</span>
+							<a href="{{ draft.get_absolute_url }}favorite/#third-content" class="stretched-link"></a>
+						</button>
 					</div>
-					<div class="col-auto pr-3 pl-0">
+					<div class="col-auto pr-0 pl-0 mr-3">
 						<button class="btn btn-sm btn-outline-info"><i class="fab fa-github mr-2"></i>Edit on GitHub</button>
+						<a href="{{ draft.github_url }}" target="_blank" class="stretched-link"></a>
 					</div>
 				</div>
 			</div>
@@ -97,13 +135,31 @@
 				{% for comment in draft.comments.all %}
 					<tr class="tr-hidden-btn">
 						<th scope="row">{{ comment.blog }}</th>
-						<td>
-							{{ comment.content }}
-							<span class="text-muted">- {{ comment.created }}</span>
-							<button class="quote-hidden-btn btn btn-sm btn-outline-secondary py-0 ml-1">Quote</button>
+						<td style ="word-break:break-all; vertical-align:top">
+							<div class="markdown-body">
+							{{ comment.content|plaintext_markdown}}
+							</div>
+
+							<br>
+							<span class="text-muted">{{ comment.created }}</span>
+							{% if comment.updated > comment.created %}
+							<span class="text-muted">(edited {{ comment.updated }})</span>
+							{% endif %}
+
+							{% if user == comment.blog %}
+							<a href="{{ draft.get_absolute_url }}comment/{{ comment.pk }}/edit" role="button" class="btn btn-sm btn-outline-danger py-0 ml-1">Edit</a>
+							<a href="{{ draft.get_absolute_url }}comment/{{ comment.pk }}/delete" role="button" class="btn btn-sm btn-outline-danger py-0 ml-1">Delete</a>
+							{% endif %}
+							<a href="{{ draft.get_absolute_url }}comment/?quote={{ comment.pk }}" role="button" class="quote-hidden-btn btn btn-sm btn-outline-info py-0 ml-1">Quote</a>
 						</td>
 					</tr>
 				{% endfor %}
+				<tr class="tr-hidden-btn">
+					<th scope="row"> </th>
+					<td>
+						<a href="{{ draft.get_absolute_url }}comment/" role="button" class="btn btn-sm btn-info">Make a comment</a>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 	</div>

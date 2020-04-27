@@ -74,8 +74,8 @@ class DraftDetailView(QueryFromBlog, DetailView):
 
     def get_object(self):
         obj = super().get_object()
-        obj.view_count += 1
-        obj.save(update_fields=['view_count'])
+        obj.hits += 1
+        obj.save(update_fields=['hits'])
 
         if self.request.user.is_authenticated:
             activity = Activity.objects.filter(blog=self.request.user, draft=obj)
@@ -165,6 +165,14 @@ class DraftCreateView(LoginRequiredMixin, CreateView):
     form_class = DraftForm
     template_name = 'draft/form.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'form_type': 'draft_create',
+        })
+
+        return context
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['request'] = self.request
@@ -208,6 +216,8 @@ class DraftCreateView(LoginRequiredMixin, CreateView):
         tag_names = [slugify(x) for x in tag_names[:5]]
 
         for tag_name in tag_names:
+            if not tag_name:
+                continue
             tag_query = Tag.objects.filter(name__exact=tag_name)
             if tag_query.exists():
                 tag = tag_query.get()
@@ -220,6 +230,14 @@ class DraftUpdateView(QueryFromBlog, AccessRequired, LoginRequiredMixin, UpdateV
     form_class = DraftForm
     template_name = 'draft/form.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'form_type': 'draft_edit',
+        })
+
+        return context
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['request'] = self.request
@@ -229,68 +247,104 @@ class DraftUpdateView(QueryFromBlog, AccessRequired, LoginRequiredMixin, UpdateV
 
 class DraftDeleteView(QueryFromBlog, AccessRequired, LoginRequiredMixin, DeleteView):
     model = Draft
-    template_name = 'draft/delete.html'
+    template_name = 'draft/form.html'
     context_object_name = 'draft'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'form_type': 'draft_delete',
+        })
+
+        return context
 
     def get_success_url(self):
         args = (self.kwargs['username'],)
         return reverse_lazy('blog', args=args)
 
 
-class LikeRedirectView(RedirectView):
+class LikeRedirectView(LoginRequiredMixin, RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         slug = self.kwargs.get('slug')
         username = self.kwargs.get('username')
         obj = get_object_or_404(Draft, slug=slug, blog__username=username)
 
-        if self.request.user.is_authenticated:
-            activity = Activity.objects.filter(blog=self.request.user, draft=obj)
-            if activity.exists():
-                activity = activity.get()
-                if activity.liked:
-                    activity.liked = None
-                else:
-                    activity.liked = timezone.now()
-
-                activity.save(update_fields=['liked'])
+        activity = Activity.objects.filter(blog=self.request.user, draft=obj)
+        if activity.exists():
+            activity = activity.get()
+            if activity.liked:
+                activity.liked = None
             else:
-                activity = Activity(blog=self.request.user, draft=obj)
                 activity.liked = timezone.now()
-                activity.save()
+
+            activity.save(update_fields=['liked'])
+        else:
+            activity = Activity(blog=self.request.user, draft=obj)
+            activity.liked = timezone.now()
+            activity.save()
 
         return obj.get_absolute_url()
 
 
-class FavoriteRedirectView(RedirectView):
+class FavoriteRedirectView(LoginRequiredMixin, RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         slug = self.kwargs.get('slug')
         username = self.kwargs.get('username')
         obj = get_object_or_404(Draft, slug=slug, blog__username=username)
 
-        if self.request.user.is_authenticated:
-            activity = Activity.objects.filter(blog=self.request.user, draft=obj)
-            if activity.exists():
-                activity = activity.get()
-                if activity.favorited:
-                    activity.favorited = None
-                else:
-                    activity.favorited = timezone.now()
-
-                activity.save(update_fields=['favorited'])
+        activity = Activity.objects.filter(blog=self.request.user, draft=obj)
+        if activity.exists():
+            activity = activity.get()
+            if activity.favorited:
+                activity.favorited = None
             else:
-                activity = Activity(blog=self.request.user, draft=obj)
                 activity.favorited = timezone.now()
-                activity.save()
+
+            activity.save(update_fields=['favorited'])
+        else:
+            activity = Activity(blog=self.request.user, draft=obj)
+            activity.favorited = timezone.now()
+            activity.save()
 
         return obj.get_absolute_url()
 
 
 
-from .utils import generate_random_string
 class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
     fields = ['content']
     template_name = 'draft/form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'form_type': 'comment_create',
+            'comment_draft':get_object_or_404(
+                Draft,
+                slug=self.kwargs['slug'],
+                blog__username=self.kwargs['username']
+            )
+        })
+        
+        return context
+
+    def get_initial(self):
+        initial = super().get_initial()
+        if 'quote' in self.request.GET.keys():
+
+            quote_comment_pk = self.request.GET['quote']
+            comment = Comment.objects.filter(pk=quote_comment_pk)
+            if not comment.exists():
+                return initial
+
+            comment = comment.get()
+            quoted_content = '\n> '.join(comment.content.splitlines())
+            initial['content'] = '{} {}\n> {}\n\n'.format(
+                comment.blog.username,
+                comment.created,
+                quoted_content,
+            )
+        return initial
 
     def form_valid(self, form):
         form.instance.blog = self.request.user
@@ -307,7 +361,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         args = (self.kwargs['username'], self.kwargs['slug'])
-        return reverse_lazy('draft', args=args)
+        return reverse_lazy('draft', args=args)+"#third-content"
 
 
 class CommentEditView(AccessRequired, LoginRequiredMixin, UpdateView):
@@ -315,12 +369,49 @@ class CommentEditView(AccessRequired, LoginRequiredMixin, UpdateView):
     template_name = 'draft/form.html'
     fields = ['content']
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'form_type': 'comment_edit',
+            'comment_draft':get_object_or_404(
+                Draft,
+                slug=self.kwargs['slug'],
+                blog__username=self.kwargs['username']
+            )
+        })
+        
+        return context
 
-class CommentDeleteView(AccessRequired, LoginRequiredMixin, DeleteView):
-    model = Comment
-    template_name = 'draft/delete.html'
-    context_object_name = 'draft'
+    def form_valid(self, form):
+        form.instance.updated = timezone.now()
+        form.save()
+
+        return super().form_valid(form)
 
     def get_success_url(self):
         args = (self.kwargs['username'], self.kwargs['slug'])
-        return reverse_lazy('draft', args=args)
+        return reverse_lazy('draft', args=args)+"#third-content"
+
+
+class CommentDeleteView(AccessRequired, LoginRequiredMixin, DeleteView):
+    model = Comment
+    template_name = 'draft/form.html'
+    context_object_name = 'comment'
+    
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'form_type': 'comment_delete',
+            'comment_draft':get_object_or_404(
+                Draft,
+                slug=self.kwargs['slug'],
+                blog__username=self.kwargs['username']
+            )
+        })
+        
+        return context
+
+    def get_success_url(self):
+        args = (self.kwargs['username'], self.kwargs['slug'])
+        return reverse_lazy('draft', args=args)+"#third-content"

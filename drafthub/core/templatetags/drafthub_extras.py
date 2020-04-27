@@ -95,7 +95,19 @@ def markdown(instance):
 
     return sanitized_content
 
+@register.filter
+@mark_safe
+def plaintext_markdown(text):
+    markdown_content = _markdown.markdown(text, **markdown_kwargs)
+    sanitized_content = bleach.clean(markdown_content, **bleach_kwargs)
+
+    return sanitized_content
+
 
 @register.filter
 def count_range(n):
     return range(1,n+1)
+
+@register.filter
+def in_queryset(blog, queryset):
+    return blog in queryset

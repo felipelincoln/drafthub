@@ -243,13 +243,6 @@ class LikeRedirectView(RedirectView):
         username = self.kwargs.get('username')
         obj = get_object_or_404(Draft, slug=slug, blog__username=username)
 
-        user = self.request.user
-        if user.is_authenticated:
-            if user.likes.filter(slug=slug, blog__username=username).exists():
-                obj.likes.remove(user)
-            else:
-                obj.likes.add(user)
-
         if self.request.user.is_authenticated:
             activity = Activity.objects.filter(blog=self.request.user, draft=obj)
             if activity.exists():
@@ -273,13 +266,6 @@ class FavoriteRedirectView(RedirectView):
         slug = self.kwargs.get('slug')
         username = self.kwargs.get('username')
         obj = get_object_or_404(Draft, slug=slug, blog__username=username)
-
-        user = self.request.user
-        if user.is_authenticated:
-            if user.favorited_drafts.filter(slug=slug, blog__username=username).exists():
-                obj.favorited_by.remove(user)
-            else:
-                obj.favorited_by.add(user)
 
         if self.request.user.is_authenticated:
             activity = Activity.objects.filter(blog=self.request.user, draft=obj)

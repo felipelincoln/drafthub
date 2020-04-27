@@ -45,9 +45,10 @@ class SearchEngine:
         self.where, self.who, self.what = re_object.match(q).groups()
         self.what = self.what.split()
 
-        self._set_content_from_where()
-        self._filter_content_from_who()
-        self._filter_content_from_what()
+        if self.request.user.is_authenticated:
+            self._set_content_from_where()
+            self._filter_content_from_who()
+            self._filter_content_from_what()
 
 
     def get_content(self):

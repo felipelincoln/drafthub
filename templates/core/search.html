@@ -10,7 +10,7 @@
   {% if search_where == 'tags' %}
     in tags
     {% for tag in search_multi_who %}
-			<span class="badge badge-secondary">{{ tag }}</span>
+			<a href="/tag/{{ tag }}/" class="badge badge-secondary">{{ tag }}</a>
     {% endfor %}
   {% elif search_where == 'blogs' or search_where == 'favorites' and search_who %}
     in blogs

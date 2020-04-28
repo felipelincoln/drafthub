@@ -8,7 +8,7 @@ from . import onlinedata
 
 class DraftManager(models.Manager):
     def get_queryset(self):
-        latest_date = timezone.now() - timedelta(minutes=1) # everything from the last minute is considered new
+        latest_date = timezone.now() - timedelta(days=7) # everything from the last minute is considered new
         queryset = super().get_queryset().annotate(
             last_views=Count('activities', filter=Q(activities__viewed__gte=latest_date)),
             last_favorites=Count('activities', filter=Q(activities__favorited__gte=latest_date)),
@@ -21,7 +21,7 @@ class TagManager(models.Manager):
     online_data = onlinedata.TAG_ONLINE_DATA
 
     def get_queryset(self):
-        latest_date = timezone.now() - timedelta(minutes=1) # everything from the last minute is considered new
+        latest_date = timezone.now() - timedelta(days=7) # everything from the last minute is considered new
         queryset = super().get_queryset().annotate(
             icon=Case(
             *[When(name=k, then=Value(v['icon'])) for k, v in self.online_data.items()],

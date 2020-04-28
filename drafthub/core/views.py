@@ -39,15 +39,16 @@ class SearchEngine:
 
     def __init__(self, request):
         self.request = request
-        q = request.GET.get('q')
-        template = '^(?:(favorites|blogs|tags)(?:\.(\w+))?:)?\s*(.*?)\s*$'
-        re_object = re.compile(template)
-        self.where, self.who, self.what = re_object.match(q).groups()
-        self.what = self.what.split()
+        if 'q' in request.GET.keys():
+            q = request.GET.get('q')
+            template = '^(?:(favorites|blogs|tags)(?:\.(\w+))?:)?\s*(.*?)\s*$'
+            re_object = re.compile(template)
+            self.where, self.who, self.what = re_object.match(q).groups()
+            self.what = self.what.split()
 
-        self._set_content_from_where()
-        self._filter_content_from_who()
-        self._filter_content_from_what()
+            self._set_content_from_where()
+            self._filter_content_from_who()
+            self._filter_content_from_what()
 
 
     def get_content(self):

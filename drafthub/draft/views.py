@@ -49,6 +49,22 @@ class TagListView(ListView):
 
         return context
 
+class BlogUpdateView(LoginRequiredMixin, UpdateView):
+    model = Blog
+    fields = ['bio', 'email', 'text']
+    template_name = 'draft/form.html'
+    context_object_name = 'blog'
+
+    def get_object(self):
+        obj = get_object_or_404(Blog, username=self.request.user)
+        return obj
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'form_type': 'blog_edit',
+        })
+        return context
 
 class BlogListView(ListView):
     model = Draft
@@ -238,11 +254,45 @@ class DraftUpdateView(QueryFromBlog, AccessRequired, LoginRequiredMixin, UpdateV
 
         return context
 
+    def form_valid(self, form):
+        self._set_tags(form)
+        return super().form_valid(form)
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['request'] = self.request
 
         return kwargs
+
+    def get_initial(self):
+        initial = super().get_initial()
+        tags = self.object.tags.all().values_list('name', flat=True)
+        initial.update({
+            'tags': ', '.join(tags),
+        })
+
+        return initial
+        
+        
+
+    def _set_tags(self, form):
+        from django.utils.text import slugify
+
+        tag_str = form.cleaned_data['tags']
+        draft = form.instance
+
+        tag_names = tag_str.split(',')
+        tag_names = [slugify(x) for x in tag_names[:5]]
+
+        for tag_name in tag_names:
+            if not tag_name:
+                continue
+            tag_query = Tag.objects.filter(name__exact=tag_name)
+            if tag_query.exists():
+                tag = tag_query.get()
+                draft.tags.add(tag)
+            else:
+                draft.tags.create(name=tag_name)
 
 
 class DraftDeleteView(QueryFromBlog, AccessRequired, LoginRequiredMixin, DeleteView):

@@ -41,6 +41,11 @@
 					{% elif form_type == 'draft_delete' %}
 					Are you sure you want delete your draft? <a href="{{ draft.get_absolute_url }}">(back)</a><br>
 					<input type="submit" class="btn btn-danger mt-2" value="Confirm">
+
+					{% elif form_type == 'blog_edit'%}
+					<a href="{{ form.instance.get_absolute_url }}">Voltar</a>
+					{{ form.as_p }}
+					<input type="submit" class="btn btn-info" value="Submit">
 					{% endif %}
 				</div>
 

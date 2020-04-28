@@ -4,7 +4,8 @@ from django.urls import reverse
 
 
 class Blog(AbstractUser):
-    bio = models.TextField(max_length=160, default='get_from_github')
+    bio = models.CharField(max_length=160, default='get_from_github')
+    text = models.TextField(default='say a word about your blog ;)')
 
     def __str__(self):
         return self.username

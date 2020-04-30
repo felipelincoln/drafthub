@@ -1,0 +1,9 @@
+*.pyc
+*.md
+
+LICENSE
+
+.git*
+.git*/
+
+docker-compose.yml 

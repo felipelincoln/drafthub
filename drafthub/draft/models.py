@@ -35,7 +35,7 @@ class Draft(models.Model):
     objects = DraftManager()
 
     def __str__(self):
-        return self.title
+        return self.get_short_title()
 
     @property
     def favorites(self):

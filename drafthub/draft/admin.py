@@ -32,3 +32,5 @@ class Activity(admin.ModelAdmin):
         'blog', 'draft', 'favorited', 'liked', 'viewed',
     )
     readonly_fields = ('viewed',)
+    list_display = ('blog', 'draft', 'favorited', 'liked', 'viewed',)
+    list_filter = ('blog', 'draft', 'favorited', 'liked', 'viewed',)

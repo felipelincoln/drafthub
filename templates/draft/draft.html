@@ -133,7 +133,7 @@
 		<table class="table">
 			<tbody>
 				{% for comment in draft.comments.all %}
-					<tr class="tr-hidden-btn">
+					<tr id="{{ comment.id }}" class="tr-hidden-btn">
 						<th scope="row">{{ comment.blog }}</th>
 						<td style ="word-break:break-all; vertical-align:top">
 							<div class="markdown-body">

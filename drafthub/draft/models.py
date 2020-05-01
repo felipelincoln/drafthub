@@ -1,4 +1,3 @@
-from django import forms
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth import get_user_model
@@ -17,11 +16,6 @@ class Draft(models.Model):
         'draft.tag',
         blank=True,
         related_name='tagged_drafts'
-    )
-    comments = models.ManyToManyField(
-        'draft.comment',
-        blank=True,
-        related_name='draft'
     )
 
     github_url = models.URLField(max_length=1100)
@@ -90,20 +84,25 @@ class Tag(models.Model):
         return reverse('tag', args=(self.name,))
 
 class Comment(models.Model):
-    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
-    content = models.TextField(max_length=255)
+    blog = models.ForeignKey(
+        Blog,
+        on_delete=models.CASCADE,
+        related_name='my_comments',
+    )
+    draft = models.ForeignKey(
+        Draft,
+        on_delete=models.CASCADE,
+        related_name='comments',
+    )
+    content = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(blank=True, null=True)
 
-    def __str__(self):
-        return self.blog.username + "'s comment (#{})".format(self.id)
 
     def get_absolute_url(self):
-        kwargs = {
-            'username': self.draft.get().blog.username,
-            'slug': self.draft.get().slug,
-        }
-        return reverse('draft', kwargs=kwargs)
+        draft_url = self.draft.get_absolute_url()
+        pk = self.id
+        return f'{draft_url}#{pk}'
 
     class Meta:
         ordering = ['created',]

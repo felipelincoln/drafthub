@@ -369,7 +369,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context.update({
             'form_type': 'comment_create',
-            'comment_draft':get_object_or_404(
+            'comment_draft': get_object_or_404(
                 Draft,
                 slug=self.kwargs['slug'],
                 blog__username=self.kwargs['username']
@@ -398,20 +398,14 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.blog = self.request.user
-        form.save()
-        obj = get_object_or_404(
+        form.instance.draft = get_object_or_404(
             Draft,
             slug=self.kwargs['slug'],
             blog__username=self.kwargs['username']
         )
-        comment = form.instance
-        obj.comments.add(comment)
+        form.save()
 
         return super().form_valid(form)
-
-    def get_success_url(self):
-        args = (self.kwargs['username'], self.kwargs['slug'])
-        return reverse_lazy('draft', args=args)+"#third-content"
 
 
 class CommentEditView(AccessRequired, LoginRequiredMixin, UpdateView):
@@ -437,10 +431,6 @@ class CommentEditView(AccessRequired, LoginRequiredMixin, UpdateView):
         form.save()
 
         return super().form_valid(form)
-
-    def get_success_url(self):
-        args = (self.kwargs['username'], self.kwargs['slug'])
-        return reverse_lazy('draft', args=args)+"#third-content"
 
 
 class CommentDeleteView(AccessRequired, LoginRequiredMixin, DeleteView):

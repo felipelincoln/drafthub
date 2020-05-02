@@ -10,18 +10,18 @@ class Draft(models.Model):
     blog = models.ForeignKey(
         Blog,
         on_delete=models.CASCADE,
-        related_name='my_drafts'
+        related_name='my_drafts',
     )
     tags = models.ManyToManyField(
         'draft.tag',
         blank=True,
-        related_name='tagged_drafts'
+        related_name='tagged_drafts',
     )
 
     github_url = models.URLField(max_length=1100)
-    title = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255)
-    abstract = models.TextField(max_length=255, blank=True)
+    title = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=107)
+    abstract = models.TextField(max_length=200, blank=True)
     pub_date = models.DateTimeField(auto_now_add=True)
     last_update = models.DateTimeField(blank=True, null=True)
     hits = models.IntegerField(default=0)
@@ -31,25 +31,6 @@ class Draft(models.Model):
     def __str__(self):
         return self.get_short_title()
 
-    @property
-    def favorites(self):
-        return Blog.objects.filter(
-            my_activities__draft=self,
-            my_activities__favorited__isnull=False
-        )
-
-    def likes(self):
-        return Blog.objects.filter(
-            my_activities__draft=self,
-            my_activities__liked__isnull=False
-        )
-
-    def views(self):
-        return Blog.objects.filter(
-            my_activities__draft=self,
-            my_activities__viewed__isnull=False
-        )
-
     def get_absolute_url(self):
         kwargs = {
             'username': self.blog.username,
@@ -57,17 +38,38 @@ class Draft(models.Model):
         }
         return reverse('draft', kwargs=kwargs)
 
-    def get_short_title(self):
+    @property
+    def favorites(self):
+        return Blog.objects.filter(
+            my_activities__draft=self,
+            my_activities__favorited__isnull=False,
+        )
+
+    @property
+    def likes(self):
+        return Blog.objects.filter(
+            my_activities__draft=self,
+            my_activities__liked__isnull=False,
+        )
+
+    @property
+    def views(self):
+        return Blog.objects.filter(
+            my_activities__draft=self,
+            my_activities__viewed__isnull=False,
+        )
+
+    def get_short_title(self, max_len=50):
         short = self.title
-        if len(short) > 45:
-            short = short[:45]
+        if len(short) > max_len:
+            short = short[:max_len-3]
             short = short.rstrip()
             short = short + '...'
 
         return short
 
     class Meta:
-        ordering = ['-pub_date',]
+        ordering = ['-pub_date', '-last_update']
         verbose_name = 'draft'
         verbose_name_plural = 'drafts'
 

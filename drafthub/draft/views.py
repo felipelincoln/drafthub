@@ -90,20 +90,24 @@ class DraftDetailView(QueryFromBlog, DetailView):
 
     def get_object(self):
         obj = super().get_object()
-        obj.hits += 1
-        obj.save(update_fields=['hits'])
+        referer = self.request.META.get('HTTP_REFERER') or ''
+
+        if not self.request.user in obj.views:
+            if not obj.get_absolute_url() in referer:
+                obj.hits += 1
+                obj.save(update_fields=['hits'])
 
         if self.request.user.is_authenticated:
-            activity = Activity.objects.filter(blog=self.request.user, draft=obj)
-            if activity.exists():
-                activity = activity.get()
+            activity, created = Activity.objects.get_or_create(
+                blog=self.request.user,
+                draft=obj
+            )
+            if not created:
                 activity.save(update_fields=['viewed'])
-            else:
-                activity = Activity(blog=self.request.user, draft=obj)
-                activity.save()
 
             obj.last_update = self._get_draft_last_update(obj)
-            obj.save(update_fields=['last_update'])
+            if obj.last_update:
+                obj.save(update_fields=['last_update'])
 
         return obj
 
@@ -165,13 +169,11 @@ class DraftDetailView(QueryFromBlog, DetailView):
         last_commit = api_data['data']['repository']['object']['history']
         last_commit = last_commit['edges'][0]['node']['author']['date']
         last_commit = parse_datetime(last_commit)
-        pub_date = obj.pub_date
-        last_update = obj.last_update
 
         tzinfo = last_commit.tzinfo
         last_commit = last_commit.replace(tzinfo=tzinfo).astimezone(tz=None)
 
-        if last_commit > pub_date:
+        if last_commit > obj.pub_date:
             return last_commit
 
         return None
@@ -216,33 +218,25 @@ class DraftCreateView(LoginRequiredMixin, CreateView):
             non_unique_slug = non_unique_slug[:-1]
 
         slug = non_unique_slug
-        while Draft.objects.filter(slug=slug, blog__username=author):
+        while Draft.objects.filter(slug=slug, blog__username=author).exists():
             unique = generate_random_string()
             slug = non_unique_slug + '-' + unique
 
         return slug
     
     def _set_tags(self, form):
-        from django.utils.text import slugify
-
-        tag_str = form.cleaned_data['tags']
+        tags = form.cleaned_data['tags']
         draft = form.instance
 
-        tag_names = tag_str.split(',')
-        tag_names = [slugify(x) for x in tag_names[:5]]
-
-        for tag_name in tag_names:
-            if not tag_name:
-                continue
-            tag_query = Tag.objects.filter(name__exact=tag_name)
-            if tag_query.exists():
-                tag = tag_query.get()
+        if tags:
+            for tag_name in tags:
+                tag, created = Tag.objects.get_or_create(name=tag_name)
                 draft.tags.add(tag)
-            else:
-                draft.tags.create(name=tag_name)
 
 
-class DraftUpdateView(QueryFromBlog, AccessRequired, LoginRequiredMixin, UpdateView):
+class DraftUpdateView(QueryFromBlog, AccessRequired, LoginRequiredMixin,
+                      UpdateView):
+
     form_class = DraftForm
     template_name = 'draft/form.html'
 
@@ -255,6 +249,7 @@ class DraftUpdateView(QueryFromBlog, AccessRequired, LoginRequiredMixin, UpdateV
         return context
 
     def form_valid(self, form):
+        form.instance.tags.clear()
         self._set_tags(form)
         return super().form_valid(form)
 
@@ -272,30 +267,21 @@ class DraftUpdateView(QueryFromBlog, AccessRequired, LoginRequiredMixin, UpdateV
         })
 
         return initial
-        
-        
+
 
     def _set_tags(self, form):
-        from django.utils.text import slugify
-
-        tag_str = form.cleaned_data['tags']
+        tags = form.cleaned_data['tags']
         draft = form.instance
 
-        tag_names = tag_str.split(',')
-        tag_names = [slugify(x) for x in tag_names[:5]]
-
-        for tag_name in tag_names:
-            if not tag_name:
-                continue
-            tag_query = Tag.objects.filter(name__exact=tag_name)
-            if tag_query.exists():
-                tag = tag_query.get()
+        if tags:
+            for tag_name in tags:
+                tag, created = Tag.objects.get_or_create(name=tag_name)
                 draft.tags.add(tag)
-            else:
-                draft.tags.create(name=tag_name)
 
 
-class DraftDeleteView(QueryFromBlog, AccessRequired, LoginRequiredMixin, DeleteView):
+class DraftDeleteView(QueryFromBlog, AccessRequired, LoginRequiredMixin,
+                      DeleteView):
+
     model = Draft
     template_name = 'draft/form.html'
     context_object_name = 'draft'

@@ -1,4 +1,5 @@
-from django.urls import path
+from django.urls import path, include
+
 from .views import (
     DraftCreateView, DraftDetailView, DraftUpdateView, DraftDeleteView,
     CommentCreateView, CommentUpdateView, CommentDeleteView,
@@ -8,39 +9,19 @@ from .views import (
 )
 
 
+draft_urlpatterns = [
+    path('',DraftDetailView.as_view(),name='draft'),
+    path('edit/', DraftUpdateView.as_view()),
+    path('delete/', DraftDeleteView.as_view()),
+    path('comment/new/', CommentCreateView.as_view()),
+    path('comment/<int:pk>/edit/', CommentUpdateView.as_view()),
+    path('comment/<int:pk>/delete/', CommentDeleteView.as_view()),
+    path('like/', LikeRedirectView.as_view()),
+    path('favorite/', FavoriteRedirectView.as_view()),
+]
+
 urlpatterns = [
-    path('new/', DraftCreateView.as_view(), name='draft-new'),
-    path('<str:username>/<slug:slug>/',
-         DraftDetailView.as_view(),
-         name='draft'),
-
-    path('<str:username>/<slug:slug>/edit/',
-         DraftUpdateView.as_view(),
-         name='draft-edit'),
-
-    path('<str:username>/<slug:slug>/delete/',
-         DraftDeleteView.as_view(),
-         name='draft-delete'),
-
-    path('<str:username>/<slug:slug>/comment/new/',
-         CommentCreateView.as_view(),
-         name='comment-new'),
-
-    path('<str:username>/<slug:slug>/comment/<int:pk>/edit/',
-         CommentUpdateView.as_view(),
-         name='comment-edit'),
-
-    path('<str:username>/<slug:slug>/comment/<int:pk>/delete/',
-         CommentDeleteView.as_view(),
-         name='comment-delete'),
-
-    path('<str:username>/<slug:slug>/like/',
-         LikeRedirectView.as_view(),
-         name='like'),
-
-    path('<str:username>/<slug:slug>/favorite/',
-         FavoriteRedirectView.as_view(),
-         name='favorite'),
-
+    path('new/', DraftCreateView.as_view()),
     path('tag/<str:tag>/', TagListView.as_view(), name='tag'),
+    path('blog/<str:username>/<slug:slug>/', include(draft_urlpatterns))
 ]

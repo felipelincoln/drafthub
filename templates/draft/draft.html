@@ -9,10 +9,10 @@
 			</div>
 			{% if user == draft.blog %}
 			<div class="col-auto my-auto pr-0">
-				<a href="{{ draft.get_absolute_url }}edit/" role="button" class="btn btn-outline-danger">Edit</a>
+				<a href="edit/" role="button" class="btn btn-outline-danger">Edit</a>
 			</div>
 			<div class="col-auto my-auto">
-				<a href="{{ draft.get_absolute_url }}delete/" role="button" class="btn btn-outline-danger">Delete</a>
+				<a href="delete/" role="button" class="btn btn-outline-danger">Delete</a>
 			</div>
 			{% endif %}
 		</div>
@@ -45,7 +45,7 @@
 							<i class="far fa-heart mr-2"></i>
 							Like
 							<span class="badge badge-info ml-2">{{ draft.likes.count }}</span>
-							<a href="{{ draft.get_absolute_url }}like/" class="stretched-link"></a>
+							<a href="like/" class="stretched-link"></a>
 						</button>
 					</div>
 					<div class="col-auto pr-0 pl-0 mr-3">
@@ -55,7 +55,7 @@
 							<i class="far fa-star mr-2"></i>
 							Favorite
 							<span class="badge badge-info ml-2">{{ draft.favorites.count }}</span>
-							<a href="{{ draft.get_absolute_url }}favorite/" class="stretched-link"></a>
+							<a href="favorite/" class="stretched-link"></a>
 						</button>
 					</div>
 					<div class="col-auto pr-0 pl-0 mr-3">
@@ -104,7 +104,7 @@
 							<i class="far fa-heart mr-2"></i>
 							Like
 							<span class="badge badge-info ml-2">{{ draft.likes.count }}</span>
-							<a href="{{ draft.get_absolute_url }}like/#third-content" class="stretched-link"></a>
+							<a href="like/#third-content" class="stretched-link"></a>
 						</button>
 					</div>
 					<div class="col-auto pr-0 pl-0 mr-3">
@@ -114,7 +114,7 @@
 							<i class="far fa-star mr-2"></i>
 							Favorite
 							<span class="badge badge-info ml-2">{{ draft.favorites.count }}</span>
-							<a href="{{ draft.get_absolute_url }}favorite/#third-content" class="stretched-link"></a>
+							<a href="favorite/#third-content" class="stretched-link"></a>
 						</button>
 					</div>
 					<div class="col-auto pr-0 pl-0 mr-3">
@@ -147,17 +147,17 @@
 							{% endif %}
 
 							{% if user == comment.blog %}
-							<a href="{{ draft.get_absolute_url }}comment/{{ comment.pk }}/edit" role="button" class="btn btn-sm btn-outline-danger py-0 ml-1">Edit</a>
-							<a href="{{ draft.get_absolute_url }}comment/{{ comment.pk }}/delete" role="button" class="btn btn-sm btn-outline-danger py-0 ml-1">Delete</a>
+							<a href="comment/{{ comment.pk }}/edit" role="button" class="btn btn-sm btn-outline-danger py-0 ml-1">Edit</a>
+							<a href="comment/{{ comment.pk }}/delete" role="button" class="btn btn-sm btn-outline-danger py-0 ml-1">Delete</a>
 							{% endif %}
-							<a href="{{ draft.get_absolute_url }}comment/?quote={{ comment.pk }}" role="button" class="quote-hidden-btn btn btn-sm btn-outline-info py-0 ml-1">Quote</a>
+							<a href="comment/new/?quote={{ comment.pk }}" role="button" class="quote-hidden-btn btn btn-sm btn-outline-info py-0 ml-1">Quote</a>
 						</td>
 					</tr>
 				{% endfor %}
 				<tr class="tr-hidden-btn">
 					<th scope="row"> </th>
 					<td>
-						<a href="{{ draft.get_absolute_url }}comment/new/" role="button" class="btn btn-sm btn-info">Make a comment</a>
+						<a href="comment/new/" role="button" class="btn btn-sm btn-info">Make a comment</a>
 					</td>
 				</tr>
 			</tbody>

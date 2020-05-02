@@ -4,7 +4,9 @@ from django.contrib.auth import get_user_model
 
 from .managers import DraftManager, TagManager
 
+
 Blog = get_user_model()
+
 
 class Draft(models.Model):
     blog = models.ForeignKey(
@@ -74,17 +76,6 @@ class Draft(models.Model):
         verbose_name_plural = 'drafts'
 
 
-class Tag(models.Model):
-    name = models.SlugField(max_length=25)
-
-    objects = TagManager()
-
-    def __str__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse('tag', args=(self.name,))
-
 class Comment(models.Model):
     blog = models.ForeignKey(
         Blog,
@@ -110,6 +101,18 @@ class Comment(models.Model):
         ordering = ['created',]
         verbose_name = 'comment'
         verbose_name_plural = 'comments'
+
+
+class Tag(models.Model):
+    name = models.SlugField(max_length=25)
+
+    objects = TagManager()
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('tag', args=(self.name,))
 
 
 class Activity(models.Model):

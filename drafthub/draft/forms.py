@@ -22,7 +22,7 @@ class DraftForm(forms.ModelForm):
             raise ValidationError('invalid title')
         
         return self.cleaned_data['title']
-        
+
 
     def clean_github_url(self):
         import requests
@@ -65,18 +65,18 @@ class DraftForm(forms.ModelForm):
         check_length = match(re_length)
         check_size = match(re_size)
         check_invalid_space = match(invalid_re_space)
-        
+
         if not check_comma:
-            raise ValidationError('Tags must be separated by a comma (,)')
+            raise ValidationError('tags must be separated by a comma (,)')
 
         if not check_size:
-            raise ValidationError('You can only use 5 tags')
+            raise ValidationError('you can only use 5 tags')
         
         if not check_length:
-            raise ValidationError('Each tag must have less than 26 characters')
+            raise ValidationError('each tag must have less than 26 characters')
 
         if check_invalid_space:
-            raise ValidationError('Tag name not valid')
+            raise ValidationError('tag name not valid')
 
         return [slugify(tag) for tag in tag_str.split(',')]
 

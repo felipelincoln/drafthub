@@ -34,53 +34,59 @@ class AccessRequired:
         return super().dispatch(request, *args, **kwargs)
 
 
-class TagListView(ListView):
-    model = Draft
-    template_name = 'draft/tag.html'
-    context_object_name = 'tag_drafts'
-
-    def get_queryset(self):
-        self.tag = get_object_or_404(Tag, name=self.kwargs['tag'])
-        return self.model.objects.filter(tags=self.tag)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['tag'] = self.tag
-
-        return context
-
-class BlogUpdateView(LoginRequiredMixin, UpdateView):
-    model = Blog
-    fields = ['bio', 'email', 'text']
+class DraftCreateView(LoginRequiredMixin, CreateView):
+    form_class = DraftForm
     template_name = 'draft/form.html'
-    context_object_name = 'blog'
-
-    def get_object(self):
-        obj = get_object_or_404(Blog, username=self.request.user)
-        return obj
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
-            'form_type': 'blog_edit',
+            'form_type': 'draft_create',
         })
-        return context
-
-class BlogListView(ListView):
-    model = Draft
-    template_name = 'draft/blog.html'
-    context_object_name = 'blog_drafts'
-
-    def get_queryset(self):
-        self.blog = get_object_or_404(Blog, username=self.kwargs['username'])
-        return self.model.objects.filter(blog=self.blog)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['blog'] = self.blog
-        context['github'] = self.blog.social_auth.get().extra_data
 
         return context
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+
+        return kwargs
+
+    def form_valid(self, form):
+        form.instance.blog = self.request.user
+        form.instance.slug = self._get_draft_unique_slug(form.instance)
+        form.save()
+        self._set_tags(form)
+
+        return super().form_valid(form)
+
+    def _get_draft_unique_slug(self, instance, unique_len=6):
+        from django.utils.text import slugify
+        from .utils import generate_random_string
+
+        max_length = Draft._meta.get_field('slug').max_length
+        author = instance.blog.username
+        non_unique_slug = slugify(instance.title)
+        non_unique_slug = non_unique_slug[: max_length - unique_len - 1]
+
+        if non_unique_slug.endswith('-'):
+            non_unique_slug = non_unique_slug[:-1]
+
+        slug = non_unique_slug
+        while Draft.objects.filter(slug=slug, blog__username=author).exists():
+            unique = generate_random_string()
+            slug = non_unique_slug + '-' + unique
+
+        return slug
+
+    def _set_tags(self, form):
+        tags = form.cleaned_data['tags']
+        draft = form.instance
+
+        if tags:
+            for tag_name in tags:
+                tag, created = Tag.objects.get_or_create(name=tag_name)
+                draft.tags.add(tag)
 
 
 class DraftDetailView(QueryFromBlog, DetailView):
@@ -179,61 +185,6 @@ class DraftDetailView(QueryFromBlog, DetailView):
         return None
 
 
-class DraftCreateView(LoginRequiredMixin, CreateView):
-    form_class = DraftForm
-    template_name = 'draft/form.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
-            'form_type': 'draft_create',
-        })
-
-        return context
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['request'] = self.request
-
-        return kwargs
-
-    def form_valid(self, form):
-        form.instance.blog = self.request.user
-        form.instance.slug = self._get_draft_unique_slug(form.instance)
-        form.save()
-        self._set_tags(form)
-
-        return super().form_valid(form)
-
-    def _get_draft_unique_slug(self, instance, unique_len=6):
-        from django.utils.text import slugify
-        from .utils import generate_random_string
-
-        max_length = Draft._meta.get_field('slug').max_length
-        author = instance.blog.username
-        non_unique_slug = slugify(instance.title)
-        non_unique_slug = non_unique_slug[: max_length - unique_len - 1]
-
-        if non_unique_slug.endswith('-'):
-            non_unique_slug = non_unique_slug[:-1]
-
-        slug = non_unique_slug
-        while Draft.objects.filter(slug=slug, blog__username=author).exists():
-            unique = generate_random_string()
-            slug = non_unique_slug + '-' + unique
-
-        return slug
-    
-    def _set_tags(self, form):
-        tags = form.cleaned_data['tags']
-        draft = form.instance
-
-        if tags:
-            for tag_name in tags:
-                tag, created = Tag.objects.get_or_create(name=tag_name)
-                draft.tags.add(tag)
-
-
 class DraftUpdateView(QueryFromBlog, AccessRequired, LoginRequiredMixin,
                       UpdateView):
 
@@ -299,53 +250,6 @@ class DraftDeleteView(QueryFromBlog, AccessRequired, LoginRequiredMixin,
         return reverse_lazy('blog', args=args)
 
 
-class LikeRedirectView(LoginRequiredMixin, RedirectView):
-    def get_redirect_url(self, *args, **kwargs):
-        slug = self.kwargs.get('slug')
-        username = self.kwargs.get('username')
-        obj = get_object_or_404(Draft, slug=slug, blog__username=username)
-
-        activity = Activity.objects.filter(blog=self.request.user, draft=obj)
-        if activity.exists():
-            activity = activity.get()
-            if activity.liked:
-                activity.liked = None
-            else:
-                activity.liked = timezone.now()
-
-            activity.save(update_fields=['liked'])
-        else:
-            activity = Activity(blog=self.request.user, draft=obj)
-            activity.liked = timezone.now()
-            activity.save()
-
-        return obj.get_absolute_url()
-
-
-class FavoriteRedirectView(LoginRequiredMixin, RedirectView):
-    def get_redirect_url(self, *args, **kwargs):
-        slug = self.kwargs.get('slug')
-        username = self.kwargs.get('username')
-        obj = get_object_or_404(Draft, slug=slug, blog__username=username)
-
-        activity = Activity.objects.filter(blog=self.request.user, draft=obj)
-        if activity.exists():
-            activity = activity.get()
-            if activity.favorited:
-                activity.favorited = None
-            else:
-                activity.favorited = timezone.now()
-
-            activity.save(update_fields=['favorited'])
-        else:
-            activity = Activity(blog=self.request.user, draft=obj)
-            activity.favorited = timezone.now()
-            activity.save()
-
-        return obj.get_absolute_url()
-
-
-
 class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
     fields = ['content']
@@ -394,7 +298,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class CommentEditView(AccessRequired, LoginRequiredMixin, UpdateView):
+class CommentUpdateView(AccessRequired, LoginRequiredMixin, UpdateView):
     model = Comment
     template_name = 'draft/form.html'
     fields = ['content']
@@ -441,3 +345,65 @@ class CommentDeleteView(AccessRequired, LoginRequiredMixin, DeleteView):
     def get_success_url(self):
         args = (self.kwargs['username'], self.kwargs['slug'])
         return reverse_lazy('draft', args=args)+"#third-content"
+
+
+class LikeRedirectView(LoginRequiredMixin, RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        slug = self.kwargs.get('slug')
+        username = self.kwargs.get('username')
+        obj = get_object_or_404(Draft, slug=slug, blog__username=username)
+
+        activity = Activity.objects.filter(blog=self.request.user, draft=obj)
+        if activity.exists():
+            activity = activity.get()
+            if activity.liked:
+                activity.liked = None
+            else:
+                activity.liked = timezone.now()
+
+            activity.save(update_fields=['liked'])
+        else:
+            activity = Activity(blog=self.request.user, draft=obj)
+            activity.liked = timezone.now()
+            activity.save()
+
+        return obj.get_absolute_url()
+
+
+class FavoriteRedirectView(LoginRequiredMixin, RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        slug = self.kwargs.get('slug')
+        username = self.kwargs.get('username')
+        obj = get_object_or_404(Draft, slug=slug, blog__username=username)
+
+        activity = Activity.objects.filter(blog=self.request.user, draft=obj)
+        if activity.exists():
+            activity = activity.get()
+            if activity.favorited:
+                activity.favorited = None
+            else:
+                activity.favorited = timezone.now()
+
+            activity.save(update_fields=['favorited'])
+        else:
+            activity = Activity(blog=self.request.user, draft=obj)
+            activity.favorited = timezone.now()
+            activity.save()
+
+        return obj.get_absolute_url()
+
+
+class TagListView(ListView):
+    model = Draft
+    template_name = 'draft/tag.html'
+    context_object_name = 'tag_drafts'
+
+    def get_queryset(self):
+        self.tag = get_object_or_404(Tag, name=self.kwargs['tag'])
+        return self.model.objects.filter(tags=self.tag)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tag'] = self.tag
+
+        return context

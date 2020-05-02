@@ -1,10 +1,48 @@
+import re
 from django.contrib.auth import get_user_model
 from django.contrib.auth import views as auth_views
-from django.views.generic import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView, UpdateView
+from django.shortcuts import get_object_or_404
+
 from drafthub.draft.models import Draft, Tag
-import re
+
 
 Blog = get_user_model()
+
+
+class BlogUpdateView(LoginRequiredMixin, UpdateView):
+    model = Blog
+    fields = ['bio', 'email', 'text']
+    template_name = 'draft/form.html'
+    context_object_name = 'blog'
+
+    def get_object(self):
+        obj = get_object_or_404(Blog, username=self.request.user)
+        return obj
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'form_type': 'blog_edit',
+        })
+        return context
+
+class BlogListView(ListView):
+    model = Draft
+    template_name = 'draft/blog.html'
+    context_object_name = 'blog_drafts'
+
+    def get_queryset(self):
+        self.blog = get_object_or_404(Blog, username=self.kwargs['username'])
+        return self.model.objects.filter(blog=self.blog)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['blog'] = self.blog
+        context['github'] = self.blog.social_auth.get().extra_data
+
+        return context
 
 
 class HomeView(ListView):

@@ -1,39 +1,46 @@
 from django.urls import path
 from .views import (
-    BlogListView, DraftDetailView, DraftCreateView, DraftUpdateView,
-    DraftDeleteView, LikeRedirectView, FavoriteRedirectView,
-    CommentCreateView, CommentEditView, CommentDeleteView, TagListView,
-    BlogUpdateView
+    DraftCreateView, DraftDetailView, DraftUpdateView, DraftDeleteView,
+    CommentCreateView, CommentUpdateView, CommentDeleteView,
+    LikeRedirectView,
+    FavoriteRedirectView,
+    TagListView,
 )
 
 
 urlpatterns = [
-    path('new/', DraftCreateView.as_view(), name='new'),
-    path('edit/', BlogUpdateView.as_view(), name='blog'),
-    path('tag/<str:tag>/', TagListView.as_view(), name='tag'),
-    path('<str:username>/', BlogListView.as_view(), name='blog'),
+    path('new/', DraftCreateView.as_view(), name='draft-new'),
     path('<str:username>/<slug:slug>/',
          DraftDetailView.as_view(),
          name='draft'),
+
     path('<str:username>/<slug:slug>/edit/',
          DraftUpdateView.as_view(),
-         name='edit'),
+         name='draft-edit'),
+
     path('<str:username>/<slug:slug>/delete/',
          DraftDeleteView.as_view(),
-         name='delete'),
-    path('<str:username>/<slug:slug>/like/',
-         LikeRedirectView.as_view(),
-         name='like'),
-    path('<str:username>/<slug:slug>/favorite/',
-         FavoriteRedirectView.as_view(),
-         name='favorite'),
-    path('<str:username>/<slug:slug>/comment/',
+         name='draft-delete'),
+
+    path('<str:username>/<slug:slug>/comment/new/',
          CommentCreateView.as_view(),
-         name='comment'),
+         name='comment-new'),
+
     path('<str:username>/<slug:slug>/comment/<int:pk>/edit/',
-         CommentEditView.as_view(),
+         CommentUpdateView.as_view(),
          name='comment-edit'),
+
     path('<str:username>/<slug:slug>/comment/<int:pk>/delete/',
          CommentDeleteView.as_view(),
          name='comment-delete'),
+
+    path('<str:username>/<slug:slug>/like/',
+         LikeRedirectView.as_view(),
+         name='like'),
+
+    path('<str:username>/<slug:slug>/favorite/',
+         FavoriteRedirectView.as_view(),
+         name='favorite'),
+
+    path('tag/<str:tag>/', TagListView.as_view(), name='tag'),
 ]

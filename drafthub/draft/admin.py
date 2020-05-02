@@ -1,5 +1,7 @@
 from django.contrib import admin
+
 from .models import Draft, Tag, Comment, Activity
+from .utils import shorten_string
 
 
 @admin.register(Draft)
@@ -36,16 +38,10 @@ class DraftAdmin(admin.ModelAdmin):
         )
 
     def short_title(self, obj):
-        return obj.get_short_title(25)
+        return obj.get_short_title(50)
 
     def short_slug(self, obj):
-        short = obj.slug
-        if len(short) > 25:
-            short = short[:22]
-            short = short.rstrip()
-            short = short + '...'
-
-        return short
+        return shorten_string(obj.slug, 50)
 
 
     fieldsets = (
@@ -80,7 +76,20 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class Comment(admin.ModelAdmin):
-    pass
+
+    def short_content(self, obj):
+        return shorten_string(obj.content, 50)
+
+    fields = (
+        'id', 'blog', 'draft', 'content', 'created', 'updated'
+    )
+    readonly_fields = ('created', 'updated', 'id')
+    list_display = (
+        'id', 'blog', 'draft', 'short_content', 'created', 'updated'
+    )
+    list_filter = (
+        'blog', 'draft', 'created', 'updated',
+    )
 
 
 @admin.register(Activity)

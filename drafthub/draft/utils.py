@@ -31,3 +31,13 @@ def get_data_from_url(url):
     }
 
     return data
+
+def shorten_string(string, max_len):
+    short = string
+    if len(short) > max_len:
+        short = short[:max_len-3]
+        short = short.rstrip()
+        short = short + '...'
+
+    return short
+

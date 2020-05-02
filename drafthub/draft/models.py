@@ -62,13 +62,8 @@ class Draft(models.Model):
         )
 
     def get_short_title(self, max_len=50):
-        short = self.title
-        if len(short) > max_len:
-            short = short[:max_len-3]
-            short = short.rstrip()
-            short = short + '...'
-
-        return short
+        from .utils import shorten_string
+        return shorten_string(self.title, max_len)
 
     class Meta:
         ordering = ['-pub_date', '-last_update']
@@ -87,9 +82,13 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
         related_name='comments',
     )
-    content = models.TextField()
+    content = models.TextField(max_length=10000)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(blank=True, null=True)
+
+
+    def __str__(self):
+        return str(self.id)
 
 
     def get_absolute_url(self):

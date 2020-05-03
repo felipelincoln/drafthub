@@ -4,7 +4,7 @@
 
 	<div class="container-lg ">
 		<div class="row">
-			<div class="col-auto">
+			<div class="col-auto" style="word-break:break-all;">
 				<h1>{{ draft.title }}</h1>
 			</div>
 			{% if user == draft.blog %}
@@ -17,7 +17,7 @@
 			{% endif %}
 		</div>
 		<div class="row">
-			<div class="col">
+			<div class="col" style="word-break:break-all;">
 				{{ draft.abstract }}
 			</div>
 		</div>

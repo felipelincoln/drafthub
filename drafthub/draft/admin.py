@@ -40,38 +40,46 @@ class DraftAdmin(admin.ModelAdmin):
     def short_title(self, obj):
         return obj.get_short_title(50)
 
-    def short_slug(self, obj):
-        return shorten_string(obj.slug, 50)
-
 
     fieldsets = (
         (None, {
             'fields': (
-                'blog', 'github_url', 'title', 'slug', 'abstract', 'pub_date',
-                'last_update', 'tags',
+                'did', 'blog', 'github_url', 'title', 'slug', 'abstract',
+                'created', 'updated', 'tags',
             ),
         }),
         ('Activities', {
             'fields': (
-                'hits', 'last_views', 'last_favorites', 'last_likes', 'views',
+                'hits', 'last_views', 'last_likes', 'last_favorites', 'views',
                 'favorites', 'likes',
             ),
         }),
     )
     readonly_fields = (
-        'hits', 'slug', 'pub_date', 'last_update', 'last_views',
-        'last_favorites', 'last_likes', 'views', 'favorites', 'likes',
+        'hits', 'slug', 'created', 'updated', 'last_views', 'last_likes',
+        'last_favorites', 'views', 'likes', 'favorites', 'did'
     )
     list_display = (
-        'blog', 'short_title', 'short_slug', 'pub_date',
-        'last_update', 'hits',
+        'did', 'short_title', 'created', 'updated', 'hits',
     )
-    list_filter = ('pub_date', 'last_update', 'blog', 'tags')
+    list_filter = ('created', 'updated', 'blog', 'tags')
 
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    pass
+    def tagged_drafts(self, obj):
+        return f'{obj.tagged_drafts.count()}\n' + ', '.join(
+            [draft.did for draft in obj.tagged_drafts.did]
+        )
+    def num_drafts(self, obj):
+        return obj.num_drafts
+
+    def last_drafts(self, obj):
+        return obj.last_drafts
+
+    fields = ('name', 'num_drafts', 'last_drafts', 'tagged_drafts')
+    readonly_fields = ('num_drafts', 'last_drafts', 'tagged_drafts')
+    list_display = ('name', 'num_drafts', 'last_drafts')
 
 
 @admin.register(Comment)
@@ -80,23 +88,13 @@ class Comment(admin.ModelAdmin):
     def short_content(self, obj):
         return shorten_string(obj.content, 50)
 
-    fields = (
-        'id', 'blog', 'draft', 'content', 'created', 'updated'
-    )
-    readonly_fields = ('created', 'updated', 'id')
     list_display = (
         'id', 'blog', 'draft', 'short_content', 'created', 'updated'
     )
-    list_filter = (
-        'blog', 'draft', 'created', 'updated',
-    )
+    list_filter = ('created', 'updated', 'blog', 'draft__did',)
 
 
 @admin.register(Activity)
 class Activity(admin.ModelAdmin):
-    fields = (
-        'blog', 'draft', 'favorited', 'liked', 'viewed',
-    )
-    readonly_fields = ('viewed',)
     list_display = ('blog', 'draft', 'favorited', 'liked', 'viewed',)
-    list_filter = ('blog', 'draft', 'favorited', 'liked', 'viewed',)
+    list_filter = ('blog', 'draft__did', 'favorited', 'liked', 'viewed',)

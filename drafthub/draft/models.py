@@ -9,6 +9,7 @@ Blog = get_user_model()
 
 
 class Draft(models.Model):
+    did = models.CharField(max_length=150, unique=True)
     blog = models.ForeignKey(
         Blog,
         on_delete=models.CASCADE,
@@ -19,26 +20,21 @@ class Draft(models.Model):
         blank=True,
         related_name='tagged_drafts',
     )
-
     github_url = models.URLField(max_length=1100)
     title = models.CharField(max_length=100)
     slug = models.SlugField(max_length=107)
     abstract = models.TextField(max_length=200, blank=True)
-    pub_date = models.DateTimeField(auto_now_add=True)
-    last_update = models.DateTimeField(blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(blank=True, null=True)
     hits = models.IntegerField(default=0)
 
     objects = DraftManager()
 
     def __str__(self):
-        return self.get_short_title()
+        return self.did
 
     def get_absolute_url(self):
-        kwargs = {
-            'username': self.blog.username,
-            'slug': self.slug,
-        }
-        return reverse('draft', kwargs=kwargs)
+        return reverse('draft', args=(self.did,))
 
     @property
     def favorites(self):
@@ -65,8 +61,9 @@ class Draft(models.Model):
         from .utils import shorten_string
         return shorten_string(self.title, max_len)
 
+
     class Meta:
-        ordering = ['-pub_date', '-last_update']
+        ordering = ['-created', '-updated']
         verbose_name = 'draft'
         verbose_name_plural = 'drafts'
 
@@ -90,7 +87,6 @@ class Comment(models.Model):
     def __str__(self):
         return str(self.id)
 
-
     def get_absolute_url(self):
         draft_url = self.draft.get_absolute_url()
         pk = self.id
@@ -103,7 +99,7 @@ class Comment(models.Model):
 
 
 class Tag(models.Model):
-    name = models.SlugField(max_length=25)
+    name = models.SlugField(max_length=25, unique=True)
 
     objects = TagManager()
 
@@ -130,9 +126,8 @@ class Activity(models.Model):
     liked = models.DateTimeField(blank=True, null=True)
     viewed = models.DateTimeField(auto_now=True, blank=True, null=True)
 
-
     def __str__(self):
-        return str(self.blog) + ' -> ' + str(self.draft)
+        return str(self.id)
 
 
     class Meta:

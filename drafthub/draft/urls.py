@@ -23,5 +23,5 @@ draft_urlpatterns = [
 urlpatterns = [
     path('new/', DraftCreateView.as_view()),
     path('tag/<str:tag>/', TagListView.as_view(), name='tag'),
-    path('blog/<str:username>/<slug:slug>/', include(draft_urlpatterns))
+    path('blog/<str:blog>/<slug:slug>/', include(draft_urlpatterns))
 ]

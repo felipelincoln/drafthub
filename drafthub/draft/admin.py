@@ -67,9 +67,9 @@ class DraftAdmin(admin.ModelAdmin):
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    def tagged_drafts(self, obj):
+    def drafts(self, obj):
         return f'{obj.tagged_drafts.count()}\n' + ', '.join(
-            [draft.did for draft in obj.tagged_drafts.did]
+            [draft.did for draft in obj.tagged_drafts.all()]
         )
     def num_drafts(self, obj):
         return obj.num_drafts
@@ -77,8 +77,8 @@ class TagAdmin(admin.ModelAdmin):
     def last_drafts(self, obj):
         return obj.last_drafts
 
-    fields = ('name', 'num_drafts', 'last_drafts', 'tagged_drafts')
-    readonly_fields = ('num_drafts', 'last_drafts', 'tagged_drafts')
+    fields = ('name', 'num_drafts', 'last_drafts', 'drafts')
+    readonly_fields = ('num_drafts', 'last_drafts', 'drafts')
     list_display = ('name', 'num_drafts', 'last_drafts')
 
 

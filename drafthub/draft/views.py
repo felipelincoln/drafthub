@@ -18,7 +18,7 @@ Blog = get_user_model()
 class QueryFromBlog:
     def get_queryset(self):
         return Draft.objects.filter(
-            blog__username=self.kwargs['username'])
+            blog__username=self.kwargs['blog'])
  
 
 class AccessRequired:
@@ -54,13 +54,14 @@ class DraftCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.blog = self.request.user
-        form.instance.slug = self._get_draft_unique_slug(form.instance)
+        form.instance.slug = self._get_slug(form.instance)
+        form.instance.did = self._get_did(form.instance)
         form.save()
         self._set_tags(form)
 
         return super().form_valid(form)
 
-    def _get_draft_unique_slug(self, instance, unique_len=6):
+    def _get_slug(self, instance, unique_len=6):
         from django.utils.text import slugify
         from .utils import generate_random_string
 
@@ -73,7 +74,7 @@ class DraftCreateView(LoginRequiredMixin, CreateView):
             non_unique_slug = non_unique_slug[:-1]
 
         slug = non_unique_slug
-        while Draft.objects.filter(slug=slug, blog__username=author).exists():
+        while Draft.objects.filter(did=instance.get_did(author,slug)).exists():
             unique = generate_random_string()
             slug = non_unique_slug + '-' + unique
 
@@ -87,6 +88,11 @@ class DraftCreateView(LoginRequiredMixin, CreateView):
             for tag_name in tags:
                 tag, created = Tag.objects.get_or_create(name=tag_name)
                 draft.tags.add(tag)
+
+    def _get_did(self, instance):
+        blog = instance.blog
+        slug = instance.slug
+        return instance.get_did(blog, slug)
 
 
 class DraftDetailView(QueryFromBlog, DetailView):
@@ -111,13 +117,13 @@ class DraftDetailView(QueryFromBlog, DetailView):
             if not created:
                 activity.save(update_fields=['viewed'])
 
-            obj.last_update = self._get_draft_last_update(obj)
+            obj.last_update = self._get_updated(obj)
             if obj.last_update:
-                obj.save(update_fields=['last_update'])
+                obj.save(update_fields=['updated'])
 
         return obj
 
-    def _get_draft_last_update(self, obj):
+    def _get_updated(self, obj):
         import requests
         import json
         from django.utils.dateparse import parse_datetime
@@ -179,7 +185,7 @@ class DraftDetailView(QueryFromBlog, DetailView):
         tzinfo = last_commit.tzinfo
         last_commit = last_commit.replace(tzinfo=tzinfo).astimezone(tz=None)
 
-        if last_commit > obj.pub_date:
+        if last_commit > obj.created:
             return last_commit
 
         return None
@@ -246,7 +252,7 @@ class DraftDeleteView(QueryFromBlog, AccessRequired, LoginRequiredMixin,
         return context
 
     def get_success_url(self):
-        args = (self.kwargs['username'],)
+        args = (self.kwargs['blog'],)
         return reverse_lazy('blog', args=args)
 
 
@@ -262,7 +268,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
             'comment_draft': get_object_or_404(
                 Draft,
                 slug=self.kwargs['slug'],
-                blog__username=self.kwargs['username']
+                blog__username=self.kwargs['blog']
             )
         })
         
@@ -279,9 +285,8 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 
             comment = comment.get()
             quoted_content = '\n> '.join(comment.content.splitlines())
-            initial['content'] = '{} {}\n> {}\n\n'.format(
+            initial['content'] = '{} says: \n> {}\n\n'.format(
                 comment.blog.username,
-                comment.created,
                 quoted_content,
             )
         return initial
@@ -291,7 +296,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
         form.instance.draft = get_object_or_404(
             Draft,
             slug=self.kwargs['slug'],
-            blog__username=self.kwargs['username']
+            blog__username=self.kwargs['blog']
         )
         form.save()
 
@@ -310,7 +315,7 @@ class CommentUpdateView(AccessRequired, LoginRequiredMixin, UpdateView):
             'comment_draft':get_object_or_404(
                 Draft,
                 slug=self.kwargs['slug'],
-                blog__username=self.kwargs['username']
+                blog__username=self.kwargs['blog']
             )
         })
         
@@ -336,22 +341,21 @@ class CommentDeleteView(AccessRequired, LoginRequiredMixin, DeleteView):
             'comment_draft':get_object_or_404(
                 Draft,
                 slug=self.kwargs['slug'],
-                blog__username=self.kwargs['username']
+                blog__username=self.kwargs['blog']
             )
         })
         
         return context
 
     def get_success_url(self):
-        args = (self.kwargs['username'], self.kwargs['slug'])
-        return reverse_lazy('draft', args=args)+"#third-content"
+        return reverse_lazy('draft', kwargs=self.kwargs)+"#third-content"
 
 
 class LikeRedirectView(LoginRequiredMixin, RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         slug = self.kwargs.get('slug')
-        username = self.kwargs.get('username')
-        obj = get_object_or_404(Draft, slug=slug, blog__username=username)
+        blog = self.kwargs.get('blog')
+        obj = get_object_or_404(Draft, slug=slug, blog__username=blog)
 
         activity = Activity.objects.filter(blog=self.request.user, draft=obj)
         if activity.exists():
@@ -373,8 +377,8 @@ class LikeRedirectView(LoginRequiredMixin, RedirectView):
 class FavoriteRedirectView(LoginRequiredMixin, RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         slug = self.kwargs.get('slug')
-        username = self.kwargs.get('username')
-        obj = get_object_or_404(Draft, slug=slug, blog__username=username)
+        blog = self.kwargs.get('blog')
+        obj = get_object_or_404(Draft, slug=slug, blog__username=blog)
 
         activity = Activity.objects.filter(blog=self.request.user, draft=obj)
         if activity.exists():

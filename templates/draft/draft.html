@@ -28,8 +28,8 @@
 						by <a href="{{ draft.blog.get_absolute_url }}">{{ draft.blog }}</a>
 					</div>
 					<div class="col-auto">
-						{{ draft.pub_date }}
-						{% if draft.last_update %} (updated {{ draft.last_update|date:"M d, Y" }}){% endif %}
+						{{ draft.created }}
+						{% if draft.updated %} (updated {{ draft.updated|date:"M d, Y" }}){% endif %}
 					</div>
 					<div class="col-auto">
 						{{ draft.hits }} views

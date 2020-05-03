@@ -52,8 +52,8 @@
 						<h6 class="card-subtitle mb-2 text-muted">
 							<a class="inherit-color" href="{{ draft.blog.get_absolute_url }}">{{ draft.blog }}</a>
 							, <a class="inherit-color" href="{{ draft.get_absolute_url }}">
-								{{ draft.pub_date|date:"M d, Y" }}
-								{% if draft.last_update %} (updated {{ draft.last_update|date:"M d, Y" }}){% endif %}
+								{{ draft.created|date:"M d, Y" }}
+								{% if draft.updated %} (updated {{ draft.updated|date:"M d, Y" }}){% endif %}
 							</a></h6>
 						<p class="card-text">{{ draft.abstract }}</p>
 						{% for tag in draft.tags.all %}

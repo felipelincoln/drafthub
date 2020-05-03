@@ -34,7 +34,7 @@ class BlogListView(ListView):
     context_object_name = 'blog_drafts'
 
     def get_queryset(self):
-        self.blog = get_object_or_404(Blog, username=self.kwargs['username'])
+        self.blog = get_object_or_404(Blog, username=self.kwargs['blog'])
         return self.model.objects.filter(blog=self.blog)
 
     def get_context_data(self, **kwargs):
@@ -55,7 +55,7 @@ class HomeView(ListView):
         tags = Tag.objects.all()
         context.update({
             'home_tags': tags.order_by('-last_drafts', '-num_drafts'),
-            'home_drafts': context['home_drafts'].order_by('-last_likes','-last_views', '-pub_date')
+            'home_drafts': context['home_drafts'].order_by('-last_likes','-last_views', '-created')
         })
 
         return context

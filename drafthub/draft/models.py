@@ -34,7 +34,11 @@ class Draft(models.Model):
         return self.did
 
     def get_absolute_url(self):
-        return reverse('draft', args=(self.did,))
+        kwargs = {
+            'blog': self.blog.username,
+            'slug': self.slug,
+        }
+        return reverse('draft', kwargs=kwargs)
 
     @property
     def favorites(self):
@@ -60,6 +64,9 @@ class Draft(models.Model):
     def get_short_title(self, max_len=50):
         from .utils import shorten_string
         return shorten_string(self.title, max_len)
+
+    def get_did(self, blog, slug):
+        return f'{blog}/{slug}'
 
 
     class Meta:

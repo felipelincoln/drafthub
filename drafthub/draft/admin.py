@@ -37,10 +37,6 @@ class DraftAdmin(admin.ModelAdmin):
             [blog.username for blog in obj.likes]
         )
 
-    def short_title(self, obj):
-        return obj.get_short_title(50)
-
-
     fieldsets = (
         (None, {
             'fields': (
@@ -60,7 +56,7 @@ class DraftAdmin(admin.ModelAdmin):
         'last_favorites', 'views', 'likes', 'favorites', 'did'
     )
     list_display = (
-        'did', 'short_title', 'created', 'updated', 'hits',
+        'did', 'created', 'updated', 'hits',
     )
     list_filter = ('created', 'updated', 'blog', 'tags')
 

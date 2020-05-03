@@ -348,7 +348,11 @@ class CommentDeleteView(AccessRequired, LoginRequiredMixin, DeleteView):
         return context
 
     def get_success_url(self):
-        return reverse_lazy('draft', kwargs=self.kwargs)+"#third-content"
+        kwargs = {
+            'blog': self.kwargs['blog'],
+            'slug': self.kwargs['slug'],
+        }
+        return reverse_lazy('draft', kwargs=kwargs)+"#third-content"
 
 
 class LikeRedirectView(LoginRequiredMixin, RedirectView):

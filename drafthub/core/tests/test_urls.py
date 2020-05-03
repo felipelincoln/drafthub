@@ -45,3 +45,8 @@ class BlogUrlsSimpletestCase(TestCase):
     def test_blog_view_class(self):
         url = reverse('blog', args=('test',)) 
         self.assertEqual(resolve(url).func.view_class, BlogListView)
+
+    def test_blog_not_found(self):
+        url = reverse('blog', args=(' ',))
+        response = self.client.get(resolve(url))
+        self.assertEqual(response.status_code, 404)

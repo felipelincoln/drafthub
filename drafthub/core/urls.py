@@ -12,6 +12,6 @@ urlpatterns = [
     path('search/', SearchListView.as_view(), name='search'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('login/', LoginView.as_view(), name='login'),
-    path('edit/', BlogUpdateView.as_view(), name='blog-edit'),
+    path('edit/', BlogUpdateView.as_view(), name='edit'),
     path('blog/<str:blog>/', BlogListView.as_view(), name='blog'),
 ]

@@ -117,12 +117,10 @@ class DraftDetailView(QueryFromBlog, DetailView):
             if not created:
                 activity.save(update_fields=['viewed'])
 
-            try: # FAIL when user have no token
+            if self.request.user.social_auth.exists():
                 obj.last_update = self._get_updated(obj)
                 if obj.last_update:
                     obj.save(update_fields=['updated'])
-            except:
-                pass
 
         return obj
 

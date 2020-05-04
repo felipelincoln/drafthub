@@ -40,7 +40,8 @@ class BlogListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['blog'] = self.blog
-        context['github'] = self.blog.social_auth.get().extra_data
+        if self.blog.social_auth.exists():
+            context['github'] = self.blog.social_auth.get().extra_data
 
         return context
 

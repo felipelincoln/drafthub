@@ -288,8 +288,10 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 
             comment = comment.get()
             quoted_content = '\n> '.join(comment.content.splitlines())
-            initial['content'] = '{} says: \n> {}\n\n'.format(
+            initial['content'] = \
+                '> **[{} said:](#{})**  \n> {}\n\n'.format(
                 comment.blog.username,
+                comment.pk,
                 quoted_content,
             )
         return initial

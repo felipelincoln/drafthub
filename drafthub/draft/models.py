@@ -65,7 +65,8 @@ class Draft(models.Model):
         from .utils import shorten_string
         return shorten_string(self.title, max_len)
 
-    def get_did(self, blog, slug):
+    @staticmethod
+    def get_did(blog, slug):
         return f'{blog}/{slug}'
 
 

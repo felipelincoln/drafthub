@@ -117,9 +117,12 @@ class DraftDetailView(QueryFromBlog, DetailView):
             if not created:
                 activity.save(update_fields=['viewed'])
 
-            obj.last_update = self._get_updated(obj)
-            if obj.last_update:
-                obj.save(update_fields=['updated'])
+            try: # FAIL when user have no token
+                obj.last_update = self._get_updated(obj)
+                if obj.last_update:
+                    obj.save(update_fields=['updated'])
+            except:
+                pass
 
         return obj
 

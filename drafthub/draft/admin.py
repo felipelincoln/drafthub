@@ -92,5 +92,7 @@ class Comment(admin.ModelAdmin):
 
 @admin.register(Activity)
 class Activity(admin.ModelAdmin):
-    list_display = ('blog', 'draft', 'favorited', 'liked', 'viewed',)
-    list_filter = ('blog', 'draft__did', 'favorited', 'liked', 'viewed',)
+    fields = ('blog', 'draft', 'viewed', 'favorited', 'liked')
+    readonly_fields = ('viewed',)
+    list_display = ('blog', 'draft', 'viewed', 'favorited', 'liked',)
+    list_filter = ('blog', 'draft__did', 'viewed', 'favorited', 'liked',)

@@ -12,7 +12,7 @@
 				</h1>
 			</div>
 			<div class="col-auto">
-				<a href="https://github.com/felipelincoln/drafthub/blob/master/drafthub/draft/onlinedata.py" class="btn btn-outline-info" role="button">
+				<a href="https://github.com/felipelincoln/drafthub/blob/master/drafthub/draft/metadata.py" class="btn btn-outline-info" role="button" target="_blank">
 					<i class="fab fab-github mr-2"></i>
 					Edit tag on GitHub
 				</a>
@@ -48,6 +48,7 @@
 			<div class="col mb-5">
 				<div class="card">
 					<div class="card-body">
+						{{ draft.hits }} hits, 
 						+{{ draft.last_favorites }} favorites, +{{ draft.last_likes }} likes, +{{ draft.last_views }} views in the last week
 						<h5 class="card-title"><a class="inherit-color" href="{{ draft.get_absolute_url }}">{{ draft.title }}</a></h5>
 						<h6 class="card-subtitle mb-2 text-muted">

@@ -27,6 +27,7 @@ class DraftManager(models.Manager):
             ),
             last_activities=F('last_views')+F('last_favorites')+F('last_likes')
         )
+        queryset = queryset.order_by('-last_activities', '-created',)
 
         return queryset
 
@@ -70,6 +71,9 @@ class TagManager(models.Manager):
             tagged_drafts_last_activities=F('tagged_drafts_last_views')
                 +F('tagged_drafts_last_favorites')
                 +F('tagged_drafts_last_likes'),
+        )
+        queryset = queryset.order_by(
+            '-tagged_drafts_last_activities', 'last_drafts',
         )
 
         return queryset

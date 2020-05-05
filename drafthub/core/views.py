@@ -39,9 +39,12 @@ class BlogListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['blog'] = self.blog
         if self.blog.social_auth.exists():
             context['github'] = self.blog.social_auth.get().extra_data
+        context.update({
+            'blog': self.blog,
+            'blog_drafts': context['blog_drafts'].order_by('-created')
+        })
 
         return context
 
@@ -53,11 +56,7 @@ class HomeView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        tags = Tag.objects.all()
-        context.update({
-            'home_tags': tags.order_by('-last_drafts', '-num_drafts'),
-            'home_drafts': context['home_drafts'].order_by('-last_likes','-last_views', '-created')
-        })
+        context['home_tags'] = Tag.objects.all()
 
         return context
 
@@ -144,7 +143,11 @@ class SearchEngine:
             elif self.where == 'tags':
                 drafts = Draft.objects.filter(tags__name__icontains=self.who)
                 if drafts.exists():
-                    self.multi_who = [tag.name for tag in Tag.objects.filter(name__icontains=self.who)]
+                    self.multi_who = [
+                        tag.name for tag in Tag.objects.filter(
+                            name__icontains=self.who
+                        )
+                    ]
                     content = drafts
                 else:
                     content = self._filter_not_found()
@@ -156,7 +159,8 @@ class SearchEngine:
             if self.where in ['tags', 'blogs'] and not self.who:
                 if self.where == 'blogs':
                     querysets = [
-                        content.filter(username__icontains=x) for x in self.what
+                        content.filter(
+                            username__icontains=x) for x in self.what
                     ]
                 elif self.where == 'tags':
                     querysets = [
@@ -165,12 +169,14 @@ class SearchEngine:
             else:
                 querysets = (
                     [content.filter(title__icontains=x) for x in self.what]
-                    + [content.filter(abstract__icontains=x) for x in self.what]
+                    +[content.filter(abstract__icontains=x) for x in self.what]
                 )
 
                 if not self.where and not self.who:
                     querysets += [
-                        content.filter(blog__username__icontains=x) for x in self.what
+                        content.filter(
+                            blog__username__icontains=x
+                        ) for x in self.what
                     ]
             content = querysets.pop()
             for queryset in querysets:
@@ -196,5 +202,4 @@ class SearchListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(self.search.get_metadata)
-        context['search_content'] = context['search_content'][:25]
         return context

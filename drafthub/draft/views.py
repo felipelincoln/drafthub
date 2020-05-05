@@ -415,6 +415,8 @@ class TagListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['tag'] = self.tag
+        context.update({
+            'tag': self.tag,
+        })
 
         return context

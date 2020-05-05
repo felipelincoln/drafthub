@@ -71,7 +71,6 @@ class Draft(models.Model):
 
 
     class Meta:
-        ordering = ['-created', '-updated']
         verbose_name = 'draft'
         verbose_name_plural = 'drafts'
 

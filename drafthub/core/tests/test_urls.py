@@ -3,7 +3,6 @@ from django.urls import reverse, resolve
 from django.contrib.auth import views as auth_views
 
 from drafthub.draft.models import Blog
-from social_django.models import UserSocialAuth
 from drafthub.core.views import (
     HomeView, SearchListView, LoginView, BlogUpdateView, BlogListView
 )

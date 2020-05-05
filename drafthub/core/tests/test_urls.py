@@ -157,6 +157,19 @@ class BlogUrlsSimpletestCase(TestCase):
         self.client.login(username=args[0], password=args[1])
         self.assertIn('_auth_user_id', self.client.session)
 
+        url = reverse('blog', args=('test2',))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_blog_status_code_authenticated2(self):
+        args = ('test2', 'testpassword')
+        blog = Blog.objects.create(username=args[0])
+        blog.set_password(args[1])
+        blog.save()
+
+        self.client.login(username=args[0], password=args[1])
+        self.assertIn('_auth_user_id', self.client.session)
+
         url = reverse('blog', args=('test',))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)

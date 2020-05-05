@@ -6,6 +6,10 @@ from .utils import shorten_string
 
 @admin.register(Draft)
 class DraftAdmin(admin.ModelAdmin):
+    def last_activities(self, obj):
+        return obj.last_activities
+
+    last_activities.admin_order_field = 'last_activities'
 
     def last_views(self, obj):
         return f'{obj.last_views}\n' + ', '.join(
@@ -46,17 +50,17 @@ class DraftAdmin(admin.ModelAdmin):
         }),
         ('Activities', {
             'fields': (
-                'hits', 'last_views', 'last_likes', 'last_favorites', 'views',
-                'favorites', 'likes',
+                'last_activities', 'hits', 'last_views', 'last_likes',
+                'last_favorites', 'views', 'favorites', 'likes',
             ),
         }),
     )
     readonly_fields = (
-        'hits', 'slug', 'created', 'updated', 'last_views', 'last_likes',
-        'last_favorites', 'views', 'likes', 'favorites', 'did'
+        'last_activities', 'hits', 'slug', 'created', 'updated', 'last_views',
+        'last_likes', 'last_favorites', 'views', 'likes', 'favorites', 'did'
     )
     list_display = (
-        'did', 'created', 'updated', 'hits',
+        'did', 'created', 'updated', 'last_activities', 'hits',
     )
     list_filter = ('created', 'updated', 'blog', 'tags')
 
@@ -73,9 +77,54 @@ class TagAdmin(admin.ModelAdmin):
     def last_drafts(self, obj):
         return obj.last_drafts
 
-    fields = ('name', 'num_drafts', 'last_drafts', 'drafts')
-    readonly_fields = ('num_drafts', 'last_drafts', 'drafts')
-    list_display = ('name', 'num_drafts', 'last_drafts')
+    def last_views(self, obj):
+        return f'{obj.tagged_drafts_last_views}'
+
+    def last_favorites(self, obj):
+        return f'{obj.tagged_drafts_last_favorites}'
+
+    def last_likes(self, obj):
+        return f'{obj.tagged_drafts_last_likes}'
+
+    def tagged_drafts_last_activities(self, obj):
+        return obj.tagged_drafts_last_activities
+
+    def icon(self, obj):
+        return obj.icon
+
+    def description(self, obj):
+        return obj.description
+
+    def short_description(self, obj):
+        return shorten_string(obj.description(50))
+        
+
+    tagged_drafts_last_activities.admin_order_field = \
+        'tagged_drafts_last_activities'
+
+    fieldsets = (
+        (None, {
+            'fields': (
+                'name', 'icon', 'description', 'num_drafts', 'last_drafts',
+                'drafts',
+            ),
+        }),
+        ('Activities', {
+            'fields': (
+                'tagged_drafts_last_activities', 'last_views', 'last_likes',
+                'last_favorites',
+            ),
+        }),
+    )
+    readonly_fields = (
+        'num_drafts', 'last_drafts', 'drafts', 'tagged_drafts_last_activities',
+        'last_views', 'last_likes', 'last_favorites', 'icon', 'description',
+        'short_description'
+    )
+    list_display = (
+        'name', 'description', 'num_drafts', 'last_drafts',
+        'tagged_drafts_last_activities',
+    )
 
 
 @admin.register(Comment)
@@ -85,7 +134,7 @@ class Comment(admin.ModelAdmin):
         return shorten_string(obj.content, 50)
 
     list_display = (
-        'id', 'blog', 'draft', 'short_content', 'created', 'updated'
+        'blog', 'draft', 'short_content', 'created', 'updated'
     )
     list_filter = ('created', 'updated', 'blog', 'draft__did',)
 

@@ -93,7 +93,7 @@ class Comment(models.Model):
 
 
     def __str__(self):
-        return str(self.id)
+        return f'{self.blog.username} comment#{self.id}'
 
     def get_absolute_url(self):
         draft_url = self.draft.get_absolute_url()
@@ -135,7 +135,7 @@ class Activity(models.Model):
     viewed = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
-        return str(self.id)
+        return f'{self.blog.username} activity#{self.id}'
 
 
     class Meta:

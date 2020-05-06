@@ -68,8 +68,8 @@ class LoginView(auth_views.LoginView):
 
 class SearchEngine:
     # search pattern where.who: what
-    where = ''
-    who = ''
+    where = None
+    who = None
     what = []
     content = Draft.objects
 

@@ -2,10 +2,13 @@ from django.test import TestCase
 from django.urls import reverse, resolve
 from django.contrib.auth import views as auth_views
 
-from drafthub.draft.models import Blog
+from django.contrib.auth import get_user_model
 from drafthub.core.views import (
     HomeView, SearchListView, LoginView, BlogUpdateView, BlogListView
 )
+
+
+Blog = get_user_model()
 
 
 class HomeUrlsTestCase(TestCase):

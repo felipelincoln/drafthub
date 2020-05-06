@@ -73,14 +73,10 @@
 						<a class="btn btn-info" role="button" href="/new/">New&nbsp;Draft</a>
 					</li>
 				</ul>
-				<form class="form-inline mt-2 mt-md-0" action="{% url 'logout' %}?next={{ request.path }}">
-					<input class="btn btn-outline-danger" type="submit" value="Logout">
-				</form>
+				<a href="{% url 'logout' %}?next={{ request.path }}" class="mt-2 mt-md-0 btn btn-outline-danger" role="button">Logout</a>
 
 				{% else %}
-				<form class="form-inline ml-auto mt-2 mt-md-0" action="{% url 'social:begin' 'github' %}?next={{ request.path }}">
-					<input class="btn btn-outline-info" type="submit" value="Enter with GitHub">
-				</form>
+				<a href="{% url 'social:begin' 'github' %}?next={{ request.path }}" class="ml-auto mt-2 mt-md-0 btn btn-outline-info" role="button">Enter with Github</a>
 				{% endif %}
 			</div>
 		</nav> 

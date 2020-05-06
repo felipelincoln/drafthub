@@ -4,7 +4,6 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin
 from social_django.models import Nonce, Association
 
-from .forms import BlogCreationForm, BlogChangeForm
 
 
 Blog = get_user_model()
@@ -17,8 +16,6 @@ admin.site.unregister(Association)
 
 @admin.register(Blog)
 class MyUserAdmin(UserAdmin):
-    add_form = BlogCreationForm
-    form = BlogChangeForm
     model = Blog
 
     fieldsets = (

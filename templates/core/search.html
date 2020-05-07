@@ -6,6 +6,22 @@
 
 <div class="container-lg my-5">
   <h2>
+	{% if search_content_tags %}
+	{{ search_content_tags.count }} tags found<br>
+	{% for tag in search_content_tags %}
+			<a href="/tag/{{ tag }}/" class="badge badge-secondary">{{ tag }}</a><br>
+	{% endfor %}
+	<br>
+	{% endif %}
+
+	{% if search_content_blogs %}
+	{{ search_content_blogs.count }} blogs found<br>
+	{% for blog in search_content_blogs %}
+			<a href="{{ blog.get_absolute_url }}/" class="badge badge-secondary">{{ blog }}</a><br>
+	{% endfor %}
+	<br>
+	{% endif %}
+
   {{ search_content.count }} results
   {% if search_where == 'tags' %}
     in tags

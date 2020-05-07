@@ -2,7 +2,7 @@ import re
 from django.contrib.auth import get_user_model
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, UpdateView
+from django.views.generic import ListView, UpdateView, TemplateView
 from django.shortcuts import get_object_or_404
 
 from drafthub.draft.models import Draft, Tag
@@ -89,11 +89,28 @@ class SearchEngine:
             self._filter_content_from_what()
 
 
-    def get_content(self):
-        return self.content.all()
+    @property
+    def results(self):
+        content = {'search_content': self.content.all()}
+
+        if not self.where:
+            q = self.request.GET.get('q')
+            self.request.GET._mutable = True
+            self.request.GET.__setitem__('q', f'tags:{q}')
+
+            tag_search = SearchEngine(self.request)
+            tag_results = tag_search.results['search_content']
+            content.update({'search_content_tags': tag_results})
+
+            self.request.GET.__setitem__('q', f'blogs:{q}')
+            blog_search = SearchEngine(self.request)
+            blog_results = blog_search.results['search_content']
+            content.update({'search_content_blogs': blog_results})
+
+        return content
 
     @property
-    def get_metadata(self):
+    def metadata(self):
         input_value = ''
         if self.where:
             input_value += self.where
@@ -160,7 +177,8 @@ class SearchEngine:
                 if self.where == 'blogs':
                     querysets = [
                         content.filter(
-                            username__icontains=x) for x in self.what
+                            username__icontains=x
+                        ) for x in self.what
                     ]
                 elif self.where == 'tags':
                     querysets = [
@@ -177,10 +195,15 @@ class SearchEngine:
                         content.filter(
                             blog__username__icontains=x
                         ) for x in self.what
+                    ] + [
+                        content.filter(
+                            tags__name__icontains=x
+                        ) for x in self.what
                     ]
             content = querysets.pop()
             for queryset in querysets:
                 content |= queryset
+
         self.content = content
 
 
@@ -190,16 +213,14 @@ class SearchEngine:
         return self.content
 
 
-class SearchListView(ListView):
-    context_object_name = 'search_content'
+class SearchListView(TemplateView):
     template_name = 'core/search.html'
-
-    def get_queryset(self):
-        self.search = SearchEngine(self.request)
-        search_content = self.search.get_content()
-        return search_content
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update(self.search.get_metadata)
+        search = SearchEngine(self.request)
+        context.update({
+             **search.results,
+             **search.metadata
+        })
         return context

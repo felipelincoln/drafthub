@@ -1,4 +1,5 @@
 import re
+from django.db.models import Value, Case, When, IntegerField
 from django.contrib.auth import get_user_model
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -106,6 +107,7 @@ class SearchEngine:
             blog_search = SearchEngine(self.request)
             blog_results = blog_search.results['search_content']
             content.update({'search_content_blogs': blog_results})
+            self.request.GET._mutable = False
 
         return content
 
@@ -200,10 +202,19 @@ class SearchEngine:
                             tags__name__icontains=x
                         ) for x in self.what
                     ]
-            content = querysets.pop()
-            for queryset in querysets:
-                content |= queryset
 
+            score = {}
+            for queryset in querysets:
+                for instance in queryset:
+                    k = instance.pk
+                    score[k] = score.setdefault(k, 0) + 1
+
+            content = content.filter(pk__in=score).annotate(
+                score=Case(
+                    *[When(pk=k, then=Value(v)) for k,v in score.items()],
+                    output_field=IntegerField()
+                ),
+            ).order_by('-score')
         self.content = content
 
 

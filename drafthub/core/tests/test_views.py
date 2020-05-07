@@ -749,6 +749,14 @@ class SearchViewsTests(TestCase):
         )
 
 class EditViewsTests(TestCase):
+    def test_edit_template_authenticated(self):
+        blog = Blog.objects.create_user(username='myblog', password='mypass')
+        self.client.login(username='myblog', password='mypass')
+        self.assertIn('_auth_user_id', self.client.session)
+
+        response = self.client.get(reverse('edit'))
+        self.assertTemplateUsed(response, 'draft/form.html')
+
     def test_edit_post(self):
         blog = Blog.objects.create_user(username='myblog', password='mypass')
         self.client.login(username='myblog', password='mypass')
@@ -775,7 +783,13 @@ class EditViewsTests(TestCase):
         self.assertEqual(blog.text, 'this text will appear in my blog page')
 
 
-class BlogViewsTest(TestCase):
+class BlogViewsTests(TestCase):
+    def test_edit_template(self):
+        blog = Blog.objects.create(username='myblog')
+
+        response = self.client.get(reverse('blog', args=(blog.username,)))
+        self.assertTemplateUsed(response, 'draft/blog.html')
+
     def test_blog_drafts_ordering(self):
         # (-created,)
         url = reverse('blog', args=('myblog',))

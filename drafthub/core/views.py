@@ -214,7 +214,8 @@ class SearchEngine:
                     *[When(pk=k, then=Value(v)) for k,v in score.items()],
                     output_field=IntegerField()
                 ),
-            ).order_by('-score')
+            )
+            content = content.order_by('-score', *content.query.order_by)
         self.content = content
 
 

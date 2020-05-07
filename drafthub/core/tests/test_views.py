@@ -163,6 +163,298 @@ class SearchViewsTests(TestCase):
         )
         draft.tags.add(tag)
 
+    def test_search_blogs_ordering(self):
+        other_blog = Blog.objects.create(username='myotherblog')
+
+        def get_first(q):
+            response = self.client.get(self.url, {'q':q})
+            return response.context['search_content_blogs'].first()
+
+        self.assertNotEqual(get_first('my blog myblog'), other_blog)
+        self.assertEqual(get_first('my blog other'), other_blog)
+
+    def test_search_where_blogs_ordering(self):
+        other_blog = Blog.objects.create(username='myotherblog')
+
+        def get_first(q):
+            response = self.client.get(self.url, {'q':f'blogs:{q}'})
+            return response.context['search_content'].first()
+
+        self.assertNotEqual(get_first('my blog myblog'), other_blog)
+        self.assertEqual(get_first('my blog other'), other_blog)
+
+
+    def test_search_tags_ordering(self):
+        # (-score, -tagged_drafts_last_activities, last_drafts)
+        blog = Blog.objects.create(username='myotherblog')
+        tag1 = Tag.objects.create(name='first-test')
+        tagb = Tag.objects.create(name='both-test')
+        draft1 = Draft.objects.create(
+            did='myotherblog/first-draft',
+            blog=blog,
+            slug='first-draft',
+            title='First draft',
+            abstract='this is my first draft',
+        )
+        time.sleep(0.1)
+        draft2 = Draft.objects.create(
+            did='myotherblog/second-draft',
+            blog=blog,
+            slug='second-draft',
+            title='Second draft',
+            abstract='this is my second draft',
+        )
+        draft1.tags.add(tag1, tagb)
+        draft2.tags.add(tagb)
+
+        def get_first(q):
+            response = self.client.get(self.url, {'q':q})
+            return response.context['search_content_tags'].first()
+
+        # same score
+        q = 'test'
+        # draft1 created then draft2 created
+        # ordering: tag1(0), tagb(0)
+        self.assertEqual(get_first(q), tag1)
+
+        # myotherblog views draft1
+        # ordering: tag1(1), tagb(1)
+        activity1 = Activity.objects.create(blog=blog, draft=draft1)
+        self.assertEqual(get_first(q), tag1)
+
+        # myotherblog view and like draft2
+        # ordering: tagb(3), tag1(1)
+        activity2 = Activity.objects.create(blog=blog, draft=draft2)
+        activity2.liked = timezone.now()
+        activity2.save()
+        self.assertEqual(get_first(q), tagb)
+
+        # myotherblog like and favorite draft1
+        # ordering: tagb(5), tag1(3)
+        activity1.liked = timezone.now()
+        activity1.favorited = timezone.now()
+        activity1.save()
+        self.assertEqual(get_first(q), tagb)
+        
+        # myotherblog favorite draft2
+        # ordering: tagb(6), tag1(3)
+        activity2.liked = timezone.now()
+        activity2.favorited = timezone.now()
+        activity2.save()
+        self.assertEqual(get_first(q), tagb)
+
+        # both-test score greater (2 matchs)
+        q = 'both test'
+        # draft1 created then draft2 created
+        # ordering: tag1(0), tagb(0)
+        self.assertEqual(get_first(q), tagb)
+
+        # myotherblog views draft1
+        # ordering: tag1(1), tagb(1)
+        activity1 = Activity.objects.create(blog=blog, draft=draft1)
+        self.assertEqual(get_first(q), tagb)
+
+        # myotherblog view and like draft2
+        # ordering: tagb(3), tag1(1)
+        activity2 = Activity.objects.create(blog=blog, draft=draft2)
+        activity2.liked = timezone.now()
+        activity2.save()
+        self.assertEqual(get_first(q), tagb)
+
+        # myotherblog like and favorite draft1
+        # ordering: tagb(5), tag1(3)
+        activity1.liked = timezone.now()
+        activity1.favorited = timezone.now()
+        activity1.save()
+        self.assertEqual(get_first(q), tagb)
+        
+        # myotherblog favorite draft2
+        # ordering: tagb(6), tag1(3)
+        activity2.liked = timezone.now()
+        activity2.favorited = timezone.now()
+        activity2.save()
+        self.assertEqual(get_first(q), tagb)
+
+    def test_search_where_tags_ordering(self):
+        # (-score, -tagged_drafts_last_activities, last_drafts)
+        blog = Blog.objects.create(username='myotherblog')
+        tag1 = Tag.objects.create(name='first-test')
+        tagb = Tag.objects.create(name='both-test')
+        draft1 = Draft.objects.create(
+            did='myotherblog/first-draft',
+            blog=blog,
+            slug='first-draft',
+            title='First draft',
+            abstract='this is my first draft',
+        )
+        time.sleep(0.1)
+        draft2 = Draft.objects.create(
+            did='myotherblog/second-draft',
+            blog=blog,
+            slug='second-draft',
+            title='Second draft',
+            abstract='this is my second draft',
+        )
+        draft1.tags.add(tag1, tagb)
+        draft2.tags.add(tagb)
+
+        def get_first(q):
+            response = self.client.get(self.url, {'q':f'tags:{q}'})
+            return response.context['search_content'].first()
+
+        # same score
+        q = 'test'
+        # draft1 created then draft2 created
+        # ordering: tag1(0), tagb(0)
+        self.assertEqual(get_first(q), tag1)
+
+        # myotherblog views draft1
+        # ordering: tag1(1), tagb(1)
+        activity1 = Activity.objects.create(blog=blog, draft=draft1)
+        self.assertEqual(get_first(q), tag1)
+
+        # myotherblog view and like draft2
+        # ordering: tagb(3), tag1(1)
+        activity2 = Activity.objects.create(blog=blog, draft=draft2)
+        activity2.liked = timezone.now()
+        activity2.save()
+        self.assertEqual(get_first(q), tagb)
+
+        # myotherblog like and favorite draft1
+        # ordering: tagb(5), tag1(3)
+        activity1.liked = timezone.now()
+        activity1.favorited = timezone.now()
+        activity1.save()
+        self.assertEqual(get_first(q), tagb)
+        
+        # myotherblog favorite draft2
+        # ordering: tagb(6), tag1(3)
+        activity2.liked = timezone.now()
+        activity2.favorited = timezone.now()
+        activity2.save()
+        self.assertEqual(get_first(q), tagb)
+
+        # both-test score greater (2 matchs)
+        q = 'both test'
+        # draft1 created then draft2 created
+        # ordering: tag1(0), tagb(0)
+        self.assertEqual(get_first(q), tagb)
+
+        # myotherblog views draft1
+        # ordering: tag1(1), tagb(1)
+        activity1 = Activity.objects.create(blog=blog, draft=draft1)
+        self.assertEqual(get_first(q), tagb)
+
+        # myotherblog view and like draft2
+        # ordering: tagb(3), tag1(1)
+        activity2 = Activity.objects.create(blog=blog, draft=draft2)
+        activity2.liked = timezone.now()
+        activity2.save()
+        self.assertEqual(get_first(q), tagb)
+
+        # myotherblog like and favorite draft1
+        # ordering: tagb(5), tag1(3)
+        activity1.liked = timezone.now()
+        activity1.favorited = timezone.now()
+        activity1.save()
+        self.assertEqual(get_first(q), tagb)
+        
+        # myotherblog favorite draft2
+        # ordering: tagb(6), tag1(3)
+        activity2.liked = timezone.now()
+        activity2.favorited = timezone.now()
+        activity2.save()
+        self.assertEqual(get_first(q), tagb)
+
+    def test_search_drafts_ordering(self):
+        # (-score, -last_activities, -created)
+        blog = Blog.objects.create(username='myotherblog')
+        draft1 = Draft.objects.create(
+            did='myblog/first-draft',
+            blog=blog,
+            slug='first-draft',
+            title='First draft',
+            abstract='this is my first draft',
+        )
+        time.sleep(0.1)
+        draft2 = Draft.objects.create(
+            did='myblog/second-draft',
+            blog=blog,
+            slug='second-draft',
+            title='Second draft',
+            abstract='this is my second draft',
+        )
+
+        def get_first(q):
+            response = self.client.get(self.url, {'q':q})
+            return response.context['search_content'].first()
+
+        # same score
+        q = 'draft'
+
+        # draft1 created then draft2 created
+        # ordering: draft2(0), draft1(0)
+        self.assertEqual(get_first(q), draft2)
+
+        # myblog views draft1
+        # ordering: draft1(1), draft2(0)
+        activity1 = Activity.objects.create(blog=blog, draft=draft1)
+        self.assertEqual(get_first(q), draft1)
+
+        # myblog view and like draft2
+        # ordering: draft2(2), draft1(1)
+        activity2 = Activity.objects.create(blog=blog, draft=draft2)
+        activity2.liked = timezone.now()
+        activity2.save()
+        self.assertEqual(get_first(q), draft2)
+
+        # myblog like and favorite draft1
+        # ordering: draft1(3), draft2(2)
+        activity1.liked = timezone.now()
+        activity1.favorited = timezone.now()
+        activity1.save()
+        self.assertEqual(get_first(q), draft1)
+        
+        # myblog favorite draft2
+        # ordering: draft2(3), draft1(3)
+        activity2.liked = timezone.now()
+        activity2.favorited = timezone.now()
+        activity2.save()
+        self.assertEqual(get_first(q), draft2)
+
+        # draft2 greater score
+        q = 'draft second'
+
+        # draft1 created then draft2 created
+        # ordering: draft2(0), draft1(0)
+        self.assertEqual(get_first(q), draft2)
+
+        # myblog views draft1
+        # ordering: draft1(1), draft2(0)
+        activity1 = Activity.objects.create(blog=blog, draft=draft1)
+        self.assertEqual(get_first(q), draft2)
+
+        # myblog view and like draft2
+        # ordering: draft2(2), draft1(1)
+        activity2 = Activity.objects.create(blog=blog, draft=draft2)
+        activity2.liked = timezone.now()
+        activity2.save()
+        self.assertEqual(get_first(q), draft2)
+
+        # myblog like and favorite draft1
+        # ordering: draft1(3), draft2(2)
+        activity1.liked = timezone.now()
+        activity1.favorited = timezone.now()
+        activity1.save()
+        self.assertEqual(get_first(q), draft2)
+        
+        # myblog favorite draft2
+        # ordering: draft2(3), draft1(3)
+        activity2.liked = timezone.now()
+        activity2.favorited = timezone.now()
+        activity2.save()
+        self.assertEqual(get_first(q), draft2)
+
     def test_search_template(self):
         response = self.client.get(self.url)
         self.assertTemplateUsed(response, 'core/search.html')

@@ -22,21 +22,15 @@ class BlogUpdateView(LoginRequiredMixin, UpdateView):
         obj = get_object_or_404(Blog, username=self.request.user)
         return obj
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
-            'form_type': 'blog_edit',
-        })
-        return context
-
 class BlogListView(ListView):
     model = Draft
     template_name = 'draft/blog.html'
     context_object_name = 'blog_drafts'
+    paginate_by = 20
 
     def get_queryset(self):
         self.blog = get_object_or_404(Blog, username=self.kwargs['blog'])
-        return self.model.objects.filter(blog=self.blog)
+        return self.model.objects.filter(blog=self.blog).order_by('-created')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -44,8 +38,7 @@ class BlogListView(ListView):
             context['github'] = self.blog.social_auth.get().extra_data
         context.update({
             'blog': self.blog,
-            'blog_drafts': context['blog_drafts'].order_by('-created')
-        })
+            })
 
         return context
 
@@ -54,6 +47,7 @@ class HomeView(ListView):
     model = Draft
     context_object_name = 'home_drafts'
     template_name = 'core/home.html'
+    paginate_by = 20
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -69,6 +63,7 @@ class LoginView(auth_views.LoginView):
 
 class SearchEngine:
     # search pattern where.who: what
+    MAX_RESULTS = 30
     where = None
     who = None
     what = []
@@ -92,7 +87,7 @@ class SearchEngine:
 
     @property
     def results(self):
-        content = {'search_content': self.content.all()}
+        content = {'search_content': self.content.all()[:self.MAX_RESULTS]}
 
         if not self.where:
             q = self.request.GET.get('q')

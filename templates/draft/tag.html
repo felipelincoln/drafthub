@@ -1,4 +1,5 @@
 {% extends 'core/base.html' %}
+{% load drafthub_extras %}
 {% block content %}
 
 	<div class="container-lg bg-light rounded border py-3">
@@ -13,7 +14,7 @@
 			</div>
 			<div class="col-auto">
 				<a href="https://github.com/felipelincoln/drafthub/blob/master/drafthub/draft/metadata.py" class="btn btn-outline-info" role="button" target="_blank">
-					<i class="fab fab-github mr-2"></i>
+					<i class="fab fa-github mr-2"></i>
 					Edit tag on GitHub
 				</a>
 			</div>
@@ -33,7 +34,7 @@
 	<div class="container-lg my-5">
 		<div class="row my-3">
 			<div class="col">
-				<h2>{{ tag_drafts.count }} articles</h2>
+				<h2>{{ tag.tagged_drafts.count }} articles</h2>
 			</div>
 		</div>
 
@@ -70,6 +71,23 @@
 				</div>
 			</div>
 			{% endfor %}
+		</div>
+
+		<nav aria-label="...">
+			<ul class="pagination ">
+				{% for page in page_obj.paginator.num_pages|count_range %}
+					{% if page == page_obj.number %}
+					<li class="page-item disabled"><a class="page-link" href="" tabindex="-1">{{ page }}</a></li>
+					{% else %}
+					<li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+					{% endif %}
+				{% endfor %}
+			</ul>
+		</nav>
+
+
+
+
 	</div>
 
 

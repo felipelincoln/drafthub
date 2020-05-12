@@ -408,6 +408,7 @@ class TagListView(ListView):
     model = Draft
     template_name = 'draft/tag.html'
     context_object_name = 'tag_drafts'
+    paginate_by = 20
 
     def get_queryset(self):
         self.tag = get_object_or_404(Tag, name=self.kwargs['tag'])

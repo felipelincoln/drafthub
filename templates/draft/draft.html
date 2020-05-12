@@ -11,10 +11,6 @@
 			<div class="col-auto my-auto pr-0">
 				<a href="edit/" role="button" class="btn btn-outline-danger">Edit</a>
 			</div>
-			<div class="col-auto my-auto">
-				<a href="delete/" role="button" class="btn btn-outline-danger">Delete</a>
-			</div>
-
 
 			<!-- Button trigger modal -->
 			<div class="col-auto my-auto">
@@ -27,7 +23,7 @@
 			<div class="modal fade" id="deleteDraft" tabindex="-1" role="dialog" aria-labelledby="deleteDraftLabel" aria-hidden="true">
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
-						<div class="modal-header">
+						<div class="modal-header" style="word-break:break-all;">
 							<h5 class="modal-title" id="deleteDraftLabel">Delete <b>{{ draft.get_short_title }}</b> ?</h5>
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
@@ -180,12 +176,11 @@
 							{% endif %}
 
 							{% if user == comment.blog %}
-							<a href="comment/{{ comment.pk }}/edit" role="button" class="btn btn-sm btn-outline-danger py-0 ml-1">Edit</a>
-							<a href="comment/{{ comment.pk }}/delete" role="button" class="btn btn-sm btn-outline-danger py-0 ml-1">Delete</a>
+							<a href="{% url 'comment-edit' view.kwargs.blog view.kwargs.slug comment.pk %}" role="button" class="btn btn-sm btn-outline-danger py-0 ml-1">Edit</a>
 
 
 							<!-- Button trigger modal -->
-							<button type="button" class="btn btn-sm btn-outline-danger" data-toggle="modal" data-target="#deleteComment">
+							<button type="button" class="btn btn-sm btn-outline-danger py-0" data-toggle="modal" data-target="#deleteComment">
 								Delete
 							</button>
 
@@ -211,12 +206,7 @@
 										</div>
 									</div>
 								</div>
-						</div>
-
-
-
-
-
+							</div>
 
 
 

@@ -111,3 +111,7 @@ def count_range(n):
 @register.filter
 def in_queryset(blog, queryset):
     return blog in queryset
+
+@register.filter
+def get_model_name(queryset):
+    return queryset[0]._meta.model_name

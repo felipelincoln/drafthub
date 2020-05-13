@@ -163,7 +163,7 @@
 			<tbody>
 				{% for comment in draft.comments.all %}
 					<tr id="{{ comment.id }}" class="tr-hidden-btn">
-						<th scope="row"><a href="{{ comment.blog.get_absolute_url }}">{{ comment.blog }}</a></th>
+						<th scope="row"><a style="color:black" href="{{ comment.blog.get_absolute_url }}">{{ comment.blog }}</a></th>
 						<td style ="word-break:break-all; vertical-align:top">
 							<div class="markdown-body">
 							{{ comment.content|plaintext_markdown}}

@@ -10,12 +10,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Install CI requirements
-      run: |
-        pip install pipenv
-        pipenv install coverage pylint
     - name: Start docker
       run: docker-compose up --build -d
+	- name: Installing CI requirements
+      run: |
+        docker-compose exec -T web pip install coverage
+        docker-compose exec -T web pip install pylint
     - name: Run tests
       run: docker-compose exec -T web make test
     - name: Check code coverage

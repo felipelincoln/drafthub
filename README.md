@@ -1,5 +1,12 @@
-# DraftHub 
-![](https://img.shields.io/github/workflow/status/felipelincoln/drafthub/Docker%20Image%20CI)  
+# drafthub
+
+[![build](https://img.shields.io/github/workflow/status/drafthub/drafthub/CI)](https://github.com/drafthub/drafthub/actions)
+[![docs](https://readthedocs.org/projects/drafthub/badge/?version=latest)](https://drafthub.readthedocs.io/en/latest/?badge=latest)
+[![codecov](https://codecov.io/gh/drafthub/drafthub/branch/master/graph/badge.svg)](https://codecov.io/gh/drafthub/drafthub/branch/new)
+[![tech](http://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](https://stackshare.io/felipelincoln/my-stack)
+
+Working intensively on this :nerd_face:
+
 
 This is an open source blogging website which uses GitHub to serve the posts
 

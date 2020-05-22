@@ -12,7 +12,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Start docker
       run: docker-compose up --build -d
-	- name: Installing CI requirements
+    - name: Installing CI requirements
       run: |
         docker-compose exec -T web pip install coverage
         docker-compose exec -T web pip install pylint

@@ -21,8 +21,8 @@ Start your own developer blog using git and markdown and integrate the GitHub co
 ## Contribute
 - [Write documentation](https://github.com/drafthub/drafthub/milestone/1)
 - [Enhance code quality](https://github.com/drafthub/drafthub/milestone/2)
-- [Code some tests](#)
-- [Solve an issue in general](#)
+- [Code some tests](https://github.com/drafthub/drafthub/milestone/3)
+- [Solve an issue in general](https://github.com/drafthub/drafthub/issues)
 
 ## The stack
 [<img src="https://img.stackshare.io/service/1052/YMxUfyWf.png" height="80px"><img src="https://img.stackshare.io/service/993/pUBY5pVj.png" height="80px"><img src="https://img.stackshare.io/service/1101/C9QJ7V3X.png" height="80px">

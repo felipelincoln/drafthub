@@ -19,7 +19,8 @@ Start your own developer blog using git and markdown and integrate the GitHub co
 - Get contribution from your readers :heart_eyes:
 
 ## Contribute
-- [Write documentation](#) 
+- [Write documentation](#)
+- [Enhance code quality](#)
 - [Code some tests](#)
 - [Solve an issue in general](#)
 

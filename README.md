@@ -3,7 +3,7 @@
 
 [![build](https://img.shields.io/github/workflow/status/drafthub/drafthub/CI)](https://github.com/drafthub/drafthub/actions)
 [![docs](https://readthedocs.org/projects/drafthub/badge/?version=latest)](https://drafthub.readthedocs.io/en/latest/?badge=latest)
-[![codecov](https://codecov.io/gh/drafthub/drafthub/branch/master/graph/badge.svg)](https://codecov.io/gh/drafthub/drafthub/branch/new)
+[![codecov](https://codecov.io/gh/drafthub/drafthub/branch/master/graph/badge.svg)](https://codecov.io/gh/drafthub/drafthub/)
 [![tech](http://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](https://stackshare.io/felipelincoln/my-stack)
 
 Start your own developer blog using git and markdown and integrate the GitHub community :nerd_face:.

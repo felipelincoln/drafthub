@@ -20,7 +20,7 @@ Start your own developer blog using git and markdown and integrate the GitHub co
 
 ## Contribute
 - [Write documentation](https://github.com/drafthub/drafthub/milestone/1)
-- [Enhance code quality](#)
+- [Enhance code quality](https://github.com/drafthub/drafthub/milestone/2)
 - [Code some tests](#)
 - [Solve an issue in general](#)
 

@@ -3,3 +3,4 @@ omit=
     manage.py
     drafthub/settings.py
     */migrations/*
+    */tests/*

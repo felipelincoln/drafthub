@@ -1,3 +1,4 @@
+"""Url config for drafthub"""
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings

@@ -1,76 +1,54 @@
-{% extends 'core/base.html' %}
-{% load drafthub_extras %}
-{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+	<link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+	<link rel="icon" type="image/png" href="{% static 'img/favicon-32.png' %}">
 
-	<div class="container-lg">
-		<div class="row">
-			<div class="col">
-				<h2>Trending tags</h2>
-			</div>
-		</div>
-		<hr>
-		<div class="row">
-			{% for tag in home_tags %}
-				<div class="col-auto pr-0">
-					<h3 class=""><a href="{{ tag.get_absolute_url }}" class="badge badge-secondary">
-						{% if tag.icon %}
-						<i class="{{ tag.icon }}"></i>
-						{% endif %}
-						{{ tag }}
-						</a></h3>
-				</div>
-			{% endfor %}
-		</div>
+	<!-- Primary Meta Tags -->
+	<title>drafthub: blog like a developer</title>
+	<meta name="title" content="drafthub: blog like a developer">
+	<meta name="description" content="Start your own developer blog using git and markdown and integrate the GitHub community">
+
+	<!-- Open Graph / Facebook -->
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://drafthub.herokuapp.com/">
+	<meta property="og:title" content="drafthub: blog like a developer">
+	<meta property="og:description" content="Start your own developer blog using git and markdown and integrate the GitHub community">
+	<meta property="og:image" content="https://i.ibb.co/McvBBRT/drafthub-1.png">
+
+	<!-- Twitter -->
+	<meta property="twitter:card" content="summary_large_image">
+	<meta property="twitter:url" content="https://drafthub.herokuapp.com/">
+	<meta property="twitter:title" content="drafthub: blog like a developer">
+	<meta property="twitter:description" content="Start your own developer blog using git and markdown and integrate the GitHub community">
+	<meta property="twitter:image" content="https://i.ibb.co/McvBBRT/drafthub-1.png">
+
+	<!---->
+
+	<link rel="stylesheet" href="https://unpkg.com/buefy/dist/buefy.min.css">
+</head>
+
+<body>
+	<div id="app">
+		ooi
+		<!-- Buefy components goes here -->
 	</div>
 
-	<div class="container-lg my-5">
-		<div class="row">
-			<div class="col">
-				<h2>Trending articles</h2>
-			</div>
-		</div>
-		<hr>
-		<div class="row row-cols-1 row-cols-md-2">
-			{% for draft in home_drafts %}
-			<div class="col mb-5">
-				<div class="card bg-light">
-					<div class="card-body">
-						<h5 class="card-title"><a class="inherit-color" href="{{ draft.get_absolute_url }}">{{ draft.title }}</a></h5>
-						<h6 class="card-subtitle mb-2 text-muted">
-							<a class="inherit-color" href="{{ draft.blog.get_absolute_url }}">{{ draft.blog }}</a>
-							, <a class="inherit-color" href="{{ draft.get_absolute_url }}">
-								{{ draft.created|date:"M d, Y" }}
-								{% if draft.updated %} (updated {{ draft.updated|date:"M d, Y" }}){% endif %}
-							</a></h6>
-						<p class="card-text">{{ draft.abstract }}</p>
-						{% for tag in draft.tags.all %}
-							<a href="{{ tag.get_absolute_url }}" class="card-link badge badge-pill badge-light border">
-								{% if tag.icon %}
-								<i class="{{ tag.icon }}"></i>
-								{% endif %}
-								{{ tag }}
-								</a>
-						{% endfor %}
-					</div>
-				</div>
-			</div>
-			{% endfor %}
-		</div>
+	<script src="https://unpkg.com/vue"></script>
+	<!-- Full bundle -->
+	<script src="https://unpkg.com/buefy/dist/buefy.min.js"></script>
 
+	<!-- Individual components -->
+	<script src="https://unpkg.com/buefy/dist/components/table"></script>
+	<script src="https://unpkg.com/buefy/dist/components/input"></script>
 
-	<nav aria-label="...">
-		<ul class="pagination ">
-			{% for page in page_obj.paginator.num_pages|count_range %}
-				{% if page == page_obj.number %}
-				<li class="page-item disabled"><a class="page-link" href="" tabindex="-1">{{ page }}</a></li>
-				{% else %}
-				<li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
-				{% endif %}
-			{% endfor %}
-		</ul>
-	</nav>
-
-
-	</div>
-
-{% endblock content %}
+	<script>
+		new Vue({
+			el: '#app'
+		})
+	</script>
+</body>
+</html>

@@ -33,7 +33,29 @@
 
 <body>
 	<div id="app">
-		ooi
+
+	{% for tag in home_tags %}
+		<a href="{{ tag.get_absolute_url }}">
+		<b-tag type="is-dark" size="is-medium">
+			{% if tag.icon %}
+				<b-icon pack="{{ tag.pack }}" icon="{{ tag.icon }}"></b-icon>
+			{% endif %}
+			<span>{{ tag }}</span>
+		</b-tag>
+		</a>
+	{% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
 		<!-- Buefy components goes here -->
 	</div>
 
@@ -44,6 +66,10 @@
 	<!-- Individual components -->
 	<script src="https://unpkg.com/buefy/dist/components/table"></script>
 	<script src="https://unpkg.com/buefy/dist/components/input"></script>
+
+	<!-- Scrips -->
+	<script src="https://kit.fontawesome.com/c17adb2a33.js" crossorigin="anonymous"></script>
+
 
 	<script>
 		new Vue({

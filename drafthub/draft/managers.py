@@ -36,6 +36,11 @@ class TagManager(models.Manager):
     def get_queryset(self):
         last_week = timezone.now() - timedelta(days=7)
         queryset = super().get_queryset().annotate(
+            pack=Case(
+                *[When(name=k, then=Value(v['pack'])) \
+                for k, v in TAG_METADATA.items()],
+                output_field=models.CharField()
+            ),
             icon=Case(
                 *[When(name=k, then=Value(v['icon'])) \
                 for k, v in TAG_METADATA.items()],

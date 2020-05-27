@@ -7,3 +7,9 @@ LICENSE
 .git*/
 
 docker-compose.yml 
+
+docs/_build/
+staticfiles/
+
+.coverage
+coverage.xml

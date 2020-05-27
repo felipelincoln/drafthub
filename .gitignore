@@ -1,4 +1,5 @@
 docs/_build/
+staticfiles/
 
 .coverage
 coverage.xml

@@ -8,5 +8,6 @@ WORKDIR /code
 
 COPY Pipfile Pipfile.lock /code/
 RUN pip install pipenv && pipenv install --system
+RUN python manage.py collectstatic --no-input
 
 COPY . /code/

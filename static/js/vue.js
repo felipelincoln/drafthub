@@ -6,12 +6,15 @@ Vue.component('draft-tag', {
 		'tagIcon',
 	],
 		template: `
-			<a :href="tagUrl">
-				<b-tag type="is-dark" size="is-medium">
-					<b-icon v-if="tagIcon != 'None'" :pack="tagPack" :icon="tagIcon" size="is-small"></b-icon>
-					<span><slot></slot></span>
-				</b-tag>
-			</a>
+			<b-button
+				size="is-small"
+				type="is-dark"
+				tag="a"
+				:href="tagUrl"
+				:icon-pack="tagPack"
+				:icon-left="tagIcon">
+				<slot></slot>
+			</b-button>
 		`
 })
 

@@ -39,11 +39,13 @@ class TagManager(models.Manager):
             pack=Case(
                 *[When(name=k, then=Value(v['pack'])) \
                 for k, v in TAG_METADATA.items()],
+                default=Value(''),
                 output_field=models.CharField()
             ),
             icon=Case(
                 *[When(name=k, then=Value(v['icon'])) \
                 for k, v in TAG_METADATA.items()],
+                default=Value(''),
                 output_field=models.CharField()
             ),
             description=Case(

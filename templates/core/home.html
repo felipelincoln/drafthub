@@ -33,6 +33,8 @@
 
 <body>
 	<div id="app">
+
+	<!-- tags -->
 	{% for tag in home_tags %}
 		<draft-tag
 			tag-url="{{ tag.get_absolute_url }}"
@@ -41,6 +43,25 @@
 			{{ tag }}
 		</draft-tag>
 	{% endfor %}
+
+	<!-- inputtags -->
+	<section>
+		<b-field label="Enter some tags">
+			<b-taginput
+				v-model="tags"
+				:data="filteredTags"
+				autocomplete
+				allow-new
+				maxlength="25"
+				maxtags="5"
+				style="font-family:monospace;"
+				placeholder="Add a tag"
+				@typing="getFilteredTags">
+			</b-taginput>
+			[[ tags ]]
+		</b-field>
+	</section>
+
 
 
 

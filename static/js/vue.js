@@ -7,6 +7,7 @@ Vue.component('draft-tag', {
 	],
 		template: `
 			<b-button
+				style="font-family:monospace;"
 				size="is-small"
 				type="is-dark"
 				tag="a"
@@ -18,6 +19,22 @@ Vue.component('draft-tag', {
 		`
 })
 
+
+const dbTags = ['python', 'albion-pvp', 'django']
+
+
 new Vue({
-	el: '#app'
+	el: '#app',
+	delimiters: ['[[', ']]'],
+	data:{
+		tags: [],
+		filteredTags: dbTags,
+	},
+	methods: {
+		getFilteredTags(text){
+			this.filteredTags = dbTags.filter((item) => {
+				return item.indexOf(text.toLowerCase()) >= 0
+			})
+		},
+	}
 })

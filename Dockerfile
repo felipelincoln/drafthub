@@ -23,6 +23,6 @@ RUN pip install pipenv
 RUN pipenv install --system
 
 COPY . /code/
-COPY --from=node /code/dist /code/
+COPY --from=node /code/dist/ /code/
 
 RUN python manage.py collectstatic --no-input

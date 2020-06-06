@@ -4,15 +4,13 @@ services:
     node:
         build:
             context: .
-            dockerfile: Dockerfile.node
+            target: node
         command: npm run build-w
         volumes:
             - .:/code
             - /code/node_modules
     web:
-        build:
-            context: .
-            dockerfile: Dockerfile
+        build: .
         command: python manage.py runserver 0.0.0.0:8000 
         environment:
             - ENVIRONMENT=development

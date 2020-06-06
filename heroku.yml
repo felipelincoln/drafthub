@@ -4,5 +4,7 @@ setup:
 build:
     docker:
         web: Dockerfile
+        node: Dockerfile.node
 run:
     web: gunicorn drafthub.wsgi
+    node: npm run build

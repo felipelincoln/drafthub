@@ -29,55 +29,18 @@
 	<!---->
 
 	<link rel="stylesheet" href="https://unpkg.com/buefy/dist/buefy.min.css">
+	<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 </head>
 
 <body>
 	<div id="app">
 
-	<!-- tags -->
-	{% for tag in home_tags %}
-		<draft-tag
-			tag-url="{{ tag.get_absolute_url }}"
-			tag-pack="{{ tag.pack }}"
-			tag-icon="{{ tag.icon }}">
-			{{ tag }}
-		</draft-tag>
-	{% endfor %}
+		empty
 
-	<!-- inputtags -->
-	<section>
-		<b-field label="Enter some tags">
-			<b-taginput
-				v-model="tags"
-				:data="filteredTags"
-				autocomplete
-				allow-new
-				maxlength="25"
-				maxtags="5"
-				style="font-family:monospace;"
-				placeholder="Add a tag"
-				@typing="getFilteredTags">
-			</b-taginput>
-			[[ tags ]]
-		</b-field>
-	</section>
-
-
-
-
-	<!-- Buefy components goes here -->
 	</div>
 
 	<script src="https://unpkg.com/vue"></script>
-	<!-- Full bundle -->
 	<script src="https://unpkg.com/buefy/dist/buefy.min.js"></script>
-
-	<!-- Individual components -->
-	<script src="https://unpkg.com/buefy/dist/components/table"></script>
-	<script src="https://unpkg.com/buefy/dist/components/input"></script>
-
-	<!-- Scrips -->
-	<script src="https://kit.fontawesome.com/c17adb2a33.js" crossorigin="anonymous"></script>
 	<script src="{% static 'js/vue.js' %}"></script>
 
 </body>

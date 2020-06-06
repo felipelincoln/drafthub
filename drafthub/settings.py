@@ -26,7 +26,7 @@ if ENVIRONMENT == 'production':
 
 elif ENVIRONMENT == 'development':
     DEBUG = 1
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = ['*']
     
 
 

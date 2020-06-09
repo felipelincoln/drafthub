@@ -5,5 +5,3 @@ staticfiles/
 coverage.xml
 
 node_modules/
-templates/
-static/

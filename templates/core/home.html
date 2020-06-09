@@ -27,21 +27,30 @@
 	<meta property="twitter:image" content="https://i.ibb.co/McvBBRT/drafthub-1.png">
 
 	<!---->
+	<link rel="stylesheet" href="{% static 'css/theme.css' %}">
 
-	<link rel="stylesheet" href="https://unpkg.com/buefy/dist/buefy.min.css">
-	<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 </head>
 
 <body>
 	<div id="app">
 
-		empty
+		<b-field label="Dark">
+				<b-taginput
+						type="is-primary">
+				</b-taginput>
+		</b-field>
+
+		<b-button type="is-primary">Oi</b-button>
 
 	</div>
 
 	<script src="https://unpkg.com/vue"></script>
 	<script src="https://unpkg.com/buefy/dist/buefy.min.js"></script>
-	<script src="{% static 'js/vue.js' %}"></script>
+	<script>
+		new Vue({
+			el: "#app"
+		})
+	</script>
 
 </body>
 </html>

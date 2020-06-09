@@ -1,0 +1,20 @@
+{
+  "name": "drafthub",
+  "version": "1.0.0",
+  "description": "> Hosted blogging platform based on GitHub",
+  "main": "src/sass/theme.scss",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+		"css-build": "node-sass --omit-source-map-url src/sass/theme.scss static/css/theme.css",
+		"css-watch": "npm run css-build -- --watch",
+		"start": "npm run css-build & npm run css-watch"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "buefy": "^0.8.20",
+    "node-sass": "^4.14.1"
+  }
+}

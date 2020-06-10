@@ -2,39 +2,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-	<link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
-	<link rel="icon" type="image/png" href="{% static 'img/favicon-32.png' %}">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+  <link rel="icon" type="image/png" href="{% static 'img/favicon-32.png' %}">
 
-	<!-- Primary Meta Tags -->
-	<title>drafthub: blog like a developer</title>
-	<meta name="title" content="drafthub: blog like a developer">
-	<meta name="description" content="Start your own developer blog using git and markdown and integrate the GitHub community">
+  <!-- Primary Meta Tags -->
+  <title>drafthub: blog like a developer</title>
+  <meta name="title" content="drafthub: blog like a developer">
+  <meta name="description" content="Start your own developer blog using git and markdown and integrate the GitHub community">
 
-	<!-- Open Graph / Facebook -->
-	<meta property="og:type" content="website">
-	<meta property="og:url" content="https://drafthub.herokuapp.com/">
-	<meta property="og:title" content="drafthub: blog like a developer">
-	<meta property="og:description" content="Start your own developer blog using git and markdown and integrate the GitHub community">
-	<meta property="og:image" content="https://i.ibb.co/McvBBRT/drafthub-1.png">
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://drafthub.herokuapp.com/">
+  <meta property="og:title" content="drafthub: blog like a developer">
+  <meta property="og:description" content="Start your own developer blog using git and markdown and integrate the GitHub community">
+  <meta property="og:image" content="https://i.ibb.co/McvBBRT/drafthub-1.png">
 
-	<!-- Twitter -->
-	<meta property="twitter:card" content="summary_large_image">
-	<meta property="twitter:url" content="https://drafthub.herokuapp.com/">
-	<meta property="twitter:title" content="drafthub: blog like a developer">
-	<meta property="twitter:description" content="Start your own developer blog using git and markdown and integrate the GitHub community">
-	<meta property="twitter:image" content="https://i.ibb.co/McvBBRT/drafthub-1.png">
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://drafthub.herokuapp.com/">
+  <meta property="twitter:title" content="drafthub: blog like a developer">
+  <meta property="twitter:description" content="Start your own developer blog using git and markdown and integrate the GitHub community">
+  <meta property="twitter:image" content="https://i.ibb.co/McvBBRT/drafthub-1.png">
 
-	<!---->
-	<link rel="stylesheet" href="{% static 'css/theme.css' %}">
+  <!---->
+  <link rel="stylesheet" href="{% static 'css/theme.css' %}">
 
 </head>
 
 <body>
-	<div id="app">
+  <div id="app">
+  <template>
+    <b-navbar shadow>
+      <template slot="brand">
+        <b-navbar-item>
+          <b-taglist attached>
+            <a class="tag is-dark" ><strong>drafthub</strong></a>
+            <a class="tag is-primary"><strong>/blog/felipelincoln</strong></a>
+          </b-taglist>
+        </b-navbar-item>
+      </template>
+      <template slot="start">
+      </template>
 
-		<b-field label="Dark">
+      <template slot="end">
+        <b-navbar-dropdown label="Favorites">
+          {% for favorite in user.favorited_drafts|slice:"10" %}
+            <b-navbar-item href="{{ favorite.get_absolute_url }}">
+              {{ favorite.get_short_title }}
+            </b-navbar-item>
+          {% endfor %}
+        </b-navbar-dropdown>
+        <b-navbar-item tag="div">
+          <div class="buttons">
+            <b-button type="is-primary" outlined icon-pack="fa" icon-left="github">
+              <strong>Enter</strong>
+            </b-button>
+          </div>
+        </b-navbar-item>
+      </template>
+    </b-navbar>
+  </template>
+
+<br>
+
+
+  		<b-field label="Dark">
 				<b-taginput
 						type="is-link">
 				</b-taginput>
@@ -85,13 +119,12 @@
 
 	</div>
 
-	<script src="https://unpkg.com/vue"></script>
-	<script src="https://unpkg.com/buefy/dist/buefy.min.js"></script>
-	<script>
-		new Vue({
-			el: "#app"
-		})
-	</script>
+  </div>
+
+  <script src="https://kit.fontawesome.com/c17adb2a33.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/vue"></script>
+  <script src="https://unpkg.com/buefy/dist/buefy.min.js"></script>
+  <script src="{% static 'js/vue.js' %}"></script>
 
 </body>
 </html>

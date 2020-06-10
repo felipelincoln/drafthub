@@ -1,10 +1,48 @@
 @charset "utf-8";
-@import "../../node_modules/bulma/sass/utilities/_all";
 
-$primary: #ee5050;
-$colors: (
-	"primary": ($primary, $primary-invert)
-);
+// Import a Google Font
+@import url('https://fonts.googleapis.com/css?family=Inter:400,700');
+
+// Set your brand colors
+$beige-lighter: #EFF0EB;
+$green: #45BF17;
+$yellow: #D0A81C;
+$red: #D25C46;
+$grey: #545454;
+$blue: #097ABA;
+$cyan: #07A5DE;
+$theme-a: #3EBEB0;
+$theme-b: #F0BF1A;
+
+// Update Bulma's global variables
+@import "../../node_modules/bulma/sass/utilities/functions";
+
+$family-sans-serif: "Inter", sans-serif;
+$success: $green;
+$warning: $yellow;
+$danger: $red;
+$info: $blue;
+$dark: $grey;
+$link: $cyan;
+$primary: $theme-a;
+$secondary: $theme-b;
+$secondary-invert: findColorInvert($theme-b);
+
+
+// Update some of Bulma's component variables
+$body-background-color: $beige-lighter;
+$control-border-width: 2px;
+$input-border-color: transparent;
+$input-shadow: none;
+
+// Update colors
+@import "../../node_modules/bulma/sass/utilities/initial-variables";
+@import "../../node_modules/bulma/sass/utilities/derived-variables";
+
+$colors: mergeColorMaps($colors, (
+	"secondary": ($secondary, $secondary-invert)
+));
+
 
 @import "../../node_modules/bulma/bulma.sass";
 @import "../../node_modules/buefy/src/scss/buefy";

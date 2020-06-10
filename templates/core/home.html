@@ -28,6 +28,7 @@
 
   <!---->
   <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+  <link rel="stylesheet" href="https://cdn.materialdesignicons.com/5.3.45/css/materialdesignicons.min.css">
 
 </head>
 
@@ -42,25 +43,35 @@
             <a class="tag is-primary"><strong>/blog/felipelincoln</strong></a>
           </b-taglist>
         </b-navbar-item>
+          <a class="navbar-item"><b-icon size="is-small" icon="github"></b-icon></a>
+          <a class="navbar-item"><b-icon size="is-small" icon="twitter"></b-icon></a>
+          <a class="navbar-item"><b-icon size="is-small" icon="patreon"></b-icon></a>
+          <a class="navbar-item"><b-icon size="is-small" icon="linkedin"></b-icon></a>
       </template>
-      <template slot="start">
-      </template>
-
       <template slot="end">
-        <b-navbar-dropdown label="Favorites">
-          {% for favorite in user.favorited_drafts|slice:"10" %}
-            <b-navbar-item href="{{ favorite.get_absolute_url }}">
-              {{ favorite.get_short_title }}
-            </b-navbar-item>
-          {% endfor %}
+        {% if user.is_authenticated %}
+        <b-navbar-dropdown right label="felipelincoln">
+          <b-navbar-item href="#">
+            New draft
+          </b-navbar-item>
+          <b-navbar-item href="#">
+            Blog
+          </b-navbar-item>
+          <b-navbar-item href="#">
+            Favorites
+          </b-navbar-item>
+          <hr class="dropdown-divider">
+          <b-navbar-item href="#">
+            Logout
+          </b-navbar-item>
         </b-navbar-dropdown>
+        {% else %}
         <b-navbar-item tag="div">
-          <div class="buttons">
-            <b-button type="is-primary" outlined icon-pack="fa" icon-left="github">
-              <strong>Enter</strong>
-            </b-button>
-          </div>
+          <b-button type="is-primary" size="is-small" icon-left="github">
+            <strong>Sign in/up</strong>
+          </b-button>
         </b-navbar-item>
+        {% endif %}
       </template>
     </b-navbar>
   </template>
@@ -70,7 +81,7 @@
 
   		<b-field label="Dark">
 				<b-taginput
-						type="is-link">
+						type="is-secondary">
 				</b-taginput>
 		</b-field>
 		<span>Lorem ipsum dolor sit amet, <a href="#">consectetur.</a></span>

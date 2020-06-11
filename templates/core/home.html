@@ -34,52 +34,146 @@
 
 <body>
   <div id="app">
-  <template>
-    <b-navbar class="container" shadow>
-      <template slot="brand">
-        <b-navbar-item>
-          <b-taglist attached>
-            <a class="tag is-dark" ><strong>drafthub</strong></a>
-            <a class="tag is-primary"><strong>/blog/felipelincoln</strong></a>
-          </b-taglist>
-        </b-navbar-item>
-          <a class="navbar-item"><b-icon size="is-small" icon="github"></b-icon></a>
-          <a class="navbar-item"><b-icon size="is-small" icon="twitter"></b-icon></a>
-          <a class="navbar-item"><b-icon size="is-small" icon="patreon"></b-icon></a>
-          <a class="navbar-item"><b-icon size="is-small" icon="linkedin"></b-icon></a>
-      </template>
-      <template slot="end">
-        {% if user.is_authenticated %}
-        <b-navbar-dropdown right label="felipelincoln">
-          <b-navbar-item href="#">
-            New draft
+    <header>
+      <b-navbar class="container" shadow>
+        <template slot="brand">
+          <b-navbar-item>
+            <b-taglist attached>
+              <a class="tag is-dark" ><strong>drafthub</strong></a>
+              <a class="tag is-primary"><strong>/blog/felipelincoln</strong></a>
+            </b-taglist>
           </b-navbar-item>
-          <b-navbar-item href="#">
-            Blog
+            <a class="navbar-item"><b-icon size="is-small" icon="github"></b-icon></a>
+            <a class="navbar-item"><b-icon size="is-small" icon="twitter"></b-icon></a>
+            <a class="navbar-item"><b-icon size="is-small" icon="patreon"></b-icon></a>
+            <a class="navbar-item"><b-icon size="is-small" icon="linkedin"></b-icon></a>
+        </template>
+        <template slot="end">
+          {% if user.is_authenticated %}
+          <b-navbar-dropdown right label="felipelincoln">
+            <b-navbar-item href="#">
+              New draft
+            </b-navbar-item>
+            <b-navbar-item href="#">
+              Blog
+            </b-navbar-item>
+            <b-navbar-item href="#">
+              Favorites
+            </b-navbar-item>
+            <hr class="dropdown-divider">
+            <b-navbar-item href="#">
+              Logout
+            </b-navbar-item>
+          </b-navbar-dropdown>
+          {% else %}
+          <b-navbar-item tag="div">
+            <b-button type="is-primary" size="is-small" icon-left="github">
+              <strong>Sign in/up</strong>
+            </b-button>
           </b-navbar-item>
-          <b-navbar-item href="#">
-            Favorites
-          </b-navbar-item>
-          <hr class="dropdown-divider">
-          <b-navbar-item href="#">
-            Logout
-          </b-navbar-item>
-        </b-navbar-dropdown>
-        {% else %}
-        <b-navbar-item tag="div">
-          <b-button type="is-primary" size="is-small" icon-left="github">
-            <strong>Sign in/up</strong>
-          </b-button>
-        </b-navbar-item>
-        {% endif %}
-      </template>
-    </b-navbar>
-  </template>
+          {% endif %}
+        </template>
+      </b-navbar>
+    </header>
+
+    <br>
+
+    <section class="container">
+    <div class="columns">
+      <aside class="column is-one-fifth has-background-secondary is-hidden-mobile">
+				Trending articles
+      </aside>
+      <section class="column">
+        <nav class="level">
+  <!-- Left side -->
+  <div class="level-left">
+    <div class="level-item">
+      <p class="subtitle is-5">
+        <strong>123</strong> posts
+      </p>
+    </div>
+    <div class="level-item">
+      <div class="field has-addons">
+        <p class="control">
+          <input class="input" type="text" placeholder="Find a post">
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right side -->
+  <div class="level-right">
+    <p class="level-item"><strong>Trending</strong></p>
+    <p class="level-item"><a>Latest</a></p>
+    <p class="level-item"><a class="button is-success">New</a></p>
+  </div>
+</nav>
+
+        <div class="box">
+          <article>
+          Lorem ipsum dolor sit amet, consectetur lorem ipsum dolor sit amet, consectetur, lorem ipsum.
+          </article>
+        </div>
+        <div class="box">
+          <article>
+          Lorem ipsum dolor sit amet, consectetur lorem ipsum dolor sit amet, consectetur, lorem ipsum.
+          </article>
+        </div>
+        <div class="box">
+          <article>
+          Lorem ipsum dolor sit amet, consectetur lorem ipsum dolor sit amet, consectetur, lorem ipsum.
+          </article>
+        </div>
+        <div class="box">
+          <article>
+          Lorem ipsum dolor sit amet, consectetur lorem ipsum dolor sit amet, consectetur, lorem ipsum.
+          </article>
+        </div>
+        <div class="box">
+          <article>
+          Lorem ipsum dolor sit amet, consectetur lorem ipsum dolor sit amet, consectetur, lorem ipsum.
+          </article>
+        </div>
+      </section>
+      <aside class="column is-one-fifth has-background-secondary is-hidden-touch">
+        ICON this tag with 25 characte
+      </aside>
+    </div>
+    </section>
+
+    
+
+
+
+
+
+
+
+
+
+
+
 
 <br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-
-    <div class="container">
   		<b-field label="Dark">
 				<b-taginput
 						type="is-link">

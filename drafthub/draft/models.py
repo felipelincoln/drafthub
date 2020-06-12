@@ -107,6 +107,7 @@ class Comment(models.Model):
 
 class Tag(models.Model):
     name = models.SlugField(max_length=25, unique=True)
+    created = models.DateTimeField(auto_now_add=True)
 
     objects = TagManager()
 

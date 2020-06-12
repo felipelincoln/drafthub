@@ -51,7 +51,13 @@ class HomeView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['home_tags'] = Tag.objects.all()
+        context.update({
+            'home_tags': Tag.objects.all(),
+            'home_new_tags': Tag.objects.all().order_by('-created'),
+            'home_new_drafts': Draft.objects.all().order_by('-created'),
+            'home_blogs': Blog.objects.all(),
+            'home_new_blogs': Blog.objects.all().order_by('-date_joined'),
+        })
 
         return context
 

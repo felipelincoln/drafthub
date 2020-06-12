@@ -47,6 +47,7 @@ $colors: mergeColorMaps($colors, (
 
 // Import custom components
 @import "components/navbar";
+@import "components/footer";
 
 // Import Bulma and Buefy
 @import "../../node_modules/bulma/bulma.sass";

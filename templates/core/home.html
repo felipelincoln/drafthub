@@ -78,22 +78,26 @@
 
     <section class="container px-3 is-primary">
     <div class="columns">
-      <aside class="column is-one-fifth is-hidden-mobile">
-				Trending blogs<br>
-        {% for blog in home_blogs %}
-          <span class="tag is-secondary">{{ blog }}</span><br>
-        {% endfor %}
-        <br>
-				New blogs<br>
-        {% for blog in home_new_blogs %}
-          <span class="tag is-secondary">{{ blog }}</span><br>
-        {% endfor %}
-      </aside>
       <section class="column">
+  <div class="box">
+  <b-tabs v-model="activeTab">
+            <b-tab-item label="Overall" icon="history">
+              </b-tab-item>
+
+            <b-tab-item label="Python" icon="language-python"> </b-tab-item>
+            <b-tab-item label="Rails" icon="language-ruby-on-rails">
+            </b-tab-item>
+            <b-tab-item label="Django" icon="tag">
+            </b-tab-item>
+            <b-tab-item label="Deno" icon="tag">
+            </b-tab-item>
+            <b-tab-item label="Node.js" icon="nodejs">
+            </b-tab-item>
+   </b-tabs>
+            <strong>1,154 articles</strong>
+            <input placeholder="Search for articles in overall" type="text" style="border-bottom:1px solid grey; width:60%" class="input">
   <span>Trending articles</span>
-  <br>
   {% for draft in home_drafts %}
-    <div class="box">
       <article>
         <header>
           <h2>
@@ -115,12 +119,11 @@
           </time>
         </footer>
       </article>
-    </div>
+      <hr>
   {% endfor %}
 
   <span>Latest articles</span>
   {% for draft in home_new_drafts %}
-    <div class="box">
       <article>
         <header>
           <h2>
@@ -142,11 +145,12 @@
           </time>
         </footer>
       </article>
-    </div>
   {% endfor %}
+    </div>
 
       </section>
-      <aside class="column is-one-fifth is-hidden-touch">
+      <aside class="column is-one-fifth is-hidden-mobile">
+        <div class="box">
         <span>Trending tags</span><br>
         {% for tag in home_tags %}
           <span class="tag is-link">{{ tag }}</span><br>
@@ -156,95 +160,35 @@
         {% for tag in home_new_tags %}
           <span class="tag is-link">{{ tag }}</span><br>
         {% endfor %}
+        </div>
+        <div class="box">
+				Trending blogs<br>
+        {% for blog in home_blogs %}
+          <span class="tag is-secondary">{{ blog }}</span><br>
+        {% endfor %}
+        <br>
+				New blogs<br>
+        {% for blog in home_new_blogs %}
+          <span class="tag is-secondary">{{ blog }}</span><br>
+        {% endfor %}
+        </div>
       </aside>
     </div>
     </section>
 
-    
+    <br>
 
-
-
-
-
-
-
-
-
-
-
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-  		<b-field label="Dark">
-				<b-taginput
-						type="is-link">
-				</b-taginput>
-		</b-field>
-		<span>Lorem ipsum dolor sit amet, <a href="#">consectetur.</a></span>
-		        <b-dropdown aria-role="list">
-            <button class="button is-primary" slot="trigger" slot-scope="{ active }">
-                <span>Click me!</span>
-                <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
-            </button>
-
-            <b-dropdown-item aria-role="listitem">Action</b-dropdown-item>
-            <b-dropdown-item aria-role="listitem">Another action</b-dropdown-item>
-            <b-dropdown-item aria-role="listitem">Something else</b-dropdown-item>
-        </b-dropdown>
-		<b-taglist attached style="display:inline-block">
-        <b-tag type="is-dark">clear</b-tag><b-tag type="is-success">0.98</b-tag>
-    </b-taglist>
-		<b-taglist attached style="display:inline-block">
-        <b-tag type="is-dark">clear</b-tag><b-tag type="is-warning">0.55</b-tag>
-    </b-taglist>
-		<b-taglist attached style="display:inline-block">
-        <b-tag type="is-dark">clear</b-tag><b-tag type="is-danger">0.27</b-tag>
-    </b-taglist>
-		<b-taglist attached style="display:inline-block">
-        <b-tag type="is-dark">favorites</b-tag><b-tag type="is-info">1.2k</b-tag>
-    </b-taglist>
-				<br>
-					<hr>
-
-					            <b-checkbox>Basic</b-checkbox>
-
-<br>
-		<b-button type="is-primary">primary</b-button>
-		<b-button type="is-secondary">secondary</b-button>
-		<b-button type="is-link">link</b-button>
-		<b-button type="is-info">info</b-button>
-		<b-button type="is-success">success</b-button>
-		<b-button type="is-warning">warning</b-button>
-		<b-button type="is-danger">danger</b-button>
-		<b-button type="is-dark">dark</b-button>
-		<b-button type="is-text">text</b-button>
-		<b-field label="Error">
-            <b-slider type="is-primary" :value="20"></b-slider>
-        </b-field>
-
-		<b-pagination type="is-secondary" total="100" per-page="10"></b-pagination>
-
-	</div>
-
+    <footer class="footer">
+  <div class="content has-text-centered">
+    <p>
+      <strong>Bulma</strong> by <a href="https://jgthms.com">Jeremy Thomas</a>. The source code is licensed
+      <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
+      is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
+    </p>
   </div>
+</footer>
+
+  </div> <!-- app -->
 
   <script src="https://kit.fontawesome.com/c17adb2a33.js" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/vue"></script>

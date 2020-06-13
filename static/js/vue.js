@@ -1,21 +1,45 @@
 // vue.js
+Vue.component('dh-article', {
+  delimiters: ['[[', ']]'],
+  props: [
+    'title',
+    'author',
+    'created',
+    'updated'
+  ],
+  template: `
+    <article>
+      <header>
+        <h2 class="dh-title">
+          <strong>[[ title ]]</strong>
+        </h2>
+        <div class="dh-taglist"><slot></slot></div>
+      </header>
+      <footer class="is-size-7">
+        <address class="dh-author">
+          [[ author ]]
+        </address>
+        <time pubdate>
+          [[ created ]]
+        </time>
+        <time v-if="updated != 'None'">
+          [[ updated ]]
+        </time>
+      </footer>
+    </article>
+  `
+});
+
 Vue.component('dh-tag', {
   props: [
     'href',
-    'pack',
-    'icon',
   ],
     template: `
-      <b-button
-        style="font-family:monospace;"
-        size="is-small"
-        type="is-dark"
-        tag="a"
-        :href="href"
-        :icon-pack="pack"
-        :icon-left="icon">
+      <a
+        class="tag is-family-monospace is-small is-secondary is-light"
+        :href="href">
         <slot></slot>
-      </b-button>
+      </a>
     `
 })
 

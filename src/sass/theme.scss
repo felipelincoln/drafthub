@@ -16,9 +16,7 @@ $theme-a: #3EBEB0;
 $theme-b: #F0BF1A;
 
 // Update Bulma's global variables
-@import "../../node_modules/bulma/sass/utilities/functions";
-
-$family-sans-serif: "Inter", sans-serif;
+$family-sans-serif: "Inter", BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 $family-monospace: "Anonymous Pro", monospace;
 $success: $green;
 $warning: $yellow;
@@ -30,7 +28,6 @@ $primary: $theme-a;
 $secondary: $theme-b;
 $secondary-invert: #FFF;
 
-
 // Update some of Bulma's component variables
 $body-background-color: $beige-lighter;
 $control-border-width: 2px;
@@ -38,6 +35,7 @@ $input-border-color: transparent;
 $input-shadow: none;
 
 // Update colors
+@import "../../node_modules/bulma/sass/utilities/functions";
 @import "../../node_modules/bulma/sass/utilities/initial-variables";
 @import "../../node_modules/bulma/sass/utilities/derived-variables";
 
@@ -48,6 +46,7 @@ $colors: mergeColorMaps($colors, (
 // Import custom components
 @import "components/navbar";
 @import "components/footer";
+@import "components/dh";
 
 // Import Bulma and Buefy
 @import "../../node_modules/bulma/bulma.sass";

@@ -33,150 +33,213 @@
 </head>
 
 <body>
-  <div id="app">
-      <b-navbar class="container" shadow>
-        <template slot="brand">
-          <b-navbar-item>
-            <b-taglist attached>
-              <a class="tag is-dark" ><strong>drafthub</strong></a>
-              <a class="tag is-primary"><strong>/blog/felipelincoln</strong></a>
-            </b-taglist>
-          </b-navbar-item>
-            <a class="navbar-item"><b-icon size="is-small" icon="github"></b-icon></a>
-            <a class="navbar-item"><b-icon size="is-small" icon="twitter"></b-icon></a>
-            <a class="navbar-item"><b-icon size="is-small" icon="patreon"></b-icon></a>
-            <a class="navbar-item"><b-icon size="is-small" icon="linkedin"></b-icon></a>
-        </template>
-        <template slot="end">
-          {% if user.is_authenticated %}
-          <b-navbar-dropdown right label="felipelincoln">
-            <b-navbar-item href="#">
-              New draft
-            </b-navbar-item>
-            <b-navbar-item href="#">
-              Blog
-            </b-navbar-item>
-            <b-navbar-item href="#">
-              Favorites
-            </b-navbar-item>
-            <hr class="dropdown-divider">
-            <b-navbar-item href="#">
-              Logout
-            </b-navbar-item>
-          </b-navbar-dropdown>
-          {% else %}
-          <b-navbar-item tag="div">
-            <b-button type="is-primary" size="is-small" icon-left="github">
-              <strong>Sign in/up</strong>
-            </b-button>
-          </b-navbar-item>
-          {% endif %}
-        </template>
-      </b-navbar>
+<div id="app">
+  <b-navbar class="container" shadow>
+    <template slot="brand">
+      <b-navbar-item>
+        <b-taglist attached>
+          <a class="tag is-dark" ><strong>drafthub</strong></a>
+          <a class="tag is-primary"><strong>/blog/felipelincoln</strong></a>
+        </b-taglist>
+      </b-navbar-item>
+      <a class="navbar-item"><b-icon size="is-small" icon="github"></b-icon></a>
+      <a class="navbar-item"><b-icon size="is-small" icon="twitter"></b-icon></a>
+      <a class="navbar-item"><b-icon size="is-small" icon="patreon"></b-icon></a>
+      <a class="navbar-item"><b-icon size="is-small" icon="linkedin"></b-icon></a>
+    </template>
+    <template slot="end">
+      {% if user.is_authenticated %}
+      <b-navbar-dropdown right label="felipelincoln">
+        <b-navbar-item href="#">
+          New draft
+        </b-navbar-item>
+        <b-navbar-item href="#">
+          Blog
+        </b-navbar-item>
+        <b-navbar-item href="#">
+          Favorites
+        </b-navbar-item>
+        <hr class="dropdown-divider">
+        <b-navbar-item href="#">
+          Logout
+        </b-navbar-item>
+      </b-navbar-dropdown>
+      {% else %}
+      <b-navbar-item tag="div">
+        <b-button type="is-primary" size="is-small" icon-left="github">
+          <strong>Sign in/up</strong>
+        </b-button>
+      </b-navbar-item>
+      {% endif %}
+    </template>
+  </b-navbar>
 
-    <br>
-
-    <section class="container px-3 is-primary">
-    <div class="columns">
-      <section class="column">
-  <div class="box">
-  <b-tabs v-model="activeTab">
-            <b-tab-item label="Overall" icon="history">
-              </b-tab-item>
-
-            <b-tab-item label="Python" icon="language-python"> </b-tab-item>
-            <b-tab-item label="Rails" icon="language-ruby-on-rails">
-            </b-tab-item>
-            <b-tab-item label="Django" icon="tag">
-            </b-tab-item>
-            <b-tab-item label="Deno" icon="tag">
-            </b-tab-item>
-            <b-tab-item label="Node.js" icon="nodejs">
-            </b-tab-item>
-   </b-tabs>
-            <strong>1,154 articles</strong>
-            <input placeholder="Search for articles in overall" type="text" style="border-bottom:1px solid grey; width:60%" class="input">
-  <span>Trending articles</span>
-  {% for draft in home_drafts %}
-      <article>
-        <header>
-          <h2>
-            🔥 {{ draft.title }}
-          </h2>
+  <div class="container mt-5" style="display:flex;">
+    <section class="box mr-5" style="flex-grow:1;">
+      {% for draft in home_drafts %}
+        <dh-article
+          title="{{ draft.title }}"
+          author="{{ draft.blog }}"
+          created="{{ draft.created }}"
+          updated="{{ draft.updated }}">
           {% for tag in draft.tags.all %}
-            <span class="tag is-danger">{{ tag }}</span>
+            <dh-tag href="{{ tag.get_absolute_url }}">
+              {{ tag }}
+            </dh-tag>
           {% endfor %}
-        </header>
-        <footer>
-          <address>
-            {{ draft.blog }}
-          </address>
-          <time pubdate>
-            {{ draft.created }}
-            {% if draft.updated %}
-              {{ draft.updated }}
-            {% endif %}
-          </time>
-        </footer>
-      </article>
-      <hr>
-  {% endfor %}
-
-  <span>Latest articles</span>
-  {% for draft in home_new_drafts %}
-      <article>
-        <header>
-          <h2>
-            {{ draft.title }}
-          </h2>
-          {% for tag in draft.tags.all %}
-            <span class="tag is-link">{{ tag }}</span>
-          {% endfor %}
-        </header>
-        <footer>
-          <address>
-            {{ draft.blog }}
-          </address>
-          <time pubdate>
-            {{ draft.created }}
-            {% if draft.updated %}
-              {{ draft.updated }}
-            {% endif %}
-          </time>
-        </footer>
-      </article>
-  {% endfor %}
-    </div>
-
-      </section>
-      <aside class="column is-one-fifth is-hidden-mobile">
-        <div class="box">
-        <span>Trending tags</span><br>
-        {% for tag in home_tags %}
-          <span class="tag is-link">{{ tag }}</span><br>
-        {% endfor %}
-        <br>
-        <span>Latest tags</span><br>
-        {% for tag in home_new_tags %}
-          <span class="tag is-link">{{ tag }}</span><br>
-        {% endfor %}
-        </div>
-        <div class="box">
-				Trending blogs<br>
-        {% for blog in home_blogs %}
-          <span class="tag is-secondary">{{ blog }}</span><br>
-        {% endfor %}
-        <br>
-				New blogs<br>
-        {% for blog in home_new_blogs %}
-          <span class="tag is-secondary">{{ blog }}</span><br>
-        {% endfor %}
-        </div>
-      </aside>
-    </div>
+        </dh-article>
+      {% endfor %}
     </section>
+    <aside class="box is-hidden-mobile" style="width:20%;">
+      Trendings
+    </aside>
+  </div>
 
-    <br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+
+
+
+  <section class="container px-3 is-primary">
+  <div class="columns">
+    <section class="column">
+<div class="box">
+<b-tabs v-model="activeTab">
+          <b-tab-item label="Overall" icon="history">
+            </b-tab-item>
+
+          <b-tab-item label="Python" icon="language-python"> </b-tab-item>
+          <b-tab-item label="Rails" icon="language-ruby-on-rails">
+          </b-tab-item>
+          <b-tab-item label="Django" icon="tag">
+          </b-tab-item>
+          <b-tab-item label="Deno" icon="tag">
+          </b-tab-item>
+          <b-tab-item label="Node.js" icon="nodejs">
+          </b-tab-item>
+ </b-tabs>
+          <strong>1,154 articles</strong>
+          <input placeholder="Search for articles in overall" type="text" style="border-bottom:1px solid grey; width:60%" class="input">
+<span>Trending articles</span>
+{% for draft in home_drafts %}
+    <article>
+      <header>
+        <h2>
+          🔥 {{ draft.title }}
+        </h2>
+        {% for tag in draft.tags.all %}
+          <span class="tag is-danger">{{ tag }}</span>
+        {% endfor %}
+      </header>
+      <footer>
+        <address>
+          {{ draft.blog }}
+        </address>
+        <time pubdate>
+          {{ draft.created }}
+          {% if draft.updated %}
+            {{ draft.updated }}
+          {% endif %}
+        </time>
+      </footer>
+    </article>
+    <hr>
+{% endfor %}
+
+<span>Latest articles</span>
+{% for draft in home_new_drafts %}
+    <article>
+      <header>
+        <h2>
+          {{ draft.title }}
+        </h2>
+        {% for tag in draft.tags.all %}
+          <span class="tag is-link">{{ tag }}</span>
+        {% endfor %}
+      </header>
+      <footer>
+        <address>
+          {{ draft.blog }}
+        </address>
+        <time pubdate>
+          {{ draft.created }}
+          {% if draft.updated %}
+            {{ draft.updated }}
+          {% endif %}
+        </time>
+      </footer>
+    </article>
+{% endfor %}
+  </div>
+
+    </section>
+    <aside class="column is-one-fifth is-hidden-mobile">
+      <div class="box">
+      <span>Trending tags</span><br>
+      {% for tag in home_tags %}
+        <span class="tag is-link">{{ tag }}</span><br>
+      {% endfor %}
+      <br>
+      <span>Latest tags</span><br>
+      {% for tag in home_new_tags %}
+        <span class="tag is-link">{{ tag }}</span><br>
+      {% endfor %}
+      </div>
+      <div class="box">
+      Trending blogs<br>
+      {% for blog in home_blogs %}
+        <span class="tag is-secondary">{{ blog }}</span><br>
+      {% endfor %}
+      <br>
+      New blogs<br>
+      {% for blog in home_new_blogs %}
+        <span class="tag is-secondary">{{ blog }}</span><br>
+      {% endfor %}
+      </div>
+    </aside>
+  </div>
+  </section>
+
+  <br>
 
     <footer class="footer">
   <div class="content has-text-centered">

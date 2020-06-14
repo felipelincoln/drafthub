@@ -1,5 +1,6 @@
-.dh-title,
-.dh-taglist,
-.dh-author {
-  display: inline;
+.dh-a {
+  color: $grey;
+  &:hover {
+    text-decoration: underline;
+  }
 }

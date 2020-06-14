@@ -1,47 +1,47 @@
 @charset "utf-8";
 
-// Import a Google Font
+// Import dependencies
+@import "../../node_modules/bulma/sass/utilities/functions";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
-// Set your brand colors
+// Initial variables
+$family-sans-serif: "Inter", BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+$family-monospace: "Anonymous Pro", monospace;
 $beige-lighter: #EFF0EB;
 $green: #45BF17;
 $yellow: #D0A81C;
 $red: #D25C46;
-$grey: #545454;
+$grey-dark: #545454;
+  $grey: #646464;
 $blue: #097ABA;
 $cyan: #07A5DE;
 $theme-a: #3EBEB0;
 $theme-b: #F0BF1A;
+@import "../../node_modules/bulma/sass/utilities/initial-variables";
 
-// Update Bulma's global variables
-$family-sans-serif: "Inter", BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-$family-monospace: "Anonymous Pro", monospace;
+// Derived variables
 $success: $green;
 $warning: $yellow;
 $danger: $red;
 $info: $blue;
-$dark: $grey;
+$dark: $grey-dark;
 $link: $cyan;
 $primary: $theme-a;
 $secondary: $theme-b;
 $secondary-invert: #FFF;
+@import "../../node_modules/bulma/sass/utilities/derived-variables";
+$colors: mergeColorMaps($colors, (
+  "secondary": ($secondary, $secondary-invert)
+));
 
-// Update some of Bulma's component variables
+// Generic variables
 $body-background-color: $beige-lighter;
 $control-border-width: 2px;
 $input-border-color: transparent;
 $input-shadow: none;
-
-// Update colors
-@import "../../node_modules/bulma/sass/utilities/functions";
-@import "../../node_modules/bulma/sass/utilities/initial-variables";
-@import "../../node_modules/bulma/sass/utilities/derived-variables";
-
-$colors: mergeColorMaps($colors, (
-  "secondary": ($secondary, $secondary-invert)
-));
+$hr-background-color: $beige-lighter;
+$hr-margin: 1.5rem 0;
 
 // Import custom components
 @import "components/navbar";

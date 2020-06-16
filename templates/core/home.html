@@ -75,63 +75,69 @@
   </b-navbar>
 
   <div class="container mt-5" style="display:flex;">
-    <section class="box mr-5" style="flex-grow:1;">
-      <b-tabs>
-        <b-tab-item label="Overall" icon="history">
-          <p class="has-text-weight-semibold pb-3">Feed <span class="has-text-weight-normal">({{ home_new_drafts.count }} articles)</span></p>
-          {% for draft in home_drafts %}
-            <!--
-            <span
-              class="has-text-danger has-text-weight-bold mr-1 is-family-monospace"
-              style="float:left;">
-              POPULAR
-            </span>
-            -->
-            <dh-article
-              title="{{ draft.title }}"
-              href="{{ draft.get_absolute_url }}"
-              author="{{ draft.blog }}"
-              blog="{{ draft.blog.get_absolute_url }}"
-              created="{{ draft.created }}"
-              updated="{{ draft.updated }}"
-              hits="{{ draft.hits }}">
-              {% for tag in draft.tags.all %}
-                <dh-tag href="{{ tag.get_absolute_url }}">
-                  {{ tag }}
-                </dh-tag>
-              {% endfor %}
-            </dh-article>
-            <hr>
-          {% endfor %}
-          {% for draft in home_new_drafts %}
-            <dh-article
-              title="{{ draft.title }}"
-              href="{{ draft.get_absolute_url }}"
-              author="{{ draft.blog }}"
-              blog="{{ draft.blog.get_absolute_url }}"
-              created="{{ draft.created }}"
-              updated="{{ draft.updated }}"
-              hits="{{ draft.hits }}">
-              {% for tag in draft.tags.all %}
-                <dh-tag href="{{ tag.get_absolute_url }}">
-                  {{ tag }}
-                </dh-tag>
-              {% endfor %}
-            </dh-article>
-            <hr>
-          {% endfor %}
-
-        </b-tab-item>
-        <b-tab-item label="Python" icon="language-python"> </b-tab-item>
-        <b-tab-item label="Rails" icon="language-ruby-on-rails">
-        </b-tab-item>
-        <b-tab-item label="Deno" icon="tag">
-        </b-tab-item>
-        <b-tab-item label="Node.js" icon="nodejs">
-        </b-tab-item>
-      </b-tabs>
+    <section class="box" style="flex-grow:1;">
+    <nav class="tabs is-fullwidth">
+      <ul style="flex-shrink:1; flex-wrap:wrap;">
+        <li class="is-active">
+          <a>
+            <b-icon icon="history"></b-icon>
+            <span>Overall</span>
+          </a>
+        </li>
+        {% for tag in home_tags %}
+        <li>
+          <a>
+            <b-icon icon="tag"></b-icon>
+            <span>{{ tag.name }}</span>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </nav>
+    <p class="has-text-weight-semibold pb-3">Feed <span class="has-text-weight-normal">({{ home_new_drafts.count }} articles)</span></p>
+    {% for draft in home_drafts %}
+      <!--
+      <span
+        class="has-text-danger has-text-weight-bold mr-1 is-family-monospace"
+        style="float:left;">
+        POPULAR
+      </span>
+      -->
+      <dh-article
+        title="{{ draft.title }}"
+        href="{{ draft.get_absolute_url }}"
+        author="{{ draft.blog }}"
+        blog="{{ draft.blog.get_absolute_url }}"
+        created="{{ draft.created }}"
+        updated="{{ draft.updated }}"
+        hits="{{ draft.hits }}">
+        {% for tag in draft.tags.all %}
+          <dh-tag href="{{ tag.get_absolute_url }}">
+            {{ tag }}
+          </dh-tag>
+        {% endfor %}
+      </dh-article>
+      <hr>
+    {% endfor %}
+    {% for draft in home_new_drafts %}
+      <dh-article
+        title="{{ draft.title }}"
+        href="{{ draft.get_absolute_url }}"
+        author="{{ draft.blog }}"
+        blog="{{ draft.blog.get_absolute_url }}"
+        created="{{ draft.created }}"
+        updated="{{ draft.updated }}"
+        hits="{{ draft.hits }}">
+        {% for tag in draft.tags.all %}
+          <dh-tag href="{{ tag.get_absolute_url }}">
+            {{ tag }}
+          </dh-tag>
+        {% endfor %}
+      </dh-article>
+      <hr>
+    {% endfor %}
     </section>
-    <aside class="is-hidden-mobile" style="width:30%;">
+    <aside class="is-hidden-mobile ml-5" style="width:30%;flex-shrink:0;">
       <div class="box">
       <p class="has-text-weight-semibold pb-3">Most active topics</p>
       {% for tag in home_tags %}

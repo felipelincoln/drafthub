@@ -13,8 +13,11 @@ Vue.component('dh-article', {
   template: `
     <article class="media">
       <figure class="media-left">
-        <p class="image is-128x128" style="height:auto;">
+        <p class="image is-128x128 is-hidden-mobile" style="height:auto;">
           <img style="border-radius:6px;max-height:128px;" src="https://bulma.io/images/placeholders/128x128.png">
+        </p>
+        <p class="image is-64x64 is-hidden-tablet" style="height:auto;">
+          <img style="border-radius:6px;max-height:64px;" src="https://bulma.io/images/placeholders/128x128.png">
         </p>
       </figure>
       <section class="media-content">
@@ -45,7 +48,7 @@ Vue.component('dh-article', {
         </footer>
       </section>
       <aside class="media-right">
-        <p><span class="tag">[[ hits ]] views</span></p>
+        <p><b-tag>[[ hits ]] views</b-tag></p>
       </aside>
     </article>
   `

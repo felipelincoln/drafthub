@@ -80,18 +80,21 @@
         <b-tab-item label="Overall" icon="history">
           <p class="has-text-weight-semibold pb-3">Feed <span class="has-text-weight-normal">({{ home_new_drafts.count }} articles)</span></p>
           {% for draft in home_drafts %}
+            <!--
             <span
               class="has-text-danger has-text-weight-bold mr-1 is-family-monospace"
               style="float:left;">
               POPULAR
             </span>
+            -->
             <dh-article
               title="{{ draft.title }}"
               href="{{ draft.get_absolute_url }}"
               author="{{ draft.blog }}"
               blog="{{ draft.blog.get_absolute_url }}"
               created="{{ draft.created }}"
-              updated="{{ draft.updated }}">
+              updated="{{ draft.updated }}"
+              hits="{{ draft.hits }}">
               {% for tag in draft.tags.all %}
                 <dh-tag href="{{ tag.get_absolute_url }}">
                   {{ tag }}
@@ -107,7 +110,8 @@
               author="{{ draft.blog }}"
               blog="{{ draft.blog.get_absolute_url }}"
               created="{{ draft.created }}"
-              updated="{{ draft.updated }}">
+              updated="{{ draft.updated }}"
+              hits="{{ draft.hits }}">
               {% for tag in draft.tags.all %}
                 <dh-tag href="{{ tag.get_absolute_url }}">
                   {{ tag }}

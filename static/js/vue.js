@@ -7,33 +7,46 @@ Vue.component('dh-article', {
     'blog',
     'author',
     'created',
-    'updated'
+    'updated',
+    'hits',
   ],
   template: `
-    <article>
-      <header>
-        <h2 class="is-inline">
-          <a class="dh-a" :href="href">
-            <span class="has-text-weight-medium has-text-dark">[[ title ]]</span>
-          </a>
-        </h2>
-        <div class="is-inline"><slot></slot></div>
-      </header>
-      <footer class="is-size-7">
-        <a class="dh-a" :href="blog">
-        <address style="font-style: normal;" class="is-inline">
-          [[ author ]]
-        </address>
-        </a>
-        <a class="dh-a" :href="href">
-        <time pubdate>
-          [[ created ]]
-        </time>
-        <time v-if="updated != 'None'">
-          [[ updated ]]
-        </time>
-        </a>
-      </footer>
+    <article class="media">
+      <figure class="media-left">
+        <p class="image is-128x128" style="height:auto;">
+          <img style="border-radius:6px;max-height:128px;" src="https://bulma.io/images/placeholders/128x128.png">
+        </p>
+      </figure>
+      <section class="media-content">
+        <header>
+          <h2 class="is-inline">
+            <a class="dh-a" :href="href">
+              <span class="has-text-weight-medium has-text-dark">[[ title ]]</span>
+            </a>
+          </h2>
+          <div class="is-inline"><slot></slot></div>
+        </header>
+        <footer class="is-size-7">
+          <p>
+            <a class="dh-a" :href="blog">
+            <address style="font-style: normal;" class="is-inline">
+              [[ author ]],
+            </address>
+            </a>
+            <a class="dh-a" :href="href">
+            <time pubdate>
+              [[ created ]]
+            </time>
+            <time v-if="updated != 'None'">
+              [[ updated ]]
+            </time>
+            </a>
+          </p>
+        </footer>
+      </section>
+      <aside class="media-right">
+        <p><span class="tag">[[ hits ]] views</span></p>
+      </aside>
     </article>
   `
 });

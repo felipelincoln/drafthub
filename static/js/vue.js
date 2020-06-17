@@ -22,16 +22,8 @@ Vue.component('dh-article', {
         </p>
       </figure>
       <section class="media-content">
-        <header>
-          <h2 class="is-inline">
-            <a class="dh-a" :href="href">
-              <span class="has-text-weight-medium has-text-dark">[[ title ]]</span>
-            </a>
-          </h2>
-          <div class="is-inline"><slot></slot></div>
-        </header>
-        <footer class="is-size-7">
-          <p>
+        <div class="is-size-7" style="display:flex">
+          <p style="flex-grow:1;">
             <a class="dh-a" :href="blog">
             <address style="font-style: normal;" class="is-inline">
               [[ author ]],
@@ -46,11 +38,15 @@ Vue.component('dh-article', {
             </time>
             </a>
           </p>
-        </footer>
+          <p><b-tag style="height:unset;">[[ hits ]] views</b-tag></p>
+        </div>
+        <h2 class="is-inline">
+          <a class="dh-a" :href="href">
+            <span class="has-text-weight-medium has-text-dark">[[ title ]]</span>
+          </a>
+        </h2>
+        <div class="is-inline"><slot></slot></div>
       </section>
-      <aside class="media-right">
-        <p><b-tag>[[ hits ]] views</b-tag></p>
-      </aside>
     </article>
   `
 });

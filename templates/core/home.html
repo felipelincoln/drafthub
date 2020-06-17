@@ -91,7 +91,7 @@
         href="{{ draft.get_absolute_url }}"
         author="{{ draft.blog }}"
         blog="{{ draft.blog.get_absolute_url }}"
-        created="{{ draft.created }}"
+        created="{{ draft.created|date:'M j' }}"
         updated="{{ draft.updated }}"
         hits="{{ draft.hits }}"
         src="https://picsum.photos/128/8{{ forloop.counter }}">
@@ -110,7 +110,7 @@
         href="{{ draft.get_absolute_url }}"
         author="{{ draft.blog }}"
         blog="{{ draft.blog.get_absolute_url }}"
-        created="{{ draft.created }}"
+        created="{{ draft.created|date:'M j'}}"
         updated="{{ draft.updated }}"
         hits="{{ draft.hits }}"
         src="https://picsum.photos/127/8{{ forloop.counter }}">

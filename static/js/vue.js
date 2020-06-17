@@ -9,15 +9,16 @@ Vue.component('dh-article', {
     'created',
     'updated',
     'hits',
+    'src'
   ],
   template: `
     <article class="media">
       <figure class="media-left">
         <p class="image is-128x128 is-hidden-mobile" style="height:auto;">
-          <img style="border-radius:6px;max-height:128px;" src="https://bulma.io/images/placeholders/128x128.png">
+          <img style="border-radius:6px;max-height:128px;" :src="src">
         </p>
         <p class="image is-64x64 is-hidden-tablet" style="height:auto;">
-          <img style="border-radius:6px;max-height:64px;" src="https://bulma.io/images/placeholders/128x128.png">
+          <img style="border-radius:6px;max-height:64px;" :src="src">
         </p>
       </figure>
       <section class="media-content">

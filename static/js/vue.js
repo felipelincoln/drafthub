@@ -38,14 +38,14 @@ Vue.component('dh-article', {
             </time>
             </a>
           </p>
-          <p><b-tag style="height:unset;">[[ hits ]] views</b-tag></p>
+          <p class="is-size-7"><a :href="href" class="dh-a">[[ hits ]] views</a></p>
         </div>
-        <h2 class="is-inline">
+        <h2>
           <a class="dh-a" :href="href">
             <span class="has-text-weight-medium has-text-dark">[[ title ]]</span>
           </a>
         </h2>
-        <div class="is-inline"><slot></slot></div>
+        <p><slot></slot></p>
       </section>
     </article>
   `
@@ -57,9 +57,9 @@ Vue.component('dh-tag', {
   ],
     template: `
       <a
-        class="tag is-family-monospace is-small is-secondary is-light"
+        class="dh-a is-size-7"
         :href="href">
-        <slot></slot>
+        #<slot></slot>
       </a>
     `
 })

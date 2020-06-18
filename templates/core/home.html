@@ -96,9 +96,7 @@
         hits="{{ draft.hits }}"
         src="https://picsum.photos/128/8{{ forloop.counter }}">
         {% for tag in draft.tags.all %}
-          <dh-tag href="{{ tag.get_absolute_url }}">
-            {{ tag }}
-          </dh-tag>
+          <dh-tag href="{{ tag.get_absolute_url }}">{{ tag }}</dh-tag>
         {% endfor %}
       </dh-article>
     {% endfor %}

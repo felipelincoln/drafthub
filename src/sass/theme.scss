@@ -8,7 +8,7 @@
 // Initial variables
 $family-sans-serif: "Inter", BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 $family-monospace: "Anonymous Pro", monospace;
-$beige-lighter: #EFF0EB;
+$beige-lighter: #F0EFEB;
 $green: #45BF17;
 $yellow: #D0A81C;
 $red: #D25C46;
@@ -37,9 +37,6 @@ $colors: mergeColorMaps($colors, (
 
 // Generic variables
 $body-background-color: $beige-lighter;
-$control-border-width: 2px;
-$input-border-color: transparent;
-$input-shadow: none;
 
 // Import custom components
 @import "components/navbar";
@@ -51,6 +48,9 @@ $box-shadow: 0 1px 2px rgba($dark, 0.2);
 
 .navbar {
   border-radius: 0 0 6px 6px;
+}
+::placeholder {
+  opacity: 1;
 }
 
 

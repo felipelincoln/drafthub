@@ -9,11 +9,17 @@ Vue.component('dh-article', {
     'created',
     'updated',
     'hits',
-    'src'
+    'src',
+    'tiny'
   ],
   template: `
     <article class="media">
-      <figure class="media-left">
+      <figure v-if="tiny" class="media-left">
+        <p class="image is-48x48" style="height:auto;">
+          <img style="border-radius:2px;max-height:48px;" :src="src">
+        </p>
+      </figure>
+      <figure v-else class="media-left">
         <p class="image is-128x128 is-hidden-mobile" style="height:auto;">
           <img style="border-radius:6px;max-height:128px;" :src="src">
         </p>
@@ -38,14 +44,14 @@ Vue.component('dh-article', {
             </time>
             </a>
           </p>
-          <p class="is-size-7"><a :href="href" class="dh-a">[[ hits ]] views</a></p>
+          <p v-if="!tiny" class="is-size-7"><a :href="href" class="dh-a">[[ hits ]] views</a></p>
         </div>
         <h2>
           <a class="dh-a" :href="href">
             <span class="has-text-weight-medium has-text-dark">[[ title ]]</span>
           </a>
         </h2>
-        <p><slot></slot></p>
+        <p v-if="!tiny"><slot></slot></p>
       </section>
     </article>
   `

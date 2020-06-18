@@ -34,18 +34,11 @@
 
 <body>
 <div id="app">
-  <b-navbar class="container" shadow>
+  <b-navbar class="" shadow>
     <template slot="brand">
       <b-navbar-item>
-        <b-taglist attached>
-          <a class="tag is-dark" ><strong>drafthub</strong></a>
-          <a class="tag is-primary"><strong>/home</strong></a>
-        </b-taglist>
+        <p class="has-text-weight-semibold has-text-grey is-size-7">DRAFTHUB</p>
       </b-navbar-item>
-      <a class="navbar-item"><b-icon size="is-small" icon="github"></b-icon></a>
-      <a class="navbar-item"><b-icon size="is-small" icon="twitter"></b-icon></a>
-      <a class="navbar-item"><b-icon size="is-small" icon="patreon"></b-icon></a>
-      <a class="navbar-item"><b-icon size="is-small" icon="linkedin"></b-icon></a>
     </template>
     <template slot="end">
       {% if user.is_authenticated %}
@@ -89,13 +82,6 @@
     <p class="has-text-weight-bold has-text-grey-light pb-5 is-size-7">MOST POPULAR</p>
 
     {% for draft in home_drafts %}
-      <!--
-      <span
-        class="has-text-danger has-text-weight-bold mr-1 is-family-monospace"
-        style="float:left;">
-        POPULAR
-      </span>
-      -->
       <dh-article
         title="{{ draft.title }}"
         href="{{ draft.get_absolute_url }}"
@@ -129,17 +115,37 @@
         {% endfor %}
       </dh-article>
     {% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </section>
     <aside class="is-hidden-mobile ml-5" style="width:30%;flex-shrink:0;">
-      <div class="box">
-        <p class="has-text-weight-semibold pb-5">Homepage</p>
-        <p>Contribute to drafthub</p>
-        <ul>
-          <li>Issue #1</li>
-          <li>Issue #2</li>
-          <li>Issue #3</li>
-        </ul>
-      </div>
       <div class="box">
         <p class="has-text-weight-semibold pb-5">Most active topics</p>
         {% for tag in home_tags %}
@@ -147,11 +153,29 @@
         {% endfor %}
       </div>
       <div class="box">
-        <p class="has-text-weight-semibold pb-5">Popular blogs</p>
-        {% for blog in home_blogs %}
-          <a href="{{ blog.get_absolute_url }}"><p>{{ forloop.counter }}. {{ blog }}</p></a>
+        <p class="has-text-weight-semibold pb-5">Random articles</p>
+    {% for draft in home_new_drafts %}
+      <dh-article
+        title="{{ draft.title }}"
+        href="{{ draft.get_absolute_url }}"
+        author="{{ draft.blog }}"
+        blog="{{ draft.blog.get_absolute_url }}"
+        created="{{ draft.created|date:'M j'}}"
+        updated="{{ draft.updated }}"
+        hits="{{ draft.hits }}"
+        tiny="true"
+        src="https://picsum.photos/80/8{{ forloop.counter }}">
+        {% for tag in draft.tags.all %}
+          <dh-tag href="{{ tag.get_absolute_url }}">
+            {{ tag }}
+          </dh-tag>
         {% endfor %}
+      </dh-article>
+    {% endfor %}
+
+
       </div>
+
     </aside>
   </div>
 

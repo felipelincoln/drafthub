@@ -1,4 +1,25 @@
 // vue.js
+Vue.component('dh-search', {
+  delimiters: ['[[', ']]'],
+  props: [
+    'action',
+    'placeholder'
+  ],
+  template: `
+    <form
+      :action="action"
+      method="get">
+      <b-input
+        name="q"
+        :placeholder="placeholder"
+        size="is-small"
+        type="search"
+        rounded>
+      </b-input>
+    </form>
+  `
+});
+
 Vue.component('dh-article', {
   delimiters: ['[[', ']]'],
   props: [
@@ -68,10 +89,10 @@ Vue.component('dh-tag', {
         #<slot></slot>
       </a>
     `
-})
+});
 
 
-const dbTags = ['python', 'albion-pvp', 'django']
+const dbTags = ['python', 'albion-pvp', 'django'];
 
 
 new Vue({

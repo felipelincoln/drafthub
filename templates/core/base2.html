@@ -1,0 +1,209 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+  <link rel="icon" type="image/png" href="{% static 'img/favicon-32.png' %}">
+  <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+  <link rel="stylesheet" href="https://cdn.materialdesignicons.com/5.3.45/css/materialdesignicons.min.css">
+
+  {% block meta %}{% endblock meta %}
+
+</head>
+
+<body>
+<div id="app">
+  <b-navbar class="container" :close-on-click="false">
+    <template slot="brand">
+      <b-navbar-item tag="div">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+          <ul style="align-items:center;">
+            <li><a href="{% url 'home' %}" class="dh-a has-text-weight-semibold has-text-grey">DRAFTHUB</a></li>
+            {% block breadcrumb %}{% endblock breadcrumb %}
+          </ul>
+        </nav>
+      </b-navbar-item>
+    </template>
+    <template slot="start">
+      {% block burgerbreadcrumb %}{% endblock burgerbreadcrumb %}
+    </template>
+    <template slot="end">
+      {% if user.is_authenticated %}
+      <b-navbar-dropdown right label="{{ user.username }}">
+        <b-navbar-item href="{% url 'new' %}">
+          New article
+        </b-navbar-item>
+        <b-navbar-item href="{{ user.get_absolute_url }}">
+          Blog
+        </b-navbar-item>
+        <b-navbar-item href="{% url 'search' %}?q=favorites:">
+          Favorites
+        </b-navbar-item>
+        <hr class="dropdown-divider">
+        <b-navbar-item href="{% url 'logout' %}?next={{ request.path }}">
+          Logout
+        </b-navbar-item>
+      </b-navbar-dropdown>
+      {% else %}
+      <b-navbar-item tag="div">
+        <b-button
+          tag="a"
+          href="{% url 'social:begin' 'github' %}?next={{ request.path }}"
+          type="is-primary"
+          size="is-small"
+          icon-left="github"
+          rounded>
+          <strong>Sign in/up</strong>
+        </b-button>
+      </b-navbar-item>
+      {% endif %}
+    </template>
+  </b-navbar>
+
+  <div class="container mt-5 is-hidden-tablet">
+    <p class="has-text-weight-semibold pb-5">Homepage</p>
+    <p>Contribute to drafthub</p>
+    <ul>
+      <li>Issue #1</li>
+      <li>Issue #2</li>
+      <li>Issue #3</li>
+    </ul>
+  </div>
+
+
+  
+  <div class="container mt-5" style="display:flex;">
+    <section class="px-3" style="flex-grow:1;">
+    <p class="has-text-weight-bold has-text-grey-light pb-5 is-size-7">MOST POPULAR</p>
+
+    {% for draft in home_drafts|slice:":10" %}
+      {{ draft.get_short_title }}
+      <dh-article
+        title="{{ draft.title }}"
+        href="{{ draft.get_absolute_url }}"
+        author="{{ draft.blog }}"
+        blog="{{ draft.blog.get_absolute_url }}"
+        created="{{ draft.created|date:'M j' }}"
+        updated="{{ draft.updated }}"
+        hits="{{ draft.hits }}"
+        src="https://picsum.photos/128/8{{ forloop.counter }}">
+        {% for tag in draft.tags.all %}
+          <dh-tag href="{{ tag.get_absolute_url }}">{{ tag }}</dh-tag>
+        {% endfor %}
+      </dh-article>
+    {% endfor %}
+
+    <p class="has-text-weight-bold has-text-grey-light pb-5 pt-5 is-size-7">LATEST ARTICLES</p>
+    {% for draft in home_new_drafts %}
+      <dh-article
+        title="{{ draft.title }}"
+        href="{{ draft.get_absolute_url }}"
+        author="{{ draft.blog }}"
+        blog="{{ draft.blog.get_absolute_url }}"
+        created="{{ draft.created|date:'M j'}}"
+        updated="{{ draft.updated }}"
+        hits="{{ draft.hits }}"
+        src="https://picsum.photos/127/8{{ forloop.counter }}">
+        {% for tag in draft.tags.all %}
+          <dh-tag href="{{ tag.get_absolute_url }}">
+            {{ tag }}
+          </dh-tag>
+        {% endfor %}
+      </dh-article>
+    {% endfor %}
+
+
+
+
+
+
+
+        <b-pagination class="mt-5"
+            total="200"
+            current.sync="10"
+            range-before="3"
+            range-after="1"
+            order=""
+            size="is-small"
+            rounded="true"
+            per-page="10"
+            icon-prev="chevron-left"
+              icon-next="chevron-right"
+            aria-next-label="Next page"
+            aria-previous-label="Previous page"
+            aria-page-label="Page"
+            aria-current-label="Current page">
+        </b-pagination>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </section>
+    <aside class="px-3 is-hidden-mobile ml-5" style="width:30%;flex-shrink:0;">
+      <div>
+    <p class="has-text-weight-bold has-text-grey-light pb-5 is-size-7">MOST ACTIVE TOPICS</p>
+        {% for tag in home_tags|slice:":10" %}
+          <a href="{{ tag.get_absolute_url }}"><p>{{ forloop.counter }}. {{ tag }}</p></a>
+        {% endfor %}
+      </div>
+      <div class="mt-5 pt-3">
+    <p class="has-text-weight-bold has-text-grey-light pb-5 is-size-7">RANDOM ARTICLES</p>
+    {% for draft in home_new_drafts|slice:":5" %}
+      <dh-article
+        title="{{ draft.title }}"
+        href="{{ draft.get_absolute_url }}"
+        author="{{ draft.blog }}"
+        blog="{{ draft.blog.get_absolute_url }}"
+        created="{{ draft.created|date:'M j'}}"
+        updated="{{ draft.updated }}"
+        hits="{{ draft.hits }}"
+        tiny="true"
+        src="https://picsum.photos/80/8{{ forloop.counter }}">
+        {% for tag in draft.tags.all %}
+          <dh-tag href="{{ tag.get_absolute_url }}">
+            {{ tag }}
+          </dh-tag>
+        {% endfor %}
+      </dh-article>
+    {% endfor %}
+
+
+      </div>
+
+    </aside>
+  </div>
+
+  <footer class="footer">
+    <div class="has-text-centered">
+      <p>
+        <strong>Bulma</strong> by <a href="https://jgthms.com">Jeremy Thomas</a>. The source code is licensed
+        <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
+        is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
+      </p>
+    </div>
+  </footer>
+
+  </div> <!-- app -->
+
+  <script src="https://kit.fontawesome.com/c17adb2a33.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/vue"></script>
+  <script src="https://unpkg.com/buefy/dist/buefy.min.js"></script>
+  <script src="{% static 'js/vue.js' %}"></script>
+
+</body>
+</html>

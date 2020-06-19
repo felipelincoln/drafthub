@@ -45,15 +45,21 @@ Vue.component('dh-article', {
     <article class="media">
       <figure v-if="tiny" class="media-left">
         <p class="image is-48x48">
-          <img style="border-radius:6px;max-height:48px;" :src="src">
+          <a :href="href">
+            <img style="border-radius:6px;max-height:48px;" :src="src">
+          </a>
         </p>
       </figure>
       <figure v-else class="media-left">
         <p class="image is-128x128 is-hidden-mobile">
-          <img style="border-radius:6px;max-height:128px;" :src="src">
+          <a :href="href">
+            <img style="border-radius:6px;max-height:128px;" :src="src">
+          </a>
         </p>
         <p class="image is-64x64 is-hidden-tablet">
-          <img style="border-radius:6px;max-height:64px;" :src="src">
+          <a :href="href">
+            <img style="border-radius:6px;max-height:64px;" :src="src">
+          </a>
         </p>
       </figure>
       <section class="media-content">

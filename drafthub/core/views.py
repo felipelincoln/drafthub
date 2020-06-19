@@ -55,9 +55,10 @@ class HomeView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
-            'home_tags': Tag.objects.all(),
-            'home_blogs': Blog.objects.all(),
-            'drafts_pop': Draft.objects.all(),
+            'tags_pop': Tag.objects.all()[:10],
+            'drafts_pop': Draft.objects.all()[:10],
+            'drafts_random': Draft.objects.get_random_queryset(5),
+            'drafts_updated': Draft.objects.all().order_by('-updated')[:5],
         })
 
         return context

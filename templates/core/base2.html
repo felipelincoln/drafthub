@@ -64,43 +64,14 @@
 
   <div class="container is-flex mt-5">
     <section class="px-3" style="flex-grow:1;">
-    {% block section %}{% endblock section %}
+      {% block section %}{% endblock section %}
     </section>
 
 
     <aside class="px-3 is-hidden-mobile ml-5" style="width:30%;flex-shrink:0;">
-      <div>
-    <p class="has-text-weight-bold has-text-grey-light pb-5 is-size-7">MOST ACTIVE TOPICS</p>
-        {% for tag in home_tags|slice:":10" %}
-          <a href="{{ tag.get_absolute_url }}"><p>{{ forloop.counter }}. {{ tag }}</p></a>
-        {% endfor %}
-      </div>
-      <div class="mt-5 pt-3">
-    <p class="has-text-weight-bold has-text-grey-light pb-5 is-size-7">RANDOM ARTICLES</p>
-    {% for draft in home_new_drafts|slice:":5" %}
-      <dh-article
-        title="{{ draft.title }}"
-        href="{{ draft.get_absolute_url }}"
-        author="{{ draft.blog }}"
-        blog="{{ draft.blog.get_absolute_url }}"
-        created="{{ draft.created|date:'M j'}}"
-        updated="{{ draft.updated }}"
-        hits="{{ draft.hits }}"
-        tiny="true"
-        src="https://picsum.photos/80/8{{ forloop.counter }}">
-        {% for tag in draft.tags.all %}
-          <dh-tag href="{{ tag.get_absolute_url }}">
-            {{ tag }}
-          </dh-tag>
-        {% endfor %}
-      </dh-article>
-    {% endfor %}
-
-
-      </div>
-
+      {% block aside %}{% endblock aside %}
     </aside>
-  </div>
+  </div> <!-- container -->
   <br>
   <br>
   <br>
@@ -118,7 +89,7 @@
   </footer>
   -->
 
-  </div> <!-- app -->
+</div> <!-- app -->
 
   <script src="https://kit.fontawesome.com/c17adb2a33.js" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/vue"></script>

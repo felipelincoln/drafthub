@@ -44,7 +44,7 @@ class DraftAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': (
-                'did', 'blog', 'github_url', 'title', 'slug', 'abstract',
+                'id', 'did', 'blog', 'github_url', 'title', 'slug', 'abstract',
                 'created', 'updated', 'tags',
             ),
         }),
@@ -56,11 +56,11 @@ class DraftAdmin(admin.ModelAdmin):
         }),
     )
     readonly_fields = (
-        'last_activities', 'hits', 'slug', 'created', 'updated', 'last_views',
+        'id', 'last_activities', 'hits', 'slug', 'created', 'updated', 'last_views',
         'last_likes', 'last_favorites', 'views', 'likes', 'favorites', 'did'
     )
     list_display = (
-        'did', 'created', 'updated', 'last_activities', 'hits',
+        'did', 'id', 'created', 'updated', 'last_activities', 'hits',
     )
     list_filter = ('created', 'updated', 'blog', 'tags')
 

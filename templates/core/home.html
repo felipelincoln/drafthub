@@ -36,7 +36,7 @@
 {% block section %}
   {% if page_obj.has_previous is False %}
   <dh-heading>MOST POPULAR</dh-heading>
-  {% for draft in drafts_pop|slice:":10" %}
+  {% for draft in drafts_pop %}
     <dh-article
       title="{{ draft.title }}"
       href="{{ draft.get_absolute_url }}"
@@ -92,3 +92,54 @@
     {% endif %}
   </nav>
 {% endblock section %}
+
+{% block aside %}
+  <dh-heading>MOST ACTIVE TOPICS</dh-heading>
+  {% for tag in tags_pop %}
+    <a href="{{ tag.get_absolute_url }}"><p>{{ forloop.counter }}. {{ tag }}</p></a>
+  {% endfor %}
+
+  <br>
+  <br>
+  <dh-heading>LAST UPDATED</dh-heading>
+  {% for draft in drafts_updated %}
+    <dh-article
+      title="{{ draft.title }}"
+      href="{{ draft.get_absolute_url }}"
+      author="{{ draft.blog }}"
+      blog="{{ draft.blog.get_absolute_url }}"
+      created="{{ draft.created|date:'M j'}}"
+      updated="{{ draft.updated|date:'M j' }}"
+      hits="{{ draft.hits }}"
+      tiny="true"
+      src="https://picsum.photos/80/8{{ forloop.counter }}">
+      {% for tag in draft.tags.all %}
+        <dh-tag href="{{ tag.get_absolute_url }}">
+          {{ tag }}
+        </dh-tag>
+      {% endfor %}
+    </dh-article>
+  {% endfor %}
+
+  <br>
+  <br>
+  <dh-heading>LAST CHANCE TO READ</dh-heading>
+  {% for draft in drafts_random %}
+    <dh-article
+      title="{{ draft.title }}"
+      href="{{ draft.get_absolute_url }}"
+      author="{{ draft.blog }}"
+      blog="{{ draft.blog.get_absolute_url }}"
+      created="{{ draft.created|date:'M j'}}"
+      updated="{{ draft.updated|date:'M j' }}"
+      hits="{{ draft.hits }}"
+      tiny="true"
+      src="https://picsum.photos/80/8{{ forloop.counter }}">
+      {% for tag in draft.tags.all %}
+        <dh-tag href="{{ tag.get_absolute_url }}">
+          {{ tag }}
+        </dh-tag>
+      {% endfor %}
+    </dh-article>
+  {% endfor %}
+{% endblock aside %}

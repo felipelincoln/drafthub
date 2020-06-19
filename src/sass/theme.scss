@@ -46,6 +46,9 @@ $navbar-breakpoint: $tablet;
 address {
   font-style: normal;
 }
+footer {
+  border-top: 1px solid $grey-lighter
+}
 .image {
   height: auto !important;
 }

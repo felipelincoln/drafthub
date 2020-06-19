@@ -30,6 +30,11 @@ Vue.component('dh-heading', {
 
 Vue.component('dh-article', {
   delimiters: ['[[', ']]'],
+  data: function(){
+    return {
+      isLoading: true,
+    }
+  },
   props: [
     'title',
     'href',
@@ -46,20 +51,32 @@ Vue.component('dh-article', {
       <figure v-if="tiny" class="media-left">
         <p class="image is-48x48">
           <a :href="href">
-            <img style="border-radius:6px;max-height:48px;" :src="src">
+            <img
+              style="border-radius:6px;max-height:48px;"
+              :src="src"
+              @load="isLoading=false">
           </a>
+          <b-skeleton height="48px" :active="isLoading"></b-skeleton>
         </p>
       </figure>
       <figure v-else class="media-left">
         <p class="image is-128x128 is-hidden-mobile">
           <a :href="href">
-            <img style="border-radius:6px;max-height:128px;" :src="src">
+            <img
+              style="border-radius:6px;max-height:128px;"
+              :src="src"
+              @load="isLoading=false">
           </a>
+          <b-skeleton height="85px" :active="isLoading"></b-skeleton>
         </p>
         <p class="image is-64x64 is-hidden-tablet">
           <a :href="href">
-            <img style="border-radius:6px;max-height:64px;" :src="src">
+            <img
+              style="border-radius:6px;max-height:64px;"
+              :src="src"
+              @load="isLoading=false">
           </a>
+          <b-skeleton height="64px" :active="isLoading"></b-skeleton>
         </p>
       </figure>
       <section class="media-content">
@@ -91,7 +108,7 @@ Vue.component('dh-article', {
         <p v-if="!tiny"><slot></slot></p>
       </section>
     </article>
-  `
+  `,
 });
 
 Vue.component('dh-tag', {
@@ -115,7 +132,6 @@ new Vue({
   el: '#app',
   delimiters: ['[[', ']]'],
   data:{
-    current: 2,
     tags: [],
     filteredTags: dbTags,
   },

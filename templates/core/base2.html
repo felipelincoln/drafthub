@@ -62,98 +62,12 @@
     </template>
   </b-navbar>
 
-  <div class="container mt-5 is-hidden-tablet">
-    <p class="has-text-weight-semibold pb-5">Homepage</p>
-    <p>Contribute to drafthub</p>
-    <ul>
-      <li>Issue #1</li>
-      <li>Issue #2</li>
-      <li>Issue #3</li>
-    </ul>
-  </div>
-
-
-  
-  <div class="container mt-5" style="display:flex;">
+  <div class="container is-flex mt-5">
     <section class="px-3" style="flex-grow:1;">
-    <p class="has-text-weight-bold has-text-grey-light pb-5 is-size-7">MOST POPULAR</p>
-
-    {% for draft in home_drafts|slice:":10" %}
-      {{ draft.get_short_title }}
-      <dh-article
-        title="{{ draft.title }}"
-        href="{{ draft.get_absolute_url }}"
-        author="{{ draft.blog }}"
-        blog="{{ draft.blog.get_absolute_url }}"
-        created="{{ draft.created|date:'M j' }}"
-        updated="{{ draft.updated }}"
-        hits="{{ draft.hits }}"
-        src="https://picsum.photos/128/8{{ forloop.counter }}">
-        {% for tag in draft.tags.all %}
-          <dh-tag href="{{ tag.get_absolute_url }}">{{ tag }}</dh-tag>
-        {% endfor %}
-      </dh-article>
-    {% endfor %}
-
-    <p class="has-text-weight-bold has-text-grey-light pb-5 pt-5 is-size-7">LATEST ARTICLES</p>
-    {% for draft in home_new_drafts %}
-      <dh-article
-        title="{{ draft.title }}"
-        href="{{ draft.get_absolute_url }}"
-        author="{{ draft.blog }}"
-        blog="{{ draft.blog.get_absolute_url }}"
-        created="{{ draft.created|date:'M j'}}"
-        updated="{{ draft.updated }}"
-        hits="{{ draft.hits }}"
-        src="https://picsum.photos/127/8{{ forloop.counter }}">
-        {% for tag in draft.tags.all %}
-          <dh-tag href="{{ tag.get_absolute_url }}">
-            {{ tag }}
-          </dh-tag>
-        {% endfor %}
-      </dh-article>
-    {% endfor %}
-
-
-
-
-
-
-
-        <b-pagination class="mt-5"
-            total="200"
-            current.sync="10"
-            range-before="3"
-            range-after="1"
-            order=""
-            size="is-small"
-            rounded="true"
-            per-page="10"
-            icon-prev="chevron-left"
-              icon-next="chevron-right"
-            aria-next-label="Next page"
-            aria-previous-label="Previous page"
-            aria-page-label="Page"
-            aria-current-label="Current page">
-        </b-pagination>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    {% block section %}{% endblock section %}
     </section>
+
+
     <aside class="px-3 is-hidden-mobile ml-5" style="width:30%;flex-shrink:0;">
       <div>
     <p class="has-text-weight-bold has-text-grey-light pb-5 is-size-7">MOST ACTIVE TOPICS</p>
@@ -187,8 +101,13 @@
 
     </aside>
   </div>
+  <br>
+  <br>
+  <br>
+  <br>
 
-  <footer class="footer">
+  <!--
+  <footer class="mt-6 footer">
     <div class="has-text-centered">
       <p>
         <strong>Bulma</strong> by <a href="https://jgthms.com">Jeremy Thomas</a>. The source code is licensed
@@ -197,6 +116,7 @@
       </p>
     </div>
   </footer>
+  -->
 
   </div> <!-- app -->
 

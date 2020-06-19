@@ -43,6 +43,12 @@ $navbar-breakpoint: $tablet;
 ::placeholder {
   opacity: 0.8;
 }
+address {
+  font-style: normal;
+}
+.image {
+  height: auto !important;
+}
 
 // Import custom components
 @import "components/dh";

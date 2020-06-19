@@ -45,16 +45,19 @@ class BlogListView(ListView):
 
 class HomeView(ListView):
     model = Draft
-    context_object_name = 'home_drafts'
+    context_object_name = 'drafts_new'
     template_name = 'core/home.html'
-    paginate_by = 20
+    paginate_by = 3
+
+    def get_queryset(self):
+        return Draft.objects.all().order_by('-created')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
             'home_tags': Tag.objects.all(),
             'home_blogs': Blog.objects.all(),
-            'home_new_drafts': Draft.objects.all().order_by('-created'),
+            'drafts_pop': Draft.objects.all(),
         })
 
         return context

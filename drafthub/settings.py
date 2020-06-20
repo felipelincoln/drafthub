@@ -169,3 +169,7 @@ DATABASES['default'].update(db_from_env)
 
 # Crispy forms
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+
+# CSRF view
+CSRF_FAILURE_VIEW = 'drafthub.views.error403csrf_view'

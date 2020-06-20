@@ -1,0 +1,42 @@
+{% extends 'core/base2.html' %}
+
+{% block meta %}
+  <!-- Primary Meta Tags -->
+  <title>{{ title }}</title>
+  <meta name="title" content="{{ title }}">
+  <meta name="description" content="{{ description }}">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://drafthub-development.herokuapp.com/">
+  <meta property="og:title" content="{{ title }}">
+  <meta property="og:description" content="{{ description }}">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://drafthub-development.herokuapp.com/">
+  <meta property="twitter:title" content="{{ title }}">
+  <meta property="twitter:description" content="{{ description }}">
+{% endblock meta %}
+
+{% block breadcrumb %}
+  <li class="is-hidden-mobile">
+    <a><dh-search action="{% url 'search' %}" placeholder="Search"></dh-action></a>
+  </li>
+{% endblock breadcrumb %}
+
+{% block burgerbreadcrumb %}
+  <b-navbar-item tag="div" class="is-hidden-tablet">
+    <dh-search action="{% url 'search' %}" placeholder="Search"></dh-action>
+  </b-navbar-item>
+{% endblock burgerbreadcrumb %}
+
+{% block container %}
+  <div class="px-3" style="text-align:center;flex-grow:1;">
+    <h1>{{ status }}</h1>
+    <h2>{{ verbose }}</h2>
+    <br>
+    <p>{{ message }} Take a look into the <a target="_blank" href="https://github.com/drafthub/drafthub/pulls?q=is%3Aissue+{{ status }}">issues results</a> for this.
+    </p>
+  </div>
+{% endblock container %}

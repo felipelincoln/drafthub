@@ -63,6 +63,9 @@
   </b-navbar>
 
   <div class="container is-flex mt-5">
+    {% block container %}{% endblock %}
+  </div>
+  <div class="container is-flex mt-5">
     <section class="px-3" style="flex-grow:1;">
       {% block section %}{% endblock section %}
     </section>

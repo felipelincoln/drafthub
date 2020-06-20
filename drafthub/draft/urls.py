@@ -9,7 +9,7 @@ from .views import (
 )
 
 
-draft_urlpatterns = [
+draft_urlpatterns = [ #this will all be ajax
     path('',DraftDetailView.as_view(),name='draft'),
     path('edit/', DraftUpdateView.as_view(), name='draft-edit'),
     path('delete/', DraftDeleteView.as_view(), name='draft-delete'),
@@ -26,6 +26,6 @@ draft_urlpatterns = [
 
 urlpatterns = [
     path('new/', DraftCreateView.as_view(), name='new'),
-    path('tag/<str:tag>/', TagListView.as_view(), name='tag'),
-    path('blog/<str:blog>/<slug:slug>/', include(draft_urlpatterns))
+    path('topic/<str:tag>/', TagListView.as_view(), name='tag'),
+    path('<str:blog>/<slug:slug>/', include(draft_urlpatterns))
 ]

@@ -21,10 +21,10 @@ Vue.component('dh-search', {
 
 Vue.component('dh-heading', {
   template:`
-    <p
+    <h1
       class="has-text-weight-bold has-text-grey-light pb-5 is-size-7">
       <slot></slot>
-    </p>
+    </h1>
   `
 });
 

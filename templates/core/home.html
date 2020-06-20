@@ -23,13 +23,13 @@
 
 {% block breadcrumb %}
   <li class="is-hidden-mobile">
-    <a><dh-search action="{% url 'search' %}" placeholder="Search"></dh-action></a>
+    <a><dh-search action="{% url 'search' %}" placeholder="Search"></dh-search></a>
   </li>
 {% endblock breadcrumb %}
 
 {% block burgerbreadcrumb %}
   <b-navbar-item tag="div" class="is-hidden-tablet">
-    <dh-search action="{% url 'search' %}" placeholder="Search"></dh-action>
+    <dh-search action="{% url 'search' %}" placeholder="Search"></dh-search>
   </b-navbar-item>
 {% endblock burgerbreadcrumb %}
 
@@ -77,7 +77,6 @@
   <nav
     style="justify-content:center"
     class="pagination is-rounded is-small"
-    role="navigation"
     aria-label="pagination">
     {% if page_obj.has_previous %}
       <a href="?page={{ page_obj.previous_page_number }}" class="has-text-link pagination-previous">Previous</a>

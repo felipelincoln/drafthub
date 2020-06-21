@@ -26,6 +26,6 @@ draft_urlpatterns = [ #this will all be ajax
 
 urlpatterns = [
     path('new/', DraftCreateView.as_view(), name='new'),
-    path('topic/<str:tag>/', TagListView.as_view(), name='tag'),
+    path('topics/<str:tag>/', TagListView.as_view(), name='tag'),
     path('<str:blog>/<slug:slug>/', include(draft_urlpatterns))
 ]

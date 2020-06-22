@@ -86,7 +86,7 @@ Vue.component('dh-article', {
           <b-skeleton height="64px" :active="isLoading"></b-skeleton>
         </p>
       </figure>
-      <section class="media-content">
+      <div class="media-content" style="min-width:20%">
         <div class="is-size-7 is-flex">
           <p style="flex-grow:1;">
             <a class="dh-a" :href="blog">
@@ -113,12 +113,12 @@ Vue.component('dh-article', {
           </a>
         </h2>
         <p v-if="!tiny"><slot></slot></p>
-      </section>
+      </div>
     </article>
   `,
   computed: {
     alt: function(){
-      return `Cover image for ${this.title[0].toUpperCase()}${this.title.substring(1)}`
+      return `Cover image for: ${this.title}`
     }
   }
 });

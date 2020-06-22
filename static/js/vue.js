@@ -58,7 +58,8 @@ Vue.component('dh-article', {
             <img
               style="border-radius:6px;max-height:48px;"
               :src="src"
-              @load="isLoading=false">
+              @load="isLoading=false"
+              :alt="alt">
           </a>
           <b-skeleton height="48px" :active="isLoading"></b-skeleton>
         </p>
@@ -69,7 +70,8 @@ Vue.component('dh-article', {
             <img
               style="border-radius:6px;max-height:128px;"
               :src="src"
-              @load="isLoading=false">
+              @load="isLoading=false"
+              :alt="alt">
           </a>
           <b-skeleton height="85px" :active="isLoading"></b-skeleton>
         </p>
@@ -78,7 +80,8 @@ Vue.component('dh-article', {
             <img
               style="border-radius:6px;max-height:64px;"
               :src="src"
-              @load="isLoading=false">
+              @load="isLoading=false"
+              :alt="alt">
           </a>
           <b-skeleton height="64px" :active="isLoading"></b-skeleton>
         </p>
@@ -104,7 +107,7 @@ Vue.component('dh-article', {
             <a :href="href" class="dh-a">[[ hits ]] views</a>
           </p>
         </div>
-        <h2 style="word-wrap: break-word;">
+        <h2 style="word-wrap: break-word; text-transform: capitalize;">
           <a class="dh-a has-text-weight-medium has-text-dark" :href="href">
             [[ title ]]
           </a>
@@ -113,6 +116,11 @@ Vue.component('dh-article', {
       </section>
     </article>
   `,
+  computed: {
+    alt: function(){
+      return `Cover image for ${this.title[0].toUpperCase()}${this.title.substring(1)}`
+    }
+  }
 });
 
 Vue.component('dh-tag', {

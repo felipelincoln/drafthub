@@ -2,7 +2,7 @@
 Vue.component('dh-search', {
   props: [
     'action',
-    'placeholder'
+    'placeholder',
   ],
   template: `
     <form
@@ -94,8 +94,8 @@ Vue.component('dh-article', {
               [[ author ]],
             </address>
             </a>
-            <a class="dh-a" :href="href">
-            <time v-if="!updated" pubdate>
+            <a v-if="!updated" class="dh-a" :href="href">
+            <time pubdate>
               [[ created ]]
             </time>
             </a>

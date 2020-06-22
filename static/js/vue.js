@@ -52,7 +52,7 @@ Vue.component('dh-article', {
   ],
   template: `
     <article :aria-label="title" class="media">
-      <figure v-if="tiny" class="media-left">
+      <figure v-if="tiny" class="media-left" :aria-label="alt">
         <p class="image is-48x48">
           <a :href="href">
             <img
@@ -64,7 +64,7 @@ Vue.component('dh-article', {
           <b-skeleton height="48px" :active="isLoading"></b-skeleton>
         </p>
       </figure>
-      <figure v-else class="media-left">
+      <figure v-else class="media-left" :aria-label="alt">
         <p class="image is-128x128 is-hidden-mobile">
           <a :href="href">
             <img
@@ -87,8 +87,8 @@ Vue.component('dh-article', {
         </p>
       </figure>
       <div class="media-content" style="min-width:20%">
-        <div class="is-size-7 is-flex">
-          <p style="flex-grow:1;">
+        <p class="is-size-7 is-flex">
+          <span style="flex-grow:1;">
             <a class="dh-a" :href="blog">
             <address class="is-inline">
               [[ author ]],
@@ -98,15 +98,17 @@ Vue.component('dh-article', {
             <time v-if="!updated" pubdate>
               [[ created ]]
             </time>
-            <time v-else pubdate>
-              updated [[ updated ]]
+            </a>
+            <a v-else class="dh-a" :href="href">
+            <time pubdate>
+              (updated [[ updated ]])
             </time>
             </a>
-          </p>
-          <p v-if="!tiny">
+          </span>
+          <span v-if="!tiny">
             <a :href="href" class="dh-a">[[ hits ]] views</a>
-          </p>
-        </div>
+          </span>
+        </p>
         <h2 style="word-wrap: break-word; text-transform: capitalize;">
           <a class="dh-a has-text-weight-medium has-text-dark" :href="href">
             [[ title ]]

@@ -35,22 +35,24 @@
 
 {% block section %}
   {% if page_obj.has_previous is False %}
-  <dh-heading>MOST POPULAR</dh-heading>
-  {% for draft in drafts_pop %}
-    <dh-article
-      title="{{ draft.title }}"
-      href="{{ draft.get_absolute_url }}"
-      author="{{ draft.blog }}"
-      blog="{{ draft.blog.get_absolute_url }}"
-      created="{{ draft.created|date:'M j' }}"
-      updated="{{ draft.updated|date:'M j' }}"
-      hits="{{ draft.hits }}"
-      src="https://picsum.photos/128/8{{ forloop.counter }}">
-      {% for tag in draft.tags.all %}
-        <dh-tag href="{{ tag.get_absolute_url }}">{{ tag }}</dh-tag>
-      {% endfor %}
-    </dh-article>
-  {% endfor %}
+  <dh-heading id="mostPopular" >MOST POPULAR</dh-heading>
+  <div role="feed" aria-labelledby="mostPopular">
+    {% for draft in drafts_pop %}
+      <dh-article
+        title="{{ draft.title }}"
+        href="{{ draft.get_absolute_url }}"
+        author="{{ draft.blog }}"
+        blog="{{ draft.blog.get_absolute_url }}"
+        created="{{ draft.created|date:'M j' }}"
+        updated="{{ draft.updated|date:'M j' }}"
+        hits="{{ draft.hits }}"
+        src="https://picsum.photos/128/8{{ forloop.counter }}">
+        {% for tag in draft.tags.all %}
+          <dh-tag href="{{ tag.get_absolute_url }}">{{ tag }}</dh-tag>
+        {% endfor %}
+      </dh-article>
+    {% endfor %}
+  </div>
   <br>
   <br>
   {% endif %}

@@ -49,6 +49,9 @@ address {
 footer {
   border-top: 1px solid $grey-lighter
 }
+section {
+  min-width: 1%;
+}
 .image {
   height: auto !important;
 }

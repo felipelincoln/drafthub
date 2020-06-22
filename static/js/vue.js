@@ -20,8 +20,12 @@ Vue.component('dh-search', {
 });
 
 Vue.component('dh-heading', {
+  props: [
+    'id',
+  ],
   template:`
     <h1
+      :id="id"
       class="has-text-weight-bold has-text-grey-light pb-5 is-size-7">
       <slot></slot>
     </h1>
@@ -47,7 +51,7 @@ Vue.component('dh-article', {
     'tiny'
   ],
   template: `
-    <article class="media">
+    <article :aria-label="title" class="media">
       <figure v-if="tiny" class="media-left">
         <p class="image is-48x48">
           <a :href="href">
@@ -100,7 +104,7 @@ Vue.component('dh-article', {
             <a :href="href" class="dh-a">[[ hits ]] views</a>
           </p>
         </div>
-        <h2>
+        <h2 style="word-wrap: break-word;">
           <a class="dh-a has-text-weight-medium has-text-dark" :href="href">
             [[ title ]]
           </a>

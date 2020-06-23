@@ -53,8 +53,9 @@
           href="{% url 'social:begin' 'github' %}?next={{ request.path }}"
           type="is-primary"
           size="is-small"
-          icon-left="github">
-          <strong>Sign in/up</strong>
+          icon-left="github"
+          aria-label="Sign in using your GitHub account">
+          <strong>Sign in</strong>
         </b-button>
       </div>
       {% endif %}

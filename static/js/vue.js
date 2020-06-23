@@ -55,7 +55,7 @@ Vue.component('dh-article', {
     'latest',
   ],
   template: `
-    <article :aria-label="title" class="media">
+    <article :aria-label="title" tabindex="0" class="media">
       <figure v-if="tiny" class="media-left" :aria-label="alt">
         <p class="image is-48x48">
           <a :href="href">

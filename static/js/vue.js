@@ -102,17 +102,15 @@ Vue.component('dh-article', {
               <time pubdate :datetime="datetime">
                 [[ created ]]
               </time>
-            </a>
-            <a v-if="updated && !latest" class="dh-a" :href="href">
-              (updated <time v-html="updated">[[ updated ]]</time> ago)
+              <span v-if="updated">
+                (updated <time v-html="updated">[[ updated ]]</time> ago)
+              </span>
             </a>
             <a v-if="latest" class="dh-a" :href="href">
               <time v-html="latest">[[ latest ]]</time> ago
             </a>
           </span>
-          <span v-if="!tiny" style="text-align:center;">
-            <a :href="href" class="dh-a">[[ hits ]] views</a>
-          </span>
+          <span v-if="!tiny" style="text-align:center;">[[ hits ]] views</span>
         </p>
         <h2 style="word-wrap: break-word; text-transform: capitalize;">
           <a class="dh-a has-text-weight-medium has-text-dark" :href="href">

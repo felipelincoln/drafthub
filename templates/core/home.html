@@ -96,7 +96,7 @@
 {% block aside %}
   <dh-heading>MOST ACTIVE TOPICS</dh-heading>
   {% for tag in tags_pop %}
-    <a href="{{ tag.get_absolute_url }}"><p>{{ forloop.counter }}. {{ tag }}</p></a>
+    <p><a href="{{ tag.get_absolute_url }}">{{ forloop.counter }}. {{ tag }}</a></p>
   {% endfor %}
 
   <br>

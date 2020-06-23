@@ -35,10 +35,15 @@ class DraftManager(models.Manager):
 
     def get_random_queryset(self, n):
         from random import randint
-        count = self.model.objects.all().count() - n
+        count = self.model.objects.all().count() -1
         rand = randint(0, count)
+        queryset = self.all()[rand:rand+1]
 
-        return self.all()[rand:rand+n]
+        while len(queryset) < min(n, count):
+            rand = randint(0, count)
+            queryset |= self.all()[rand:rand+1]
+
+        return queryset
 
 
 class TagManager(models.Manager):

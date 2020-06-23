@@ -1,4 +1,5 @@
 {% extends 'core/base2.html' %}
+{% load drafthub_extras %}
 
 {% block meta %}
   <!-- Primary Meta Tags -->
@@ -6,8 +7,7 @@
   <meta name="title" content="drafthub: blog like a developer">
   <meta name="description" content="Start your own developer blog using git and markdown and integrate the GitHub community">
 
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website">
+  <!-- Open Graph / Facebook --> <meta property="og:type" content="website">
   <meta property="og:url" content="https://drafthub-development.herokuapp.com/">
   <meta property="og:title" content="drafthub: blog like a developer">
   <meta property="og:description" content="Start your own developer blog using git and markdown and integrate the GitHub community">
@@ -44,7 +44,8 @@
         author="{{ draft.blog }}"
         blog="{{ draft.blog.get_absolute_url }}"
         created="{{ draft.created|date:'M j' }}"
-        updated="{{ draft.updated|date:'M j' }}"
+        updated="{{ draft.updated|timesince }}"
+        datetime="{{ draft.created|date:'Y-m-d' }}"
         hits="{{ draft.hits }}"
         src="https://picsum.photos/128/8{{ forloop.counter }}">
         {% for tag in draft.tags.all %}
@@ -64,8 +65,7 @@
       href="{{ draft.get_absolute_url }}"
       author="{{ draft.blog }}"
       blog="{{ draft.blog.get_absolute_url }}"
-      created="{{ draft.created|date:'M j' }}"
-      updated="{{ draft.updated|date:'M j' }}"
+      latest="{{ draft.created|timesince|timesince_format }}"
       hits="{{ draft.hits }}"
       src="https://picsum.photos/118/8{{ forloop.counter }}">
       {% for tag in draft.tags.all %}
@@ -109,8 +109,7 @@
       href="{{ draft.get_absolute_url }}"
       author="{{ draft.blog }}"
       blog="{{ draft.blog.get_absolute_url }}"
-      created="{{ draft.created|date:'M j'}}"
-      updated="{{ draft.updated|date:'M j' }}"
+      latest="{{ draft.updated|timesince|timesince_format }}"
       hits="{{ draft.hits }}"
       tiny="true"
       src="https://picsum.photos/80/8{{ forloop.counter }}">
@@ -132,7 +131,7 @@
       author="{{ draft.blog }}"
       blog="{{ draft.blog.get_absolute_url }}"
       created="{{ draft.created|date:'M j'}}"
-      updated="{{ draft.updated|date:'M j' }}"
+      updated="{{ draft.updated|timesince|timesince_format }}"
       hits="{{ draft.hits }}"
       tiny="true"
       src="https://picsum.photos/80/8{{ forloop.counter }}">

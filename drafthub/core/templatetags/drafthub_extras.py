@@ -115,3 +115,7 @@ def in_queryset(blog, queryset):
 @register.filter
 def get_model_name(queryset):
     return queryset[0]._meta.model_name
+
+@register.filter
+def timesince_format(value):
+    return value.split(',')[0]

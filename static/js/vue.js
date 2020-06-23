@@ -46,9 +46,11 @@ Vue.component('dh-article', {
     'author',
     'created',
     'updated',
+    'datetime',
     'hits',
     'src',
-    'tiny'
+    'tiny',
+    'latest',
   ],
   template: `
     <article :aria-label="title" class="media">
@@ -94,18 +96,19 @@ Vue.component('dh-article', {
               [[ author ]],
             </address>
             </a>
-            <a v-if="!updated" class="dh-a" :href="href">
-            <time pubdate>
-              [[ created ]]
-            </time>
+            <a v-if="!latest" class="dh-a" :href="href">
+              <time pubdate :datetime="datetime">
+                [[ created ]]
+              </time>
             </a>
-            <a v-else class="dh-a" :href="href">
-            <time pubdate>
-              (updated [[ updated ]])
-            </time>
+            <a v-if="updated && !latest" class="dh-a" :href="href">
+              (updated <time v-html="updated">[[ updated ]]</time> ago)
+            </a>
+            <a v-if="latest" class="dh-a" :href="href">
+              <time v-html="latest">[[ latest ]]</time> ago
             </a>
           </span>
-          <span v-if="!tiny">
+          <span v-if="!tiny" style="text-align:center;">
             <a :href="href" class="dh-a">[[ hits ]] views</a>
           </span>
         </p>

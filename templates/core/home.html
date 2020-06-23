@@ -76,18 +76,18 @@
   <br>
   <nav
     style="justify-content:center"
-    class="pagination is-rounded is-small"
+    class="pagination is-small"
     aria-label="pagination">
     {% if page_obj.has_previous %}
-      <a rel="prev" href="?page={{ page_obj.previous_page_number }}" class="pagination-previous">Previous</a>
+      <a rel="prev" href="?page={{ page_obj.previous_page_number }}" class="pagination-previous px-2">Previous</a>
     {% else %}
-      <a class="pagination-previous" disabled>Previous</a>
+      <a class="pagination-previous px-2" disabled>Previous</a>
     {% endif %}
 
     {% if page_obj.has_next %}
-      <a rel="next" href="?page={{ page_obj.next_page_number }}" class="pagination-next">Next</a>
+      <a rel="next" href="?page={{ page_obj.next_page_number }}" class="pagination-next px-2">Next</a>
     {% else %}
-      <a class="pagination-next" disabled>Next</a>
+      <a class="pagination-next px-2" disabled>Next</a>
     {% endif %}
   </nav>
 {% endblock section %}

@@ -53,8 +53,7 @@
           href="{% url 'social:begin' 'github' %}?next={{ request.path }}"
           type="is-primary"
           size="is-small"
-          icon-left="github"
-          rounded>
+          icon-left="github">
           <strong>Sign in/up</strong>
         </b-button>
       </div>
@@ -70,7 +69,7 @@
       {% block section %}{% endblock section %}
     </main>
 
-    <aside class="px-3 is-hidden-mobile ml-5" style="width:30%;flex-shrink:0;">
+    <aside class="px-3 is-hidden-mobile ml-5" style="width:25%;flex-shrink:0;">
       {% block aside %}{% endblock aside %}
     </aside>
   </div>

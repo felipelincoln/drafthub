@@ -13,8 +13,7 @@ Vue.component('dh-search', {
         name="q"
         :placeholder="placeholder"
         size="is-small"
-        type="search"
-        rounded>
+        type="search">
       </b-input>
     </form>
   `
@@ -55,7 +54,7 @@ Vue.component('dh-article', {
   ],
   template: `
     <article :aria-label="title" tabindex="0" class="media">
-      <figure v-if="tiny" class="media-left" :aria-label="alt">
+      <figure v-if="tiny" class="media-left mr-2" :aria-label="alt">
         <p class="image is-48x48">
           <a :href="href">
             <img

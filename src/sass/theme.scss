@@ -38,9 +38,9 @@ $colors: mergeColorMaps($colors, (
 $input-placeholder-color: $grey;
 $footer-background-color: $white;
 $navbar-breakpoint: $tablet;
-
 $widescreen-enabled: false;
 $fullhd-enabled: false;
+$radius-small: 6px;
 
 // CSS
 ::placeholder {

@@ -39,6 +39,9 @@ $input-placeholder-color: $grey;
 $footer-background-color: $white;
 $navbar-breakpoint: $tablet;
 
+$widescreen-enabled: false;
+$fullhd-enabled: false;
+
 // CSS
 ::placeholder {
   opacity: 0.8;

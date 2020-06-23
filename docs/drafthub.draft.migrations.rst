@@ -20,6 +20,14 @@ drafthub.draft.migrations.0002\_auto\_20200612\_0522 module
    :undoc-members:
    :show-inheritance:
 
+drafthub.draft.migrations.0003\_auto\_20200623\_0131 module
+-----------------------------------------------------------
+
+.. automodule:: drafthub.draft.migrations.0003_auto_20200623_0131
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 Module contents
 ---------------

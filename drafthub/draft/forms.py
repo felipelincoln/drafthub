@@ -83,4 +83,4 @@ class DraftForm(forms.ModelForm):
 
     class Meta:
         model = Draft
-        fields = ['title', 'github_url', 'abstract']
+        fields = ['title', 'github_url', 'description', 'image']

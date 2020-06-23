@@ -193,7 +193,7 @@ class SearchEngine:
             else:
                 querysets = (
                     [content.filter(title__icontains=x) for x in self.what]
-                    +[content.filter(abstract__icontains=x) for x in self.what]
+                    +[content.filter(description__icontains=x) for x in self.what]
                 )
 
                 if not self.where and not self.who:

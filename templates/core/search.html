@@ -81,7 +81,7 @@
 								{{ draft.created|date:"M d, Y" }}
 								{% if draft.updated %} (updated {{ draft.updated|date:"M d, Y" }}){% endif %}
 							</a></h6>
-						<p class="card-text">{{ draft.abstract }}</p>
+						<p class="card-text">{{ draft.description }}</p>
 						{% for tag in draft.tags.all %}
 							<a href="{{ tag.get_absolute_url }}" class="card-link badge badge-pill badge-light border">
 								{% if tag.icon %}

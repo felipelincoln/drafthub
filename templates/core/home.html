@@ -47,7 +47,7 @@
         updated="{{ draft.updated|timesince }}"
         datetime="{{ draft.created|date:'Y-m-d' }}"
         hits="{{ draft.hits }}"
-        src="https://picsum.photos/128/8{{ forloop.counter }}">
+        src="{{ draft.image }}">
         {% for tag in draft.tags.all %}
           <dh-tag href="{{ tag.get_absolute_url }}">{{ tag }}</dh-tag>
         {% endfor %}
@@ -67,7 +67,7 @@
       blog="{{ draft.blog.get_absolute_url }}"
       latest="{{ draft.created|timesince|timesince_format }}"
       hits="{{ draft.hits }}"
-      src="https://picsum.photos/118/8{{ forloop.counter }}">
+      src="{{ draft.image }}">
       {% for tag in draft.tags.all %}
         <dh-tag href="{{ tag.get_absolute_url }}">{{ tag }}</dh-tag>
       {% endfor %}
@@ -112,7 +112,7 @@
       latest="{{ draft.updated|timesince|timesince_format }}"
       hits="{{ draft.hits }}"
       tiny="true"
-      src="https://picsum.photos/80/8{{ forloop.counter }}">
+      src="{{ draft.image }}">
       {% for tag in draft.tags.all %}
         <dh-tag href="{{ tag.get_absolute_url }}">
           {{ tag }}
@@ -134,7 +134,7 @@
       updated="{{ draft.updated|timesince|timesince_format }}"
       hits="{{ draft.hits }}"
       tiny="true"
-      src="https://picsum.photos/80/8{{ forloop.counter }}">
+      src="{{ draft.image }}">
       {% for tag in draft.tags.all %}
         <dh-tag href="{{ tag.get_absolute_url }}">
           {{ tag }}

@@ -49,7 +49,6 @@ Vue.component('dh-article', {
     'created',
     'updated',
     'datetime',
-    'hits',
     'src',
     'tiny',
     'latest',
@@ -91,26 +90,23 @@ Vue.component('dh-article', {
         </p>
       </figure>
       <div class="media-content" style="min-width:20%">
-        <p class="is-size-7 is-flex">
-          <span style="flex-grow:1;">
-            <a rel="author" class="dh-a" :href="blog">
-            <address class="is-inline">
-              [[ author ]],
-            </address>
-            </a>
-            <a v-if="!latest" class="dh-a" :href="href">
-              <time pubdate :datetime="datetime">
-                [[ created ]]
-              </time>
-              <span v-if="updated">
-                (updated <time v-html="updated">[[ updated ]]</time> ago)
-              </span>
-            </a>
-            <a v-if="latest" class="dh-a" :href="href">
-              <time v-html="latest">[[ latest ]]</time> ago
-            </a>
-          </span>
-          <span v-if="!tiny" style="text-align:center;">[[ hits ]] views</span>
+        <p class="is-size-7">
+          <a rel="author" class="dh-a" :href="blog">
+          <address class="is-inline">
+            [[ author ]],
+          </address>
+          </a>
+          <a v-if="!latest" class="dh-a" :href="href">
+            <time pubdate :datetime="datetime">
+              [[ created ]]
+            </time>
+            <span v-if="updated">
+              (updated <time v-html="updated">[[ updated ]]</time> ago)
+            </span>
+          </a>
+          <a v-if="latest" class="dh-a" :href="href">
+            <time v-html="latest">[[ latest ]]</time> ago
+          </a>
         </p>
         <h2 style="word-wrap: break-word; text-transform: capitalize;">
           <a class="dh-a has-text-weight-medium has-text-dark" :href="href">

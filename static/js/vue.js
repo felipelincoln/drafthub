@@ -9,6 +9,7 @@ Vue.component('dh-search', {
       :action="action"
       method="get">
       <b-input
+        aria-label="Search"
         name="q"
         :placeholder="placeholder"
         size="is-small"
@@ -26,6 +27,7 @@ Vue.component('dh-heading', {
   template:`
     <h1
       :id="id"
+      style="text-transform:uppercase"
       class="has-text-weight-bold has-text-grey-light pb-5 is-size-7">
       <slot></slot>
     </h1>
@@ -91,7 +93,7 @@ Vue.component('dh-article', {
       <div class="media-content" style="min-width:20%">
         <p class="is-size-7 is-flex">
           <span style="flex-grow:1;">
-            <a class="dh-a" :href="blog">
+            <a rel="author" class="dh-a" :href="blog">
             <address class="is-inline">
               [[ author ]],
             </address>
@@ -134,6 +136,7 @@ Vue.component('dh-tag', {
   ],
     template: `
       <a
+        rel="tag"
         class="dh-a is-size-7"
         :href="href">
         #<slot></slot>

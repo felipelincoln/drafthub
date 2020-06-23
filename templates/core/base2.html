@@ -17,32 +17,32 @@
 <div id="app">
   <b-navbar class="container" :close-on-click="false">
     <template slot="brand">
-      <b-navbar-item tag="div">
+      <b-navbar-item tag="div" style="padding-right:0">
         <nav class="breadcrumb" aria-label="breadcrumbs">
           <ul style="align-items:center;">
-            <li><a href="{% url 'home' %}" class="dh-a has-text-weight-semibold has-text-grey">DRAFTHUB</a></li>
+            <li><a href="{% url 'home' %}" class="is-active dh-a has-text-weight-semibold has-text-grey" aria-current="page">DRAFTHUB</a></li>
             {% block breadcrumb %}{% endblock breadcrumb %}
           </ul>
         </nav>
       </b-navbar-item>
     </template>
     <template slot="start">
-      {% block burgerbreadcrumb %}{% endblock burgerbreadcrumb %}
+      {% block search %}{% endblock search %}
     </template>
     <template slot="end">
       {% if user.is_authenticated %}
-      <b-navbar-dropdown right label="{{ user.username }}">
-        <b-navbar-item href="{% url 'new' %}">
+      <b-navbar-dropdown right label="{{ user.username }}" role="menu">
+        <b-navbar-item href="{% url 'new' %}" role="menuitem">
           New article
         </b-navbar-item>
-        <b-navbar-item href="{{ user.get_absolute_url }}">
+        <b-navbar-item href="{{ user.get_absolute_url }}" role="menuitem">
           Blog
         </b-navbar-item>
-        <b-navbar-item href="{% url 'search' %}?q=favorites:">
+        <b-navbar-item href="{% url 'search' %}?q=favorites:" role="menuitem">
           Favorites
         </b-navbar-item>
         <hr class="dropdown-divider">
-        <b-navbar-item href="{% url 'logout' %}?next={{ request.path }}">
+        <b-navbar-item href="{% url 'logout' %}?next={{ request.path }}" role="menuitem">
           Logout
         </b-navbar-item>
       </b-navbar-dropdown>

@@ -22,20 +22,19 @@
 {% endblock meta %}
 
 {% block breadcrumb %}
-  <li class="is-hidden-mobile">
-    <a><dh-search action="{% url 'search' %}" placeholder="Search"></dh-search></a>
+  <li aria-label="Search" class="is-hidden-mobile" aria-hidden="true">
   </li>
 {% endblock breadcrumb %}
 
-{% block burgerbreadcrumb %}
-  <b-navbar-item tag="div" class="is-hidden-tablet">
+{% block search %}
+  <b-navbar-item tag="div">
     <dh-search action="{% url 'search' %}" placeholder="Search"></dh-search>
   </b-navbar-item>
-{% endblock burgerbreadcrumb %}
+{% endblock search %}
 
 {% block section %}
   {% if page_obj.has_previous is False %}
-  <dh-heading id="mostPopular" >MOST POPULAR</dh-heading>
+  <dh-heading id="mostPopular" >Most popular</dh-heading>
   <div role="feed" aria-labelledby="mostPopular">
     {% for draft in drafts_pop %}
       <dh-article
@@ -44,7 +43,7 @@
         author="{{ draft.blog }}"
         blog="{{ draft.blog.get_absolute_url }}"
         created="{{ draft.created|date:'M j' }}"
-        updated="{{ draft.updated|timesince }}"
+        updated="{{ draft.updated|timesince|timesince_format }}"
         datetime="{{ draft.created|date:'Y-m-d' }}"
         hits="{{ draft.hits }}"
         src="{{ draft.image }}">
@@ -81,13 +80,13 @@
     class="pagination is-rounded is-small"
     aria-label="pagination">
     {% if page_obj.has_previous %}
-      <a href="?page={{ page_obj.previous_page_number }}" class="has-text-link pagination-previous">Previous</a>
+      <a rel="prev" href="?page={{ page_obj.previous_page_number }}" class="has-text-link pagination-previous">Previous</a>
     {% else %}
       <a class="pagination-previous" disabled>Previous</a>
     {% endif %}
 
     {% if page_obj.has_next %}
-      <a href="?page={{ page_obj.next_page_number }}" class="has-text-link pagination-next">Next</a>
+      <a rel="next" href="?page={{ page_obj.next_page_number }}" class="has-text-link pagination-next">Next</a>
     {% else %}
       <a class="pagination-next" disabled>Next</a>
     {% endif %}

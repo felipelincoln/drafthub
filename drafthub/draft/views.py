@@ -118,8 +118,8 @@ class DraftDetailView(QueryFromBlog, DetailView):
                 activity.save(update_fields=['viewed'])
 
             if self.request.user.social_auth.exists():
-                obj.last_update = self._get_updated(obj)
-                if obj.last_update:
+                obj.updated = self._get_updated(obj)
+                if obj.updated:
                     obj.save(update_fields=['updated'])
 
         return obj

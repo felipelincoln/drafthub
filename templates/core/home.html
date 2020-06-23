@@ -26,11 +26,11 @@
   </li>
 {% endblock breadcrumb %}
 
-{% block search %}
-  <b-navbar-item tag="div">
+{% block start %}
+  <div class="navbar-item">
     <dh-search action="{% url 'search' %}" placeholder="Search"></dh-search>
-  </b-navbar-item>
-{% endblock search %}
+  </div>
+{% endblock start %}
 
 {% block section %}
   {% if page_obj.has_previous is False %}
@@ -80,13 +80,13 @@
     class="pagination is-rounded is-small"
     aria-label="pagination">
     {% if page_obj.has_previous %}
-      <a rel="prev" href="?page={{ page_obj.previous_page_number }}" class="has-text-link pagination-previous">Previous</a>
+      <a rel="prev" href="?page={{ page_obj.previous_page_number }}" class="pagination-previous">Previous</a>
     {% else %}
       <a class="pagination-previous" disabled>Previous</a>
     {% endif %}
 
     {% if page_obj.has_next %}
-      <a rel="next" href="?page={{ page_obj.next_page_number }}" class="has-text-link pagination-next">Next</a>
+      <a rel="next" href="?page={{ page_obj.next_page_number }}" class="pagination-next">Next</a>
     {% else %}
       <a class="pagination-next" disabled>Next</a>
     {% endif %}

@@ -17,17 +17,17 @@
 <div id="app">
   <b-navbar class="container" :close-on-click="false">
     <template slot="brand">
-      <b-navbar-item tag="div" style="padding-right:0">
+      <div class="navbar-item" style="padding-right:0">
         <nav class="breadcrumb" aria-label="breadcrumbs">
           <ul style="align-items:center;">
             <li><a href="{% url 'home' %}" class="is-active dh-a has-text-weight-semibold has-text-grey" aria-current="page">DRAFTHUB</a></li>
             {% block breadcrumb %}{% endblock breadcrumb %}
           </ul>
         </nav>
-      </b-navbar-item>
+      </div>
     </template>
     <template slot="start">
-      {% block search %}{% endblock search %}
+      {% block start %}{% endblock start %}
     </template>
     <template slot="end">
       {% if user.is_authenticated %}
@@ -47,7 +47,7 @@
         </b-navbar-item>
       </b-navbar-dropdown>
       {% else %}
-      <b-navbar-item tag="div">
+      <div class="navbar-item">
         <b-button
           tag="a"
           href="{% url 'social:begin' 'github' %}?next={{ request.path }}"
@@ -57,7 +57,7 @@
           rounded>
           <strong>Sign in/up</strong>
         </b-button>
-      </b-navbar-item>
+      </div>
       {% endif %}
     </template>
   </b-navbar>

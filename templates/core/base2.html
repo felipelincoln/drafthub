@@ -51,7 +51,7 @@
       <div class="navbar-item">
         <b-button
           tag="a"
-          href="{% url 'social:begin' 'github' %}?next={{ request.path }}"
+          href="{% url 'social:begin' 'github' %}?next={{ request.GET.next }}"
           type="is-dark"
           icon-left="github"
           aria-label="Sign in using your GitHub account">

@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     # third parties
     'django_extensions',
     'social_django',
-    'crispy_forms',
 
     # our apps
     'drafthub.core.apps.CoreConfig',
@@ -165,10 +164,6 @@ AUTH_USER_MODEL = 'core.Blog'
 import dj_database_url
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
-
-
-# Crispy forms
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 # CSRF view

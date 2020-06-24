@@ -17,7 +17,6 @@ pymdown-extensions = "==7.0.0"
 bleach = "==3.1.4"
 pygments = "==2.6.1"
 django-extensions = "*"
-django-crispy-forms = "*"
 
 [requires]
 python_version = "3.7"

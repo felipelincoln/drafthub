@@ -67,7 +67,7 @@ class DraftForm(forms.ModelForm):
         check_invalid_space = match(invalid_re_space)
 
         if not check_comma:
-            raise ValidationError('tags must be separated by a comma (,)')
+            raise ValidationError('tags can only contain words and numbers')
 
         if not check_size:
             raise ValidationError('you can only use 5 tags')

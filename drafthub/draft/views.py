@@ -36,15 +36,7 @@ class AccessRequired:
 
 class DraftCreateView(LoginRequiredMixin, CreateView):
     form_class = DraftForm
-    template_name = 'draft/form.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
-            'form_type': 'draft_create',
-        })
-
-        return context
+    template_name = 'draft/new.html'
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -421,3 +413,9 @@ class TagListView(ListView):
         })
 
         return context
+
+def tag_list_api(request):
+    from django.http import JsonResponse
+    tag_list = [tag.name for tag in Tag.objects.all()]
+    return JsonResponse({'tags': tag_list})
+    

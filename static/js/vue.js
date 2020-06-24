@@ -127,7 +127,12 @@ Vue.component('dh-article', {
   }
 });
 
-const dbTags = ['python', 'albion-pvp', 'django'];
+
+let dbTags = [];
+//fetch('http://127.0.0.1:8000/api/tags')
+fetch('https://drafthub-development.herokuapp.com/api/tags')
+  .then(res => res.json())
+  .then(data => dbTags = data.tags)
 
 
 new Vue({
@@ -143,5 +148,8 @@ new Vue({
         return item.indexOf(text.toLowerCase()) >= 0
       })
     },
-  }
+    getTagsInputValue(){
+      return this.tags.join(', ')
+    },
+  },
 })

@@ -1,0 +1,83 @@
+{% extends 'core/base2.html' %}
+{% load drafthub_extras %}
+
+{% block meta %}
+  <title>{{ page_title }}</title>
+  <meta name="title" content="{{ page_title }}">
+  <meta name="description" content="{{ page_description }}">
+  <meta name="author" content="{{ page_author }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ page_url }}">
+  <meta property="og:title" content="{{ page_title }}">
+  <meta property="og:description" content="{{ page_description }}">
+  <meta property="og:image" content="{{ page_image }}">
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="{{ page_url }}">
+  <meta property="twitter:title" content="{{ page_title }}">
+  <meta property="twitter:description" content="{{ page_description }}">
+  <meta property="twitter:image" content="{{ page_image }}">
+{% endblock meta %}
+
+
+
+{% block breadcrumb %}
+  <li class="is-hidden-mobile" aria-hidden="true">
+  </li>
+{% endblock breadcrumb %}
+
+{% block start %}
+  <div class="navbar-item">
+    <dh-search action="{% url 'search' %}" placeholder="Search"></dh-search>
+  </div>
+{% endblock start %}
+
+
+{% block main %}
+	<form action="" method="POST">
+		{% csrf_token %}
+    <p>
+    <label>
+      title
+      <input name="title" type="text">
+    </label>
+    {{ form.title.errors }}</p>
+
+    <p>
+    <label>
+      github url
+      <input name="github_url" type="text">
+    </label>
+    {{ form.github_url.errors }}</p>
+
+    <p>
+    <label>
+      image
+      <input name="image" type="text">
+    </label>
+    {{ form.image.errors }}</p>
+
+    <input type="hidden" name="tags" :value="getTagsInputValue()">
+    {{ form.tags.errors }}</p>
+
+    <input type="submit" value="Publish">
+	</form>
+
+  <b-field label="Enter some tags">
+            <b-taginput
+                v-model="tags"
+                :data="filteredTags"
+                autocomplete
+                :allow-new="true"
+                maxlength="25"
+                maxtags="5"
+                icon="label"
+                placeholder="Add a tag"
+                @typing="getFilteredTags">
+            </b-taginput>
+        </b-field>
+        <pre style="max-height: 400px"><b>Tags:</b>[[ getTagsInputValue() ]]</pre>
+
+
+
+
+{% endblock main %}

@@ -7,6 +7,7 @@ from .views import (
     FavoriteRedirectView,
     TagListView,
 )
+from .views import tag_list_api
 
 
 draft_urlpatterns = [ #this will all be ajax
@@ -27,5 +28,6 @@ draft_urlpatterns = [ #this will all be ajax
 urlpatterns = [
     path('new/', DraftCreateView.as_view(), name='new'),
     path('topics/<str:tag>/', TagListView.as_view(), name='tag'),
-    path('<str:blog>/<slug:slug>/', include(draft_urlpatterns))
+    path('api/tags/', tag_list_api),
+    path('<str:blog>/<slug:slug>/', include(draft_urlpatterns)),
 ]

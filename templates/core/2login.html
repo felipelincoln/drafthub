@@ -1,0 +1,15 @@
+{% extends 'core/base.html' %}
+{% block content %}
+
+<div class="container-lg">
+	<div class="row justify-content-center">
+		<div class="col-auto">
+		<h2>To perform this action you must be logged in.</h2>
+		</div>
+		<div class="my-2 w-100"></div>
+		<div class="col-auto">
+<a class="btn btn-lg btn-info" role="button" href="{% url 'social:begin' 'github' %}?next={{request.GET.next}}">Login with GitHub</a>
+		</div>
+	</div>
+</div>
+{% endblock content %}

@@ -39,7 +39,7 @@ class BlogListView(ListView):
             context['github'] = self.blog.social_auth.get().extra_data
         context.update({
             'blog': self.blog,
-            })
+        })
 
         return context
 
@@ -73,6 +73,15 @@ class HomeView(ListView):
 class LoginView(auth_views.LoginView):
     template_name = 'core/login.html'
     redirect_authenticated_user = True
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        page_meta = PageContext(self.request)
+        page_meta.title = 'drafthub: login required'
+        context.update({
+             **page_meta.context,
+        })
+
+        return context
 
 
 class SearchEngine:

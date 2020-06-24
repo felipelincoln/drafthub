@@ -2,8 +2,6 @@ class BaseError:
     def __init__(self):
         self.status = None
         self.verbose = None
-        self.title = None
-        self.description = None
         self.message = None
         
     @property
@@ -11,8 +9,6 @@ class BaseError:
         context = {
             'status': self.status,
             'verbose': self.verbose,
-            'title': self.title,
-            'description': self.description,
             'message': self.message,
         }
 
@@ -33,6 +29,7 @@ class PageContext:
             ' markdown and integrate the GitHub community'
         self.url += request.get_full_path()
         self.image = 'https://i.ibb.co/McvBBRT/drafthub-1.png'
+        self.error = BaseError()
         
     @property
     def context(self):
@@ -43,6 +40,7 @@ class PageContext:
             'page_description': self.description,
             'page_url': self.url,
             'page_image': self.image,
+            'page_error': self.error.context,
         }
 
         return context

@@ -1,43 +1,43 @@
 from django.shortcuts import render
-from drafthub.utils import BaseError
+from drafthub.utils import PageContext
 
 
 def error404_view(request, exception):
-    error = BaseError()
-    error.status = 404
-    error.verbose = 'Page not found!'
-    error.title = 'drafthub: page not found'
-    error.description = 'The page you requested does not exist'
-    error.message = 'Is it a bug?'
+    page_meta = PageContext(request)
+    page_meta.error.status = 404
+    page_meta.error.verbose = 'Page not found!'
+    page_meta.error.message = 'Is it a bug?'
+    page_meta.title = 'drafthub: page not found'
+    page_meta.description = 'The page you requested does not exist'
 
-    return render(request, 'error.html', error.context, status=404)
+    return render(request, 'error.html', page_meta.context, status=404)
 
 def error500_view(request):
-    error = BaseError()
-    error.status = 500
-    error.verbose = 'Internal server error!'
-    error.title = 'drafthub: Internal server error'
-    error.description = 'Something went wrong on the server'
-    error.message = '🐛 You just found a bug!'
+    page_meta = PageContext(request)
+    page_meta.error.status = 500
+    page_meta.error.verbose = 'Internal server error!'
+    page_meta.error.message = '🐛 You just found a bug!'
+    page_meta.title = 'drafthub: Internal server error'
+    page_meta.description = 'Something went wrong on the server'
 
-    return render(request, 'error.html', error.context, status=500)
+    return render(request, 'error.html', page_meta.context, status=500)
 
 def error403csrf_view(request, reason=""):
-    error = BaseError()
-    error.status = 403
-    error.verbose = 'Forbidden request!'
-    error.title = 'drafthub: forbidden request'
-    error.description = 'The request you made was not allowed'
-    error.message = 'Did this happen more than once?'
+    page_meta = PageContext(request)
+    page_meta.error.status = 403
+    page_meta.error.verbose = 'Forbidden request!'
+    page_meta.error.message = 'Did this happen more than once?'
+    page_meta.title = 'drafthub: forbidden request'
+    page_meta.description = 'The request you made was not allowed'
 
-    return render(request, 'error.html', error.context, status=403)
+    return render(request, 'error.html', page_meta.context, status=403)
 
 def error400_view(request, exception):
-    error = BaseError()
-    error.status = 400
-    error.verbose = 'Bad request!'
-    error.title = 'drafthub: bad request'
-    error.description = 'The server could not respond to your request'
-    error.message = 'We could not respond to your request.'
+    page_meta = PageContext(request)
+    page_meta.error.status = 400
+    page_meta.error.verbose = 'Bad request!'
+    page_meta.error.message = 'We could not respond to your request.'
+    page_meta.title = 'drafthub: bad request'
+    page_meta.description = 'The server could not respond to your request'
 
-    return render(request, 'error.html', error.context, status=400)
+    return render(request, 'error.html', page_meta.context, status=400)

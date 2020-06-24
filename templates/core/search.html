@@ -53,6 +53,23 @@
     <br>
     <br>
   </section>
+  <div class="is-hidden-tablet">
+    <section v-if="{{ search_content_tags.count }}"aria-labelledby="topicsFound">
+      <dh-heading id="topicsFound">Topics: {{ search_content_tags.count }}</dh-heading>
+      {% for tag in search_content_tags %}
+        <p><a href="{{ tag.get_absolute_url }}">{{ tag }}</a></p>
+      {% endfor %}
+      <br>
+      <br>
+    </section>
+
+    <section v-if="{{ search_content_blogs.count }}" aria-labelledby="blogsFound">
+      <dh-heading id="blogsFound">Blogs: {{ search_content_blogs.count }}</dh-heading>
+      {% for blog in search_content_blogs %}
+        <p><a href="{{ blog.get_absolute_url }}">{{ blog }}</a></p>
+      {% endfor %}
+    </section>
+  </div>
 {% endblock main %}
 
 {% block aside %}

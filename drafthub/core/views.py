@@ -55,7 +55,9 @@ class HomeView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        page_meta = PageContext()
+        page_meta = PageContext(self.request)
+        popular_tags_by_name = [tag.name for tag in Tag.objects.all()[:10]]
+        page_meta.keywords = ', '.join(popular_tags_by_name)
         context.update({
             'tags_pop': Tag.objects.all()[:10],
             'drafts_pop': Draft.objects.all()[:5],
@@ -238,7 +240,7 @@ class SearchListView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         search = SearchEngine(self.request)
-        page_meta = PageContext()
+        page_meta = PageContext(self.request)
         page_meta.title = 'search results for: ' + ' '.join(search.what)
 
         context.update({

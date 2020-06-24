@@ -45,6 +45,8 @@ main {
 }
 img {
   border-radius: $radius;
+  overflow: hidden;
+  word-wrap: break-word;
 }
 a {
   &:hover {

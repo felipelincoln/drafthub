@@ -34,8 +34,8 @@
 
 {% block main %}
   <section aria-labelledby="searchResults">
-  <dh-heading id="searchResults" >Search results</dh-heading>
-    {% for draft in drafts_pop %}
+  <dh-heading id="searchResults" >Articles: {{ search_content.count }}</dh-heading>
+    {% for draft in search_content %}
       <dh-article
         title="{{ draft.title }}"
         href="{{ draft.get_absolute_url }}"
@@ -56,30 +56,19 @@
 {% endblock main %}
 
 {% block aside %}
-  <section aria-labelledby="topicsFound">
-  <dh-heading id="topicsFound">Topics Found</dh-heading>
-  {% for tag in tags_pop %}
-    <p><a href="{{ tag.get_absolute_url }}">{{ forloop.counter }}. {{ tag }}</a></p>
+  <section v-if="{{ search_content_tags.count }}"aria-labelledby="topicsFound">
+  <dh-heading id="topicsFound">Topics: {{ search_content_tags.count }}</dh-heading>
+  {% for tag in search_content_tags %}
+    <p><a href="{{ tag.get_absolute_url }}">{{ tag }}</a></p>
   {% endfor %}
   </section>
 
   <br>
   <br>
-  <section aria-labelledby="blogsFound">
-  <dh-heading id="blogsFound">Blogs found</dh-heading>
-  {% for draft in drafts_updated %}
-    <dh-article
-      title="{{ draft.title }}"
-      href="{{ draft.get_absolute_url }}"
-      author="{{ draft.blog }}"
-      blog="{{ draft.blog.get_absolute_url }}"
-      latest="{{ draft.updated|timesince|timesince_format }}"
-      tiny="true"
-      src="{{ draft.image }}">
-      {% for tag in draft.tags.all %}
-        <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
-      {% endfor %}
-    </dh-article>
+  <section v-if="{{ search_content_blogs.count }}" aria-labelledby="blogsFound">
+  <dh-heading id="blogsFound">Blogs: {{ search_content_blogs.count }}</dh-heading>
+  {% for blog in search_content_blogs %}
+    <p><a href="{{ blog.get_absolute_url }}">{{ blog }}</a></p>
   {% endfor %}
   </section>
 {% endblock aside %}

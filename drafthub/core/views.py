@@ -85,18 +85,17 @@ class SearchEngine:
 
     multi_who = []
 
-    def __init__(self, request):
+    def __init__(self, request, q='', who=None, where=None):
         self.request = request
-        if 'q' in request.GET.keys():
-            q = request.GET.get('q')
-            template = '^(?:(favorites|blogs|tags)(?:\.(\w+))?:)?\s*(.*?)\s*$'
-            re_object = re.compile(template)
-            self.where, self.who, self.what = re_object.match(q).groups()
-            self.what = self.what.split()
+        self.q = q
+        self.who = who
+        self.where = where
 
-            self._set_content_from_where()
-            self._filter_content_from_who()
-            self._filter_content_from_what()
+        self.what = q.split()
+
+        self._set_content_from_where()
+        self._filter_content_from_who()
+        self._filter_content_from_what()
 
 
     @property
@@ -104,19 +103,13 @@ class SearchEngine:
         content = {'search_content': self.content.all()[:self.MAX_RESULTS]}
 
         if not self.where:
-            q = self.request.GET.get('q')
-            self.request.GET._mutable = True
-            self.request.GET.__setitem__('q', f'tags:{q}')
-
-            tag_search = SearchEngine(self.request)
+            tag_search = SearchEngine(self.request, self.q, where='tags')
             tag_results = tag_search.results['search_content']
             content.update({'search_content_tags': tag_results})
 
-            self.request.GET.__setitem__('q', f'blogs:{q}')
-            blog_search = SearchEngine(self.request)
+            blog_search = SearchEngine(self.request, self.q, where='blogs')
             blog_results = blog_search.results['search_content']
             content.update({'search_content_blogs': blog_results})
-            self.request.GET._mutable = False
 
         return content
 
@@ -225,6 +218,8 @@ class SearchEngine:
                 ),
             )
             content = content.order_by('-score', *content.query.order_by)
+        else:
+            content = Draft.objects.none()
         self.content = content
 
 
@@ -239,7 +234,8 @@ class SearchListView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        search = SearchEngine(self.request)
+        q = self.request.GET.get('q')
+        search = SearchEngine(self.request, q)
         page_meta = PageContext(self.request)
         page_meta.title = 'search results for: ' + ' '.join(search.what)
 

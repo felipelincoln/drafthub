@@ -34,41 +34,41 @@
 
 {% block main %}
   <section aria-labelledby="searchResults">
-  <dh-heading id="searchResults" >Articles: {{ search_content.count }}</dh-heading>
-    {% for draft in search_content %}
-      <dh-article
-        title="{{ draft.title }}"
-        href="{{ draft.get_absolute_url }}"
-        author="{{ draft.blog }}"
-        blog="{{ draft.blog.get_absolute_url }}"
-        created="{{ draft.created|date:'M j' }}"
-        updated="{{ draft.updated|timesince|timesince_format }}"
-        datetime="{{ draft.created|date:'Y-m-d' }}"
-        src="{{ draft.image }}">
-        {% for tag in draft.tags.all %}
-          <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
-        {% endfor %}
-      </dh-article>
-    {% endfor %}
-  <br>
-  <br>
+    <dh-heading id="searchResults" >Articles: {{ search_content.count }}</dh-heading>
+      {% for draft in search_content %}
+        <dh-article
+          title="{{ draft.title }}"
+          href="{{ draft.get_absolute_url }}"
+          author="{{ draft.blog }}"
+          blog="{{ draft.blog.get_absolute_url }}"
+          created="{{ draft.created|date:'M j' }}"
+          updated="{{ draft.updated|timesince|timesince_format }}"
+          datetime="{{ draft.created|date:'Y-m-d' }}"
+          src="{{ draft.image }}">
+          {% for tag in draft.tags.all %}
+            <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
+          {% endfor %}
+        </dh-article>
+      {% endfor %}
+    <br>
+    <br>
   </section>
 {% endblock main %}
 
 {% block aside %}
   <section v-if="{{ search_content_tags.count }}"aria-labelledby="topicsFound">
-  <dh-heading id="topicsFound">Topics: {{ search_content_tags.count }}</dh-heading>
-  {% for tag in search_content_tags %}
-    <p><a href="{{ tag.get_absolute_url }}">{{ tag }}</a></p>
-  {% endfor %}
+    <dh-heading id="topicsFound">Topics: {{ search_content_tags.count }}</dh-heading>
+    {% for tag in search_content_tags %}
+      <p><a href="{{ tag.get_absolute_url }}">{{ tag }}</a></p>
+    {% endfor %}
+    <br>
+    <br>
   </section>
 
-  <br>
-  <br>
   <section v-if="{{ search_content_blogs.count }}" aria-labelledby="blogsFound">
-  <dh-heading id="blogsFound">Blogs: {{ search_content_blogs.count }}</dh-heading>
-  {% for blog in search_content_blogs %}
-    <p><a href="{{ blog.get_absolute_url }}">{{ blog }}</a></p>
-  {% endfor %}
+    <dh-heading id="blogsFound">Blogs: {{ search_content_blogs.count }}</dh-heading>
+    {% for blog in search_content_blogs %}
+      <p><a href="{{ blog.get_absolute_url }}">{{ blog }}</a></p>
+    {% endfor %}
   </section>
 {% endblock aside %}

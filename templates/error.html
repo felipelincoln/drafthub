@@ -28,9 +28,8 @@
 
 {% block container %}
   <div class="px-3" style="text-align:center;flex-grow:1;">
-    <h1>{{ page_error.status }}</h1>
-    <h2>{{ page_error.verbose }}</h2>
-    <br>
+    <p>{{ page_error.status }}</p>
+    <p>{{ page_error.verbose }}</p>
     <p>{{ page_error.message }} Take a look into the <a target="_blank" href="https://github.com/drafthub/drafthub/pulls?q=is%3Aissue+{{ page_error.status }}">issues results</a> for this.
     </p>
   </div>

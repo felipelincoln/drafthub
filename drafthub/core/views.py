@@ -71,12 +71,15 @@ class HomeView(ListView):
 
 
 class LoginView(auth_views.LoginView):
-    template_name = 'core/login.html'
+    template_name = 'error.html'
     redirect_authenticated_user = True
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         page_meta = PageContext(self.request)
         page_meta.title = 'drafthub: login required'
+        page_meta.error.status = 'To performe this action you must be logged in'
+        page_meta.error.verbose = ''
+        page_meta.error.message = 'Is it a bug?'
         context.update({
              **page_meta.context,
         })

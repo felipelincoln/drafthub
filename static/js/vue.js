@@ -62,6 +62,7 @@ Vue.component('dh-article', {
               style="max-height:48px;"
               :src="src"
               @load="isLoading=false"
+              @error="isLoading=false"
               :alt="alt">
           </a>
           <b-skeleton height="48px" :active="isLoading"></b-skeleton>
@@ -74,6 +75,7 @@ Vue.component('dh-article', {
               style="max-height:128px;"
               :src="src"
               @load="isLoading=false"
+              @error="isLoading=false"
               :alt="alt">
           </a>
           <b-skeleton height="85px" :active="isLoading"></b-skeleton>
@@ -84,6 +86,7 @@ Vue.component('dh-article', {
               style="max-height:64px;"
               :src="src"
               @load="isLoading=false"
+              @error="isLoading=false"
               :alt="alt">
           </a>
           <b-skeleton height="64px" :active="isLoading"></b-skeleton>

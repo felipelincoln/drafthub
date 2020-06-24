@@ -36,12 +36,6 @@ $radius: 12px;
 address {
   font-style: normal;
 }
-/*
-
-footer {
-  border-top: 1px solid $grey-lighter
-}
-*/
 aside,
 main {
   min-width: 1%;
@@ -55,6 +49,18 @@ img {
 a {
   &:hover {
     text-decoration: underline;
+  }
+}
+#ariaLink {
+  position: absolute;
+  left:-1px;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+  &:focus {
+    left:0;
+    width:auto;
+    height:auto;
   }
 }
 

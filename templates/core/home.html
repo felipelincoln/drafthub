@@ -33,8 +33,8 @@
 
 {% block section %}
   {% if page_obj.has_previous is False %}
+  <section aria-labelledby="mostPopular">
   <dh-heading id="mostPopular" >Most popular</dh-heading>
-  <div role="feed" aria-labelledby="mostPopular">
     {% for draft in drafts_pop %}
       <dh-article
         title="{{ draft.title }}"
@@ -50,51 +50,56 @@
         {% endfor %}
       </dh-article>
     {% endfor %}
-  </div>
   <br>
   <br>
+  </section>
   {% endif %}
 
-  <dh-heading>Latest articles</dh-heading>
-  {% for draft in drafts_new %}
-    <dh-article
-      title="{{ draft.title }}"
-      href="{{ draft.get_absolute_url }}"
-      author="{{ draft.blog }}"
-      blog="{{ draft.blog.get_absolute_url }}"
-      latest="{{ draft.created|timesince|timesince_format }}"
-      src="{{ draft.image }}">
-      {% for tag in draft.tags.all %}
-        <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
-      {% endfor %}
-    </dh-article>
-  {% endfor %}
+  <section role="feed" aria-labelledby="latestArticle">
+    <dh-heading id="latestArticle">Latest articles</dh-heading>
+    {% for draft in drafts_new %}
+      <dh-article
+        title="{{ draft.title }}"
+        href="{{ draft.get_absolute_url }}"
+        author="{{ draft.blog }}"
+        blog="{{ draft.blog.get_absolute_url }}"
+        latest="{{ draft.created|timesince|timesince_format }}"
+        src="{{ draft.image }}">
+        {% for tag in draft.tags.all %}
+          <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
+        {% endfor %}
+      </dh-article>
+    {% endfor %}
+    <br>
+    <br>
+    <nav
+      style="justify-content:center"
+      class="pagination"
+      aria-label="pagination">
+      {% if page_obj.has_previous %}
+        <a rel="prev" href="?page={{ page_obj.previous_page_number }}" class="pagination-previous px-2">Previous</a>
+      {% endif %}
 
-  <br>
-  <br>
-  <nav
-    style="justify-content:center"
-    class="pagination"
-    aria-label="pagination">
-    {% if page_obj.has_previous %}
-      <a rel="prev" href="?page={{ page_obj.previous_page_number }}" class="pagination-previous px-2">Previous</a>
-    {% endif %}
+      {% if page_obj.has_next %}
+        <a rel="next" href="?page={{ page_obj.next_page_number }}" class="pagination-next px-2">Next</a>
+      {% endif %}
+    </nav>
+  </section>
 
-    {% if page_obj.has_next %}
-      <a rel="next" href="?page={{ page_obj.next_page_number }}" class="pagination-next px-2">Next</a>
-    {% endif %}
-  </nav>
 {% endblock section %}
 
 {% block aside %}
-  <dh-heading>Most active topics</dh-heading>
+  <section aria-labelledby="mostActiveTopics">
+  <dh-heading id="mostActiveTopics">Most active topics</dh-heading>
   {% for tag in tags_pop %}
     <p><a href="{{ tag.get_absolute_url }}">{{ forloop.counter }}. {{ tag }}</a></p>
   {% endfor %}
+  </section>
 
   <br>
   <br>
-  <dh-heading>Last updated</dh-heading>
+  <section aria-labelledby="lastUpdated">
+  <dh-heading id="lastUpdated">Last updated</dh-heading>
   {% for draft in drafts_updated %}
     <dh-article
       title="{{ draft.title }}"
@@ -109,10 +114,12 @@
       {% endfor %}
     </dh-article>
   {% endfor %}
+  </section>
 
   <br>
   <br>
-  <dh-heading>Last chance to read</dh-heading>
+  <section aria-labelledby="lastChanceToRead">
+  <dh-heading id="lastChanceToRead">Last chance to read</dh-heading>
   {% for draft in drafts_random %}
     <dh-article
       title="{{ draft.title }}"
@@ -128,4 +135,5 @@
       {% endfor %}
     </dh-article>
   {% endfor %}
+  </section>
 {% endblock aside %}

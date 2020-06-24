@@ -3,20 +3,21 @@
 // Import dependencies
 @import "../../node_modules/bulma/sass/utilities/functions";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 // Initial variables
 $family-sans-serif: "Inter", BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-$family-monospace: "Anonymous Pro", monospace;
+
 $green: #45BF17;
 $yellow: #D0A81C;
 $red: #D25C46;
+$blue: #097ABA;
+
 $grey-dark: #545454;
 $grey: #646464;
-$blue: #097ABA;
-$cyan: #07A5DE;
+
 $theme-a: #3EBEB0;
 $theme-b: #F0BF1A;
+$theme-c: #07A5DE;
 @import "../../node_modules/bulma/sass/utilities/initial-variables";
 
 // Derived variables
@@ -24,11 +25,14 @@ $success: $green;
 $warning: $yellow;
 $danger: $red;
 $info: $blue;
+
 $dark: $grey-dark;
-$link: $cyan;
+
 $primary: $theme-a;
 $secondary: $theme-b;
 $secondary-invert: #FFF;
+$link: $theme-c;
+
 @import "../../node_modules/bulma/sass/utilities/derived-variables";
 $colors: mergeColorMaps($colors, (
   "secondary": ($secondary, $secondary-invert)
@@ -38,7 +42,6 @@ $colors: mergeColorMaps($colors, (
 $input-placeholder-color: $grey;
 $footer-background-color: $white;
 $navbar-breakpoint: $tablet;
-$widescreen-enabled: false;
 $fullhd-enabled: false;
 $radius-small: 6px;
 
@@ -52,7 +55,6 @@ address {
 footer {
   border-top: 1px solid $grey-lighter
 }
-section,
 aside,
 main {
   min-width: 1%;

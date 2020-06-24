@@ -2,19 +2,19 @@
 {% load drafthub_extras %}
 
 {% block meta %}
-  <title>drafthub: blog like a developer</title>
-  <meta name="title" content="drafthub: blog like a developer">
-  <meta name="description" content="Start your own developer blog using git and markdown and integrate the GitHub community">
+  <title>{{ page_title }}</title>
+  <meta name="title" content="{{ page_title }}">
+  <meta name="description" content="{{ page_description }}">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://drafthub-development.herokuapp.com/">
-  <meta property="og:title" content="drafthub: blog like a developer">
-  <meta property="og:description" content="Start your own developer blog using git and markdown and integrate the GitHub community">
-  <meta property="og:image" content="https://i.ibb.co/McvBBRT/drafthub-1.png">
+  <meta property="og:url" content="{{ page_url }}">
+  <meta property="og:title" content="{{ page_title }}">
+  <meta property="og:description" content="{{ page_description }}">
+  <meta property="og:image" content="{{ page_image }}">
   <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://drafthub-development.herokuapp.com/">
-  <meta property="twitter:title" content="drafthub: blog like a developer">
-  <meta property="twitter:description" content="Start your own developer blog using git and markdown and integrate the GitHub community">
-  <meta property="twitter:image" content="https://i.ibb.co/McvBBRT/drafthub-1.png">
+  <meta property="twitter:url" content="{{ page_url }}">
+  <meta property="twitter:title" content="{{ page_title }}">
+  <meta property="twitter:description" content="{{ page_description }}">
+  <meta property="twitter:image" content="{{ page_image }}">
 {% endblock meta %}
 
 
@@ -31,7 +31,7 @@
 {% endblock start %}
 
 
-{% block section %}
+{% block main %}
   {% if page_obj.has_previous is False %}
   <section aria-labelledby="mostPopular">
   <dh-heading id="mostPopular" >Most popular</dh-heading>
@@ -86,7 +86,7 @@
     </nav>
   </section>
 
-{% endblock section %}
+{% endblock main %}
 
 {% block aside %}
   <section aria-labelledby="mostActiveTopics">

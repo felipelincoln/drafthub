@@ -1,6 +1,7 @@
 // vue.js
 Vue.component('dh-search', {
   props: [
+    'value',
     'action',
     'placeholder',
   ],
@@ -9,10 +10,11 @@ Vue.component('dh-search', {
       :action="action"
       method="get">
       <b-input
-        aria-label="Search"
+        :value="value"
         name="q"
         :placeholder="placeholder"
-        type="search">
+        type="search"
+        aria-label="Search">
       </b-input>
     </form>
   `

@@ -1,25 +1,6 @@
 from django.shortcuts import render
+from drafthub.utils import BaseError
 
-
-class BaseError:
-    def __init__(self):
-        self.status = None
-        self.verbose = None
-        self.title = None
-        self.description = None
-        self.message = None
-        
-    @property
-    def context(self):
-        context = {
-            'status': self.status,
-            'verbose': self.verbose,
-            'title': self.title,
-            'description': self.description,
-            'message': self.message,
-        }
-
-        return context
 
 def error404_view(request, exception):
     error = BaseError()

@@ -1,128 +1,84 @@
-{% extends "core/base.html" %}
+{% extends 'core/base2.html' %}
 {% load drafthub_extras %}
 
-{% block search %}{{ search_input_value }}{% endblock search %}
-{% block content %}
+{% block meta %}
+  <title>{{ page_title }}</title>
+  <meta name="title" content="{{ page_title }}">
+  <meta name="description" content="{{ page_description }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ page_url }}">
+  <meta property="og:title" content="{{ page_title }}">
+  <meta property="og:description" content="{{ page_description }}">
+  <meta property="og:image" content="{{ page_image }}">
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="{{ page_url }}">
+  <meta property="twitter:title" content="{{ page_title }}">
+  <meta property="twitter:description" content="{{ page_description }}">
+  <meta property="twitter:image" content="{{ page_image }}">
+{% endblock meta %}
 
-<div class="container-lg my-5">
-	{% if search_content_tags %}
-	<div class="row">
-		<div class="col">
-			<h2>{{ search_content_tags.count }} tags found</h2>
-		</div>
-	</div>
-	<hr>
-	<div class="row">
-		{% for tag in search_content_tags %}
-			<div class="col-auto pr-0">
-				<h3 class=""><a href="{{ tag.get_absolute_url }}" class="badge badge-secondary">
-					{% if tag.icon %}
-					<i class="{{ tag.icon }}"></i>
-					{% endif %}
-					{{ tag }}
-					{{ tag.num_drafts }} (+{{ tag.tagged_drafts_last_activities }})
-					</a></h3>
-			</div>
-		{% endfor %}
-	</div>
-	<br>
-	{% endif %}
 
-	{% if search_content_blogs %}
-	<div class="row">
-		<div class="col">
-			<h2>{{ search_content_blogs.count }} blogs found</h2>
-		</div>
-	</div>
-	<hr>
-	<div class="row">
-		{% for blog in search_content_blogs %}
-			<div class="col-auto pr-0">
-				<h3 class=""><a href="{{ blog.get_absolute_url }}" class="badge badge-secondary">
-					{{ blog }}
-					</a></h3>
-			</div>
-		{% endfor %}
-	</div>
-	<br>
-	{% endif %}
 
-  <h2>{{ search_content.count }} results
-  {% if search_where == 'tags' %}
-    in tags
-    {% for tag in search_multi_who %}
-			<a href="/tag/{{ tag }}/" class="badge badge-secondary">{{ tag }}</a>
+{% block breadcrumb %}
+  <li class="is-hidden-mobile" aria-hidden="true">
+  </li>
+{% endblock breadcrumb %}
+
+{% block start %}
+  <div class="navbar-item">
+    <dh-search action="{% url 'search' %}" placeholder="Search"></dh-search>
+  </div>
+{% endblock start %}
+
+
+{% block main %}
+  <section aria-labelledby="searchResults">
+  <dh-heading id="searchResults" >Search results</dh-heading>
+    {% for draft in drafts_pop %}
+      <dh-article
+        title="{{ draft.title }}"
+        href="{{ draft.get_absolute_url }}"
+        author="{{ draft.blog }}"
+        blog="{{ draft.blog.get_absolute_url }}"
+        created="{{ draft.created|date:'M j' }}"
+        updated="{{ draft.updated|timesince|timesince_format }}"
+        datetime="{{ draft.created|date:'Y-m-d' }}"
+        src="{{ draft.image }}">
+        {% for tag in draft.tags.all %}
+          <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
+        {% endfor %}
+      </dh-article>
     {% endfor %}
-  {% elif search_where == 'blogs' or search_where == 'favorites' and search_who %}
-    in blogs
-    {% for blog in search_multi_who %}
-			<a href="#">{{ blog }}</a>
-    {% endfor %}
-    {% if search_where == 'favorites' %}
-    favorites
-    {% endif %}
-  {% endif %}
-  {% if search_what %}
-    for "{{ search_what|join:" " }}"
-  {% endif %}
-  </h2>
-	<hr>
+  <br>
+  <br>
+  </section>
+{% endblock main %}
 
-	{% if search_content|get_model_name == 'draft' %}
-		<div class="row row-cols-1 row-cols-md-2">
-			{% for draft in search_content %}
-			<div class="col mb-5">
-				<div class="card bg-light">
-					<div class="card-body">
-						<h5 class="card-title"><a class="inherit-color" href="{{ draft.get_absolute_url }}">{{ draft.title }}</a></h5>
-						<h6 class="card-subtitle mb-2 text-muted">
-							<a class="inherit-color" href="{{ draft.blog.get_absolute_url }}">{{ draft.blog }}</a>
-							, <a class="inherit-color" href="{{ draft.get_absolute_url }}">
-								{{ draft.created|date:"M d, Y" }}
-								{% if draft.updated %} (updated {{ draft.updated|date:"M d, Y" }}){% endif %}
-							</a></h6>
-						<p class="card-text">{{ draft.description }}</p>
-						{% for tag in draft.tags.all %}
-							<a href="{{ tag.get_absolute_url }}" class="card-link badge badge-pill badge-light border">
-								{% if tag.icon %}
-								<i class="{{ tag.icon }}"></i>
-								{% endif %}
-								{{ tag }}
-								</a>
-						{% endfor %}
-					</div>
-				</div>
-			</div>
-			{% endfor %}
-		</div>
+{% block aside %}
+  <section aria-labelledby="topicsFound">
+  <dh-heading id="topicsFound">Topics Found</dh-heading>
+  {% for tag in tags_pop %}
+    <p><a href="{{ tag.get_absolute_url }}">{{ forloop.counter }}. {{ tag }}</a></p>
+  {% endfor %}
+  </section>
 
-	{% elif search_content|get_model_name == 'tag' %}
-		<div class="row">
-			{% for tag in search_content %}
-				<div class="col-auto pr-0">
-					<h3 class=""><a href="{{ tag.get_absolute_url }}" class="badge badge-secondary">
-						{% if tag.icon %}
-						<i class="{{ tag.icon }}"></i>
-						{% endif %}
-						{{ tag }}
-						{{ tag.num_drafts }} (+{{ tag.tagged_drafts_last_activities }})
-						</a></h3>
-				</div>
-			{% endfor %}
-		</div>
-	{% elif search_content|get_model_name == 'blog' %}
-		<div class="row">
-			{% for blog in search_content %}
-				<div class="col-auto pr-0">
-					<h3 class=""><a href="{{ blog.get_absolute_url }}" class="badge badge-secondary">
-						{{ blog }}
-						</a></h3>
-				</div>
-			{% endfor %}
-		</div>
-	{% endif %}
-
-	
-</div>
-
-{% endblock content %}
+  <br>
+  <br>
+  <section aria-labelledby="blogsFound">
+  <dh-heading id="blogsFound">Blogs found</dh-heading>
+  {% for draft in drafts_updated %}
+    <dh-article
+      title="{{ draft.title }}"
+      href="{{ draft.get_absolute_url }}"
+      author="{{ draft.blog }}"
+      blog="{{ draft.blog.get_absolute_url }}"
+      latest="{{ draft.updated|timesince|timesince_format }}"
+      tiny="true"
+      src="{{ draft.image }}">
+      {% for tag in draft.tags.all %}
+        <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
+      {% endfor %}
+    </dh-article>
+  {% endfor %}
+  </section>
+{% endblock aside %}

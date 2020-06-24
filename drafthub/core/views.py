@@ -7,6 +7,7 @@ from django.views.generic import ListView, UpdateView, TemplateView
 from django.shortcuts import get_object_or_404
 
 from drafthub.draft.models import Draft, Tag
+from drafthub.utils import PageContext
 
 
 Blog = get_user_model()
@@ -54,12 +55,14 @@ class HomeView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        page_meta = PageContext()
         context.update({
             'tags_pop': Tag.objects.all()[:10],
             'drafts_pop': Draft.objects.all()[:5],
             'drafts_random': Draft.objects.get_random_queryset(3),
             'drafts_updated': Draft.objects.filter(
                 updated__isnull=False).order_by('-updated')[:5],
+             **page_meta.context,
         })
 
         return context
@@ -235,8 +238,12 @@ class SearchListView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         search = SearchEngine(self.request)
+        page_meta = PageContext()
+        page_meta.title = 'search results for: ' + ' '.join(search.what)
+
         context.update({
              **search.results,
-             **search.metadata
+             **search.metadata,
+             **page_meta.context
         })
         return context

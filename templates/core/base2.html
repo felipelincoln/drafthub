@@ -17,10 +17,10 @@
 <div id="app">
   <b-navbar class="container" :close-on-click="false">
     <template slot="brand">
-      <div class="navbar-item" style="padding-right:0">
+      <div class="navbar-item pr-0">
         <nav class="breadcrumb" aria-label="breadcrumbs">
           <ul style="align-items:center;">
-            <li><a href="{% url 'home' %}" class="is-active dh-a has-text-weight-semibold has-text-grey" aria-current="page">DRAFTHUB</a></li>
+            <li><a href="{% url 'home' %}" class="is-active" aria-current="page">DRAFTHUB</a></li>
             {% block breadcrumb %}{% endblock breadcrumb %}
           </ul>
         </nav>
@@ -51,8 +51,7 @@
         <b-button
           tag="a"
           href="{% url 'social:begin' 'github' %}?next={{ request.path }}"
-          type="is-primary"
-          size="is-small"
+          type="is-dark"
           icon-left="github"
           aria-label="Sign in using your GitHub account">
           <strong>Sign in</strong>
@@ -78,7 +77,7 @@
   <footer class="mt-6 footer">
     <div class="has-text-centered">
       <p>
-        <a class="dh-a" target="_blank" href="https://github.com/drafthub/drafthub">drafthub</a> is an open-source project by <a class="dh-a" target="_blank" href="https://github.com/felipelincoln">Felipe Lincoln</a>
+        <a target="_blank" href="https://github.com/drafthub/drafthub">drafthub</a> is an open-source project by <a target="_blank" href="https://github.com/felipelincoln">Felipe Lincoln</a>
       </p>
     </div>
   </footer>

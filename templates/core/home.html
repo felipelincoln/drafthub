@@ -2,24 +2,22 @@
 {% load drafthub_extras %}
 
 {% block meta %}
-  <!-- Primary Meta Tags -->
   <title>drafthub: blog like a developer</title>
   <meta name="title" content="drafthub: blog like a developer">
   <meta name="description" content="Start your own developer blog using git and markdown and integrate the GitHub community">
-
-  <!-- Open Graph / Facebook --> <meta property="og:type" content="website">
+  <meta property="og:type" content="website">
   <meta property="og:url" content="https://drafthub-development.herokuapp.com/">
   <meta property="og:title" content="drafthub: blog like a developer">
   <meta property="og:description" content="Start your own developer blog using git and markdown and integrate the GitHub community">
   <meta property="og:image" content="https://i.ibb.co/McvBBRT/drafthub-1.png">
-
-  <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://drafthub-development.herokuapp.com/">
   <meta property="twitter:title" content="drafthub: blog like a developer">
   <meta property="twitter:description" content="Start your own developer blog using git and markdown and integrate the GitHub community">
   <meta property="twitter:image" content="https://i.ibb.co/McvBBRT/drafthub-1.png">
 {% endblock meta %}
+
+
 
 {% block breadcrumb %}
   <li class="is-hidden-mobile" aria-hidden="true">
@@ -48,7 +46,7 @@
         datetime="{{ draft.created|date:'Y-m-d' }}"
         src="{{ draft.image }}">
         {% for tag in draft.tags.all %}
-          <dh-tag href="{{ tag.get_absolute_url }}">{{ tag }}</dh-tag>
+          <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
         {% endfor %}
       </dh-article>
     {% endfor %}
@@ -57,7 +55,7 @@
   <br>
   {% endif %}
 
-  <dh-heading>LATEST ARTICLES</dh-heading>
+  <dh-heading>Latest articles</dh-heading>
   {% for draft in drafts_new %}
     <dh-article
       title="{{ draft.title }}"
@@ -67,7 +65,7 @@
       latest="{{ draft.created|timesince|timesince_format }}"
       src="{{ draft.image }}">
       {% for tag in draft.tags.all %}
-        <dh-tag href="{{ tag.get_absolute_url }}">{{ tag }}</dh-tag>
+        <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
       {% endfor %}
     </dh-article>
   {% endfor %}
@@ -76,31 +74,27 @@
   <br>
   <nav
     style="justify-content:center"
-    class="pagination is-small"
+    class="pagination"
     aria-label="pagination">
     {% if page_obj.has_previous %}
       <a rel="prev" href="?page={{ page_obj.previous_page_number }}" class="pagination-previous px-2">Previous</a>
-    {% else %}
-      <a class="pagination-previous px-2" disabled>Previous</a>
     {% endif %}
 
     {% if page_obj.has_next %}
       <a rel="next" href="?page={{ page_obj.next_page_number }}" class="pagination-next px-2">Next</a>
-    {% else %}
-      <a class="pagination-next px-2" disabled>Next</a>
     {% endif %}
   </nav>
 {% endblock section %}
 
 {% block aside %}
-  <dh-heading>MOST ACTIVE TOPICS</dh-heading>
+  <dh-heading>Most active topics</dh-heading>
   {% for tag in tags_pop %}
     <p><a href="{{ tag.get_absolute_url }}">{{ forloop.counter }}. {{ tag }}</a></p>
   {% endfor %}
 
   <br>
   <br>
-  <dh-heading>LAST UPDATED</dh-heading>
+  <dh-heading>Last updated</dh-heading>
   {% for draft in drafts_updated %}
     <dh-article
       title="{{ draft.title }}"
@@ -111,16 +105,14 @@
       tiny="true"
       src="{{ draft.image }}">
       {% for tag in draft.tags.all %}
-        <dh-tag href="{{ tag.get_absolute_url }}">
-          {{ tag }}
-        </dh-tag>
+        <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
       {% endfor %}
     </dh-article>
   {% endfor %}
 
   <br>
   <br>
-  <dh-heading>LAST CHANCE TO READ</dh-heading>
+  <dh-heading>Last chance to read</dh-heading>
   {% for draft in drafts_random %}
     <dh-article
       title="{{ draft.title }}"
@@ -132,9 +124,7 @@
       tiny="true"
       src="{{ draft.image }}">
       {% for tag in draft.tags.all %}
-        <dh-tag href="{{ tag.get_absolute_url }}">
-          {{ tag }}
-        </dh-tag>
+        <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
       {% endfor %}
     </dh-article>
   {% endfor %}

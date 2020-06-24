@@ -6,18 +6,10 @@
 
 // Initial variables
 $family-sans-serif: "Inter", BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-
 $green: #45BF17;
 $yellow: #D0A81C;
 $red: #D25C46;
 $blue: #097ABA;
-
-$grey-dark: #545454;
-$grey: #646464;
-
-$theme-a: #3EBEB0;
-$theme-b: #F0BF1A;
-$theme-c: #07A5DE;
 @import "../../node_modules/bulma/sass/utilities/initial-variables";
 
 // Derived variables
@@ -26,24 +18,16 @@ $warning: $yellow;
 $danger: $red;
 $info: $blue;
 
-$dark: $grey-dark;
-
-$primary: $theme-a;
-$secondary: $theme-b;
-$secondary-invert: #FFF;
-$link: $theme-c;
-
+$link: $grey-dark;
+$link-focus-border: $grey-dark;
 @import "../../node_modules/bulma/sass/utilities/derived-variables";
-$colors: mergeColorMaps($colors, (
-  "secondary": ($secondary, $secondary-invert)
-));
 
 // Generic variables
-$input-placeholder-color: $grey;
-$footer-background-color: $white;
 $navbar-breakpoint: $tablet;
 $fullhd-enabled: false;
-$radius-small: 6px;
+$input-placeholder-color: $text-light;
+$footer-background-color: $white;
+$radius: 12px;
 
 // CSS
 ::placeholder {
@@ -52,9 +36,12 @@ $radius-small: 6px;
 address {
   font-style: normal;
 }
+/*
+
 footer {
   border-top: 1px solid $grey-lighter
 }
+*/
 aside,
 main {
   min-width: 1%;
@@ -62,10 +49,19 @@ main {
 .image {
   height: auto !important;
 }
+img {
+  border-radius: $radius;
+}
+a {
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+
 
 // Import custom components
 @import "components/dh";
-
 
 // Import Bulma and Buefy
 @import "../../node_modules/bulma/bulma.sass";

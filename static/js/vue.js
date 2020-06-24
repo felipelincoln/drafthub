@@ -12,7 +12,6 @@ Vue.component('dh-search', {
         aria-label="Search"
         name="q"
         :placeholder="placeholder"
-        size="is-small"
         type="search">
       </b-input>
     </form>
@@ -27,8 +26,8 @@ Vue.component('dh-heading', {
     <h1
       :id="id"
       style="text-transform:uppercase"
-      class="has-text-weight-bold has-text-grey-light pb-5 is-size-7">
-      <slot></slot>
+      class="pb-5">
+      <strong><slot></slot></strong>
     </h1>
   `
 });
@@ -58,7 +57,7 @@ Vue.component('dh-article', {
         <p class="image is-48x48">
           <a :href="href">
             <img
-              style="border-radius:6px;max-height:48px;"
+              style="max-height:48px;"
               :src="src"
               @load="isLoading=false"
               :alt="alt">
@@ -70,7 +69,7 @@ Vue.component('dh-article', {
         <p class="image is-128x128 is-hidden-mobile">
           <a :href="href">
             <img
-              style="border-radius:6px;max-height:128px;"
+              style="max-height:128px;"
               :src="src"
               @load="isLoading=false"
               :alt="alt">
@@ -80,7 +79,7 @@ Vue.component('dh-article', {
         <p class="image is-64x64 is-hidden-tablet">
           <a :href="href">
             <img
-              style="border-radius:6px;max-height:64px;"
+              style="max-height:64px;"
               :src="src"
               @load="isLoading=false"
               :alt="alt">
@@ -89,13 +88,13 @@ Vue.component('dh-article', {
         </p>
       </figure>
       <div class="media-content" style="min-width:20%">
-        <p class="is-size-7">
-          <a rel="author" class="dh-a" :href="blog">
-          <address class="is-inline">
-            [[ author ]],
-          </address>
+        <p><small>
+          <a rel="author" :href="blog">
+            <address class="is-inline">
+              [[ author ]],
+            </address>
           </a>
-          <a v-if="!latest" class="dh-a" :href="href">
+          <a v-if="!latest" :href="href">
             <time pubdate :datetime="datetime">
               [[ created ]]
             </time>
@@ -103,16 +102,16 @@ Vue.component('dh-article', {
               (updated <time v-html="updated">[[ updated ]]</time> ago)
             </span>
           </a>
-          <a v-if="latest" class="dh-a" :href="href">
+          <a v-if="latest" :href="href">
             <time v-html="latest">[[ latest ]]</time> ago
           </a>
-        </p>
-        <h2 style="word-wrap: break-word; text-transform: capitalize;">
-          <a class="dh-a has-text-weight-medium has-text-dark" :href="href">
+        </small></p>
+        <h2 style="word-wrap: break-word;text-transform: capitalize;">
+          <a :href="href"><strong>
             [[ title ]]
-          </a>
+          </strong></a>
         </h2>
-        <p v-if="!tiny"><slot></slot></p>
+        <p v-if="!tiny"><small><slot></slot></small></p>
       </div>
     </article>
   `,
@@ -122,21 +121,6 @@ Vue.component('dh-article', {
     }
   }
 });
-
-Vue.component('dh-tag', {
-  props: [
-    'href',
-  ],
-    template: `
-      <a
-        rel="tag"
-        class="dh-a is-size-7"
-        :href="href">
-        #<slot></slot>
-      </a>
-    `
-});
-
 
 const dbTags = ['python', 'albion-pvp', 'django'];
 

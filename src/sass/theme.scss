@@ -40,11 +40,7 @@ aside,
 main {
   min-width: 1%;
 }
-.image {
-  height: auto !important;
-}
 img {
-  border-radius: $radius;
   overflow: hidden;
   word-wrap: break-word;
 }
@@ -52,6 +48,10 @@ a {
   &:hover {
     text-decoration: underline;
   }
+}
+
+.image img {
+  border-radius: $radius;
 }
 #ariaLink {
   position: absolute;
@@ -67,5 +67,13 @@ a {
 }
 
 // Import Bulma and Buefy
-@import "../../node_modules/bulma/bulma.sass";
+@import "../../node_modules/bulma/sass/utilities/_all";
+@import "./_minireset";
+@import "./_generic";
+@import "../../node_modules/bulma/sass/elements/_all";
+@import "../../node_modules/bulma/sass/form/_all";
+@import "../../node_modules/bulma/sass/components/_all";
+@import "../../node_modules/bulma/sass/grid/_all";
+@import "../../node_modules/bulma/sass/helpers/_all";
+@import "../../node_modules/bulma/sass/layout/_all";
 @import "../../node_modules/buefy/src/scss/buefy";

@@ -60,6 +60,7 @@ Vue.component('dh-article', {
         <p class="image is-48x48">
           <a :href="href">
             <img
+              v-show="!isLoading"
               style="max-height:48px;"
               :src="src"
               @load="isLoading=false"
@@ -73,6 +74,7 @@ Vue.component('dh-article', {
         <p class="image is-128x128 is-hidden-mobile">
           <a :href="href">
             <img
+              v-show="!isLoading"
               style="max-height:128px;"
               :src="src"
               @load="isLoading=false"
@@ -84,6 +86,7 @@ Vue.component('dh-article', {
         <p class="image is-64x64 is-hidden-tablet">
           <a :href="href">
             <img
+              v-show="!isLoading"
               style="max-height:64px;"
               :src="src"
               @load="isLoading=false"
@@ -140,7 +143,7 @@ Vue.component('articlecover', {
     }
   },
   template: `
-    <figure>
+    <figure class="image">
       <b-skeleton
         v-if="imgPlaceholder"
         height="300px"

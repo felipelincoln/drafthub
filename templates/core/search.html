@@ -21,8 +21,9 @@
 
 
 {% block breadcrumb %}
-  <li class="is-hidden-mobile" aria-hidden="true">
-  </li>
+  <li><a href="{% url 'home' %}">DRAFTHUB</a></li>
+  <li class="is-active"><a href="#" aria-current="page">Search</a></li>
+  <li class="is-hidden-mobile" aria-hidden="true"></li>
 {% endblock breadcrumb %}
 
 {% block start %}

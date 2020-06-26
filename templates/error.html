@@ -15,16 +15,15 @@
 {% endblock meta %}
 
 {% block breadcrumb %}
-  <li class="is-hidden-mobile">
-    <a><dh-search action="{% url 'search' %}" placeholder="Search"></dh-action></a>
-  </li>
+  <li class="is-active"><a aria-current="page" href="{% url 'home' %}">DRAFTHUB</a></li>
+  <li class="is-hidden-mobile" aria-hidden="true"></li>
 {% endblock breadcrumb %}
 
-{% block burgerbreadcrumb %}
-  <b-navbar-item tag="div" class="is-hidden-tablet">
-    <dh-search action="{% url 'search' %}" placeholder="Search"></dh-action>
-  </b-navbar-item>
-{% endblock burgerbreadcrumb %}
+{% block start %}
+  <div class="navbar-item">
+    <dh-search action="{% url 'search' %}" placeholder="Search"></dh-search>
+  </div>
+{% endblock start %}
 
 {% block container %}
   <div class="px-3" style="text-align:center;flex-grow:1;">

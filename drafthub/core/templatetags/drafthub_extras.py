@@ -43,14 +43,14 @@ markdown_kwargs = {
 }
 bleach_kwargs = {
     'tags': [
-	'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-	'b', 'i', 'strong', 'em', 'tt', 'del',
-	'p', 'br',
-	'span', 'div', 'blockquote', 'code', 'hr', 'pre',
-	'ul', 'ol', 'li', 'dd', 'dt', 'dl',
-	'img',
-	'a',
-	'sub', 'sup',
+        'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+        'b', 'i', 'strong', 'em', 'tt', 'del',
+        'p', 'br',
+        'span', 'div', 'blockquote', 'code', 'hr', 'pre',
+        'ul', 'ol', 'li', 'dd', 'dt', 'dl',
+        'img',
+        'a',
+        'sub', 'sup',
         'table', 'thead','td', 'tr', 'th', 'tbody',
         'input', # allow only type, checked and disabled
     ],
@@ -119,3 +119,7 @@ def get_model_name(queryset):
 @register.filter
 def timesince_format(value):
     return value.split(',')[0]
+
+@register.filter
+def js_bool(value):
+    return str(bool(value)).lower()

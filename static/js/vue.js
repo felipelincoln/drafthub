@@ -241,7 +241,7 @@ Vue.component('inputtags', {
     }
   },
   template: `
-    <b-field label="Enter some tags">
+    <div>
       <b-taginput
         :value="value"
         :data="filteredTags"
@@ -255,7 +255,7 @@ Vue.component('inputtags', {
         @typing="getFilteredTags">
       </b-taginput>
     <input type="hidden" :name="name" :value="getTagsInputValue">
-    </b-field>
+    </div>
   `,
   methods: {
     getFilteredTags: function(text){
@@ -284,6 +284,13 @@ vm = new Vue({
       image: '',
       title: '',
       description: '',
+      formError: {
+        tags: true,
+        url: true,
+        image: true,
+        title: true,
+        description: true,
+      }
     },
   },
 })

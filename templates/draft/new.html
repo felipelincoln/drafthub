@@ -34,74 +34,86 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 {% block container %}
 <div style="border: 1px solid #ddd" class="box">
+  <form
+    action=""
+    method="POST"
+    autocomplete="off"
+    @keydown.enter.prevent>
 
-
-
-  <form action="" method="POST">
     {% csrf_token %}
+    <b-field label="Title" :type="{'is-danger': newArticle.formError.title}">
+      <b-input
+        @input="newArticle.formError.title=false"
+        v-model="newArticle.title"
+        autocomplete="off"
+        name="title"
+        type="text">
+      </b-input>
+      <template v-if="newArticle.formError.title" slot="message">
+        {{ form.title.errors }}
+      </template>
+    </b-field>
 
-
-
-    <p>
-    <label>
-      title
-      <input v-model="newArticle.title" name="title" type="text">
-    </label>
-    {{ form.title.errors }}</p>
-
-    <label>
-      description
-      <input v-model="newArticle.description" name="description" type="text">
-    </label>
-    {{ form.title.errors }}</p>
-
-    <p>
-    <label>
-      github url
-      <input v-model.lazy="newArticle.url" name="github_url" type="text">
-    </label>
-    {{ form.github_url.errors }}</p>
-
-    <p>
-    <label>
-      image
-      <input v-model.lazy="newArticle.image" name="image" type="text">
-    </label>
-    {{ form.image.errors }}</p>
-
-  oasdokasd
-    oasdkokads
-
-    <input type="submit" value="Publish">
-
-
-   <inputtags :api="newArticle.apiTags" name="tags" v-model="newArticle.tags"></inputtags>
-   {{ form.tags.errors }}</p>
+    <b-field label="Description" :type="{'is-danger': newArticle.formError.description}">
+      <b-input
+        @input.once="newArticle.formError.description=false"
+        v-model="newArticle.description"
+        name="description"
+        type="textarea"
+        autocomplete="off">
+      </b-input>
+      <template v-if="newArticle.formError.description" slot="message">
+        {{ form.description.errors }}
+      </template>
+    </b-field>
+    <b-field label="Tags" :type="{'is-danger': newArticle.formError.tags}">
+      <inputtags
+        @input.once="newArticle.formError.tags=false"
+        :api="newArticle.apiTags"
+        name="tags"
+        v-model="newArticle.tags">
+      </inputtags>
+      <template v-if="newArticle.formError.tags" slot="message">
+        {{ form.tags.errors }}
+      </template>
+    </b-field>
+    <b-field label="GitHub url" :type="{'is-danger': newArticle.formError.url}">
+      <b-input
+        @input.once="newArticle.formError.url=false"
+        :value="newArticle.url"
+        @change.native="newArticle.url = $event.target.value"
+        name="github_url"
+        autocomplete="off">
+      </b-input>
+      <template v-if="newArticle.formError.url" slot="message">
+        {{ form.github_url.errors }}
+      </template>
+    </b-field>
+    <b-field label="Cover image" :type="{'is-danger': newArticle.formError.image}">
+      <b-input 
+        @input.once="newArticle.formError.image=false"
+        :value="newArticle.image"
+        @change.native="newArticle.image = $event.target.value"
+        name="image"
+        autocomplete="off">
+      </b-input>
+      <template v-if="newArticle.formError.image" slot="message">
+        {{ form.image.errors }}
+      </template>
+    </b-field>
+    <p class="control">
+      <button class="button is-dark">Submit</button>
+    </p>
   </form>
-
-
-        </div>
-
-
-
+</div>
 {% endblock container %}
+
+
+
+
+
 
 {% block main %}
         <preview :url="newArticle.url"></preview>
@@ -153,8 +165,14 @@ vm.newArticle.url = "{{ form.github_url.value|default:'' }}";
 vm.newArticle.image = "{{ form.image.value|default:'' }}";
 strTags = "{{ form.tags.value|default:'' }}";
 if (strTags){
-  vm.newArticle.tags = strTags.split(', ')
-}
+  vm.newArticle.tags = strTags.split(', ');
+};
+
+vm.newArticle.formError.url = {{ form.github_url.errors|js_bool }};
+vm.newArticle.formError.title = {{ form.title.errors|js_bool }};
+vm.newArticle.formError.description = {{ form.description.errors|js_bool }};
+vm.newArticle.formError.image = {{ form.image.errors|js_bool }};
+vm.newArticle.formError.tags = {{ form.tags.errors|js_bool }};
 
 
 fetch('/api/topics')

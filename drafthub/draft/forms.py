@@ -52,33 +52,29 @@ class DraftForm(forms.ModelForm):
         if not tag_str:
             return None
 
-        def match(pattern):
-            re_match = re.compile(pattern)
-            return re_match.match(tag_str)
+        tags = [tag for tag in tag_str.split(', ')]
+        bad_tags_len = [tag for tag in tags if len(tag) > 25]
+        bad_tags_name = [tag for tag in tags if slugify(tag) in ['', '-']]
+        bad_size = len(tags) > 5
 
-        re_comma = '^(?:[\w\s-]+,){0,}(?:[\w\s-]+)?,?$'
-        re_size = '^(?:[\w\s-]+,){0,4}(?:[\w\s-]+)?,?$'
-        re_length = '^(?:[\w\s-]{1,25},){0,4}(?:[\w\s-]{1,25})?,?$'
-        invalid_re_space = '.*,\s,.*'
+        errors = []
+        if bad_tags_len:
+            errors.append(
+                'Tags must have less than 26 characters: '
+                +', '.join(bad_tags_len)
+            )
+        if bad_tags_name:
+            errors.append(
+                'Invalid tag name: '
+                +', '.join(bad_tags_name)
+            )
+        if bad_size:
+            errors.append('Maximum of 5 tags allowed')
 
-        check_comma = match(re_comma)
-        check_length = match(re_length)
-        check_size = match(re_size)
-        check_invalid_space = match(invalid_re_space)
+        if errors:
+            raise ValidationError(errors)
 
-        if not check_comma:
-            raise ValidationError('tags can only contain words and numbers')
-
-        if not check_size:
-            raise ValidationError('you can only use 5 tags')
-        
-        if not check_length:
-            raise ValidationError('each tag must have less than 26 characters')
-
-        if check_invalid_space:
-            raise ValidationError('tag name not valid')
-
-        return [slugify(tag) for tag in tag_str.split(',')]
+        return [slugify(tag) for tag in tags]
 
 
     class Meta:

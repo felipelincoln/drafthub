@@ -47,6 +47,7 @@
       <b-input
         @input="newArticle.formError.title=false"
         v-model="newArticle.title"
+        maxlength="{{ form.fields.title.max_length }}"
         autocomplete="off"
         name="title"
         type="text">
@@ -60,6 +61,7 @@
       <b-input
         @input.once="newArticle.formError.description=false"
         v-model="newArticle.description"
+        maxlength="{{ form.fields.description.max_length }}"
         name="description"
         type="textarea"
         autocomplete="off">
@@ -68,7 +70,9 @@
         {{ form.description.errors }}
       </template>
     </b-field>
-    <b-field label="Tags" :type="{'is-danger': newArticle.formError.tags}">
+    <b-field
+      label="Tags"
+      :type="{'is-danger': newArticle.formError.tags}">
       <inputtags
         @input.once="newArticle.formError.tags=false"
         :api="newArticle.apiTags"
@@ -79,24 +83,30 @@
         {{ form.tags.errors }}
       </template>
     </b-field>
+
     <b-field label="GitHub url" :type="{'is-danger': newArticle.formError.url}">
       <b-input
         @input.once="newArticle.formError.url=false"
         :value="newArticle.url"
         @change.native="newArticle.url = $event.target.value"
         name="github_url"
+        type="url"
+        :use-html5-validation="false"
         autocomplete="off">
       </b-input>
       <template v-if="newArticle.formError.url" slot="message">
         {{ form.github_url.errors }}
       </template>
     </b-field>
+
     <b-field label="Cover image" :type="{'is-danger': newArticle.formError.image}">
       <b-input 
         @input.once="newArticle.formError.image=false"
         :value="newArticle.image"
         @change.native="newArticle.image = $event.target.value"
         name="image"
+        type="url"
+        :use-html5-validation="false"
         autocomplete="off">
       </b-input>
       <template v-if="newArticle.formError.image" slot="message">

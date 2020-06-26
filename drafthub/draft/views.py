@@ -414,8 +414,20 @@ class TagListView(ListView):
 
         return context
 
+
+# API
+from django.http import JsonResponse
+
 def tag_list_api(request):
-    from django.http import JsonResponse
     tag_list = [tag.name for tag in Tag.objects.all()]
     return JsonResponse({'tags': tag_list})
+
+def render_markdown_api(request):
+    from .utils import markdown
+    try:
+        url = request.GET.get('url')
+        return JsonResponse({'markdown': markdown(url)})
+    except:
+        return JsonResponse({'markdown': 'Data could not be retrieved.'})
+        
     

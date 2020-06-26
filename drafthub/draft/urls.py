@@ -7,10 +7,10 @@ from .views import (
     FavoriteRedirectView,
     TagListView,
 )
-from .views import tag_list_api
+from .views import tag_list_api, render_markdown_api
 
 
-draft_urlpatterns = [ #this will all be ajax
+draft_urlpatterns = [
     path('',DraftDetailView.as_view(),name='draft'),
     path('edit/', DraftUpdateView.as_view(), name='draft-edit'),
     path('delete/', DraftDeleteView.as_view(), name='draft-delete'),
@@ -25,9 +25,14 @@ draft_urlpatterns = [ #this will all be ajax
     path('favorite/', FavoriteRedirectView.as_view(), name='draft-favorite'),
 ]
 
+api_urlpatterns = [
+    path('topics/', tag_list_api),
+    path('markdown/', render_markdown_api),
+]
+
 urlpatterns = [
     path('new/', DraftCreateView.as_view(), name='new'),
     path('topics/<str:tag>/', TagListView.as_view(), name='tag'),
-    path('api/tags/', tag_list_api),
+    path('api/', include(api_urlpatterns)),
     path('<str:blog>/<slug:slug>/', include(draft_urlpatterns)),
 ]

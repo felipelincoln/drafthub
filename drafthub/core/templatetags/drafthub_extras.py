@@ -64,8 +64,8 @@ register = template.Library()
 
 @register.filter
 @mark_safe
-def markdown(instance):
-    url = instance.github_url
+def markdown(github_url):
+    url = github_url
     data = get_data_from_url(url)
 
     raw = data['raw']

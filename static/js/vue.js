@@ -1,4 +1,3 @@
-// vue.js
 Vue.component('dh-search', {
   props: [
     'value',
@@ -20,6 +19,7 @@ Vue.component('dh-search', {
   `
 });
 
+
 Vue.component('dh-heading', {
   props: [
     'id',
@@ -33,6 +33,7 @@ Vue.component('dh-heading', {
     </h1>
   `
 });
+
 
 Vue.component('dh-article', {
   delimiters: ['[[', ']]'],
@@ -128,28 +129,158 @@ Vue.component('dh-article', {
 });
 
 
-let dbTags = [];
-//fetch('http://127.0.0.1:8000/api/tags')
-fetch('https://drafthub-development.herokuapp.com/api/tags')
-  .then(res => res.json())
-  .then(data => dbTags = data.tags)
-
-
-new Vue({
-  el: '#app',
-  delimiters: ['[[', ']]'],
-  data:{
-    tags: [],
-    filteredTags: dbTags,
+Vue.component('articlecover', {
+  props: {
+    'src': '',
   },
+  data: function(){
+    return {
+      imgLoading: false,
+      imgPlaceholder: true,
+    }
+  },
+  template: `
+    <figure>
+      <b-skeleton
+        v-if="imgPlaceholder"
+        height="300px"
+        :animated="imgLoading">
+      </b-skeleton>
+      <img
+        v-show="!imgPlaceholder"
+        :src="src"
+        @load="imgPlaceholder=false"
+        @error="imgNotLoaded()">
+    </figure>
+  `,
   methods: {
-    getFilteredTags(text){
-      this.filteredTags = dbTags.filter((item) => {
+    imgNotLoaded: function(){
+      console.log('img not loaded@');
+      this.imgLoading = false;
+      this.imgPlaceholder = true;
+    },
+  },
+  watch: {
+    src: function(){
+      console.log('image changed');
+      this.imgLoading = true;
+      this.imgPlaceholder = true;
+    },
+  },
+});
+
+
+
+Vue.component('preview', {
+  delimiters: ['[[', ']]'],
+  props: {
+    url: '',
+  },
+  data: function(){
+    return {
+      mdLoading: false,
+      mdPlaceholder: true,
+      mdPreview: '',
+    }
+  },
+  template: `
+    <div v-if="mdPlaceholder">
+      <b-skeleton
+        width="80%"
+        height="40px"
+        :animated="mdLoading">
+      </b-skeleton>
+      <b-skeleton
+        width="100%"
+        :count="2"
+        :animated="mdLoading">
+      </b-skeleton>
+      <br>
+      <b-skeleton
+        width="100%"
+        :count="3"
+        :animated="mdLoading">
+      </b-skeleton>
+    </div>
+    <div v-else class="markdown-body" v-html="mdPreview">
+      [[ mdPreview ]]
+    </div>
+  `,
+  watch: {
+    url: function(){
+      console.log('url changed');
+      this.mdLoading = true;
+      this.mdPlaceholder = true;
+      fetch(`/api/markdown/?url=${this.url}`)
+        .then(res => res.json())
+        .then((data) => {
+            this.mdLoading = false;
+            if(data.markdown != "Data could not be retrieved."){
+              this.mdPlaceholder = false;
+              this.mdPreview = data.markdown;
+              console.log('updating', this.$el);
+              this.$nextTick(() => window.renderMathInElement(this.$el));
+            }
+        })
+    },
+  },
+});
+
+Vue.component('inputtags', {
+  props: [
+    'api',
+    'value',
+    'name',
+  ],
+  data: function(){
+    return {
+      filteredTags: [],
+    }
+  },
+  template: `
+    <b-field label="Enter some tags">
+      <b-taginput
+        :value="value"
+        :data="filteredTags"
+        autocomplete
+        :allow-new="true"
+        maxlength="25"
+        maxtags="5"
+        icon="label"
+        placeholder="Add a tag"
+        @input="$emit('input', $event)"
+        @typing="getFilteredTags">
+      </b-taginput>
+    <input type="hidden" :name="name" :value="getTagsInputValue">
+    </b-field>
+  `,
+  methods: {
+    getFilteredTags: function(text){
+      this.filteredTags = this.api.filter((item) => {
         return item.indexOf(text.toLowerCase()) >= 0
       })
     },
-    getTagsInputValue(){
-      return this.tags.join(', ')
+  },
+  computed: {
+    getTagsInputValue: function(){
+      return this.value.join(', ')
+    },
+  },
+});
+
+
+
+vm = new Vue({
+  el: '#app',
+  delimiters: ['[[', ']]'],
+  data: {
+    newArticle: {
+      apiTags: [],
+      tags: [],
+      url: '',
+      image: '',
+      title: '',
+      description: '',
     },
   },
 })

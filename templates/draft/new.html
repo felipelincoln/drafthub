@@ -32,52 +32,117 @@
 {% endblock start %}
 
 
-{% block main %}
-	<form action="" method="POST">
-		{% csrf_token %}
+{% block container %}
+<div style="border: 1px solid #ddd" class="box">
+
+{{ form.github_url.value }}
+
+
+  <form action="" method="POST">
+    {% csrf_token %}
+
+
+
     <p>
     <label>
       title
-      <input name="title" type="text">
+      <input v-model="newArticle.title" name="title" type="text">
+    </label>
+    {{ form.title.errors }}</p>
+
+    <label>
+      description
+      <input v-model="newArticle.description" name="description" type="text">
     </label>
     {{ form.title.errors }}</p>
 
     <p>
     <label>
       github url
-      <input name="github_url" type="text">
+      <input v-model.lazy="newArticle.url" name="github_url" type="text">
     </label>
     {{ form.github_url.errors }}</p>
 
     <p>
     <label>
       image
-      <input name="image" type="text">
+      <input v-model.lazy="newArticle.image" name="image" type="text">
     </label>
     {{ form.image.errors }}</p>
 
-    <input type="hidden" name="tags" :value="getTagsInputValue()">
-    {{ form.tags.errors }}</p>
+  oasdokasd
+    oasdkokads
 
     <input type="submit" value="Publish">
-	</form>
 
-  <b-field label="Enter some tags">
-            <b-taginput
-                v-model="tags"
-                :data="filteredTags"
-                autocomplete
-                :allow-new="true"
-                maxlength="25"
-                maxtags="5"
-                icon="label"
-                placeholder="Add a tag"
-                @typing="getFilteredTags">
-            </b-taginput>
-        </b-field>
-        <pre style="max-height: 400px"><b>Tags:</b>[[ getTagsInputValue() ]]</pre>
+
+   <inputtags :api="newArticle.apiTags" name="tags" v-model="newArticle.tags"></inputtags>
+   {{ form.tags.errors }}</p>
+  </form>
+
+
+        </div>
 
 
 
+{% endblock container %}
 
+{% block main %}
+        <preview :url="newArticle.url"></preview>
 {% endblock main %}
+
+
+{% block aside %}
+  <articlecover :src="newArticle.image"></articlecover>
+
+        <p><small>
+          <a rel="author" href="#">
+            <address class="is-inline">
+              felipelincoln,
+            </address>
+          </a>
+          <a href="#">
+            <time pubdate>
+              {% now "M j"%}
+            </time>
+          </a>  
+        </small></p>
+        <h2 style="word-wrap: break-word;text-transform: capitalize;">
+          <a href="#"><strong>
+            [[ newArticle.title ]]
+          </strong></a>
+            <b-skeleton v-if="!newArticle.title" :animated="false" height="19px"></b-skeleton>
+        </h2>
+        <p><small>
+          <a v-for="tag in newArticle.tags" href="#">#[[ tag ]] </a>
+        </small></p>
+        <br>
+        <p><b>tl;dr</b> 
+          [[ newArticle.description ]]
+            <b-skeleton v-if="!newArticle.description" :animated="false"></b-skeleton>
+            <b-skeleton v-if="!newArticle.description" :animated="false"></b-skeleton>
+            <b-skeleton v-if="!newArticle.description" :animated="false"></b-skeleton>
+            <b-skeleton v-if="!newArticle.description" :animated="false"></b-skeleton>
+        </p>
+  
+{% endblock aside %}
+
+
+{% block script %}
+<script>
+
+vm.newArticle.title = "{{ form.title.value|default:'' }}";
+vm.newArticle.description = "{{ form.description.value|default:'' }}";
+vm.newArticle.url = "{{ form.github_url.value|default:'' }}";
+vm.newArticle.image = "{{ form.image.value|default:'' }}";
+strTags = "{{ form.tags.value|default:'' }}";
+if (strTags){
+  vm.newArticle.tags = strTags.split(', ')
+}
+
+
+fetch('/api/topics')
+  .then(res => res.json())
+  .then(data => vm.newArticle.apiTags = data.tags)
+</script>
+{% endblock script %}

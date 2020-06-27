@@ -17,13 +17,12 @@ class Draft(models.Model):
     )
     tags = models.ManyToManyField(
         'draft.tag',
-        blank=True,
         related_name='tagged_drafts',
     )
     github_url = models.URLField(max_length=1100)
     title = models.CharField(max_length=100)
     slug = models.SlugField(max_length=107)
-    description = models.TextField(max_length=200, blank=True)
+    description = models.TextField(max_length=200)
     image = models.URLField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(blank=True, null=True)

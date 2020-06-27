@@ -4,7 +4,7 @@ from .models import Draft
 
 
 class DraftForm(forms.ModelForm):
-    tags = forms.CharField(max_length=200, required=False)
+    tags = forms.CharField(max_length=200)
 
 
     def __init__(self, request, *args, **kwargs):

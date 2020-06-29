@@ -251,7 +251,7 @@ Vue.component('inputtags', {
         maxtags="5"
         icon="label"
         placeholder="Add a tag"
-        :confirm-key-codes="[13, 188, 9]"
+        :confirm-key-codes="[13, 188, 9, 229]"
         @input="$emit('input', $event)"
         @typing="getFilteredTags">
       </b-taginput>

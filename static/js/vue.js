@@ -243,6 +243,7 @@ Vue.component('inputtags', {
   template: `
     <div>
       <b-taginput
+        ref="taginput"
         :value="value"
         :data="filteredTags"
         autocomplete
@@ -251,8 +252,9 @@ Vue.component('inputtags', {
         maxtags="5"
         icon="label"
         placeholder="Add a tag"
-        :confirm-key-codes="[13, 188, 9, 229]"
+        :confirm-key-codes="[13, 188, 9]"
         @input="$emit('input', $event)"
+        @remove="showDeletedTag"
         @typing="getFilteredTags">
       </b-taginput>
     <input type="hidden" :name="name" :value="getTagsInputValue">
@@ -263,6 +265,13 @@ Vue.component('inputtags', {
       this.filteredTags = this.api.filter((item) => {
         return item.indexOf(text.toLowerCase()) >= 0
       })
+    },
+    showDeletedTag: function(){
+      let deletedTag = this.value.filter(x => !vm.newArticle.tags.includes(x));
+      let lastTag = this.value.slice(-1)[0];
+      if(deletedTag == lastTag){
+        this.$refs.taginput.newTag = lastTag;
+      }
     },
   },
   computed: {

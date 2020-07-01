@@ -1,14 +1,16 @@
 FROM node:14 AS node
 
-RUN mkdir -p /code/src/sass
+RUN mkdir -p /code/src
 WORKDIR /code
 
 COPY package.json package-lock.json /code/
 RUN npm install
 
-COPY ./src/sass /code/src/sass
+COPY ./src /code/src
+COPY ./webpack.config.js /code
 
 RUN npm run css-build
+RUN npm run js-build
 
 
 FROM python:3.7
@@ -24,6 +26,6 @@ RUN pip install pipenv
 RUN pipenv install --system
 
 COPY . /code/
-COPY --from=node /code/static/css/ /code/static/css/
+COPY --from=node /code/static /code/static
 
 RUN python manage.py collectstatic --no-input

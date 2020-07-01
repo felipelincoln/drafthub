@@ -5,7 +5,7 @@ services:
         build:
             context: .
             target: node
-        command: npm start
+        command: npm run build
         volumes:
             - .:/code
             - /code/node_modules

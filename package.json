@@ -8,14 +8,21 @@
   },
   "scripts": {
     "css-build": "node-sass --omit-source-map-url src/sass/theme.scss static/css/theme.css",
-    "css-watch": "npm run css-build -- --watch",
-    "start": "npm run css-build & npm run css-watch"
+    "css-watch": "npm run css-build && npm run css-build -- --watch",
+    "js-build": "webpack --entry ./src/vue/main.js --output static/js/bundle.js",
+    "js-watch": "npm run js-build -- --watch",
+    "build": "npm run css-watch & npm run js-watch"
   },
   "author": "",
   "license": "MIT",
   "devDependencies": {
     "buefy": "^0.8.20",
     "bulma": "^0.9.0",
-    "node-sass": "^4.14.1"
+    "node-sass": "^4.14.1",
+    "vue": "^2.6.11",
+    "vue-loader": "^15.9.3",
+    "vue-template-compiler": "^2.6.11",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12"
   }
 }

@@ -13,11 +13,11 @@ window.vm = new Vue({
   el: '#app',
   delimiters: ['[[', ']]'],
   components: {
-    'dh-search': searchform,
-    'dh-heading': heading1,
-    'dh-article': draftarticle,
-    'articlecover': coverpreview,
-    'preview': markdownpreview,
+    'searchform': searchform,
+    'heading1': heading1,
+    'draftarticle': draftarticle,
+    'coverpreview': coverpreview,
+    'markdownpreview': markdownpreview,
     'inputtags': inputtags,
   },
   data: {

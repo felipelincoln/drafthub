@@ -28,7 +28,7 @@
 
 {% block start %}
   <div class="navbar-item">
-    <dh-search action="{% url 'search' %}" placeholder="Search"></dh-search>
+    <searchform action="{% url 'search' %}" placeholder="Search"></searchform>
   </div>
 {% endblock start %}
 
@@ -36,9 +36,9 @@
 {% block main %}
   {% if page_obj.has_previous is False %}
   <section aria-labelledby="mostPopular">
-  <dh-heading id="mostPopular" >Most popular</dh-heading>
+  <heading1 id="mostPopular" >Most popular</heading1>
     {% for draft in drafts_pop %}
-      <dh-article
+      <draftarticle
         title="{{ draft.title }}"
         href="{{ draft.get_absolute_url }}"
         author="{{ draft.blog }}"
@@ -50,7 +50,7 @@
         {% for tag in draft.tags.all %}
           <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
         {% endfor %}
-      </dh-article>
+      </draftarticle>
     {% endfor %}
   <br>
   <br>
@@ -58,9 +58,9 @@
   {% endif %}
 
   <section role="feed" aria-labelledby="latestArticle">
-    <dh-heading id="latestArticle">Latest articles</dh-heading>
+    <heading1 id="latestArticle">Latest articles</heading1>
     {% for draft in drafts_new %}
-      <dh-article
+      <draftarticle
         title="{{ draft.title }}"
         href="{{ draft.get_absolute_url }}"
         author="{{ draft.blog }}"
@@ -70,7 +70,7 @@
         {% for tag in draft.tags.all %}
           <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
         {% endfor %}
-      </dh-article>
+      </draftarticle>
     {% endfor %}
     <br>
     <br>
@@ -92,7 +92,7 @@
 
 {% block aside %}
   <section aria-labelledby="mostActiveTopics">
-  <dh-heading id="mostActiveTopics">Most active topics</dh-heading>
+  <heading1 id="mostActiveTopics">Most active topics</heading1>
   {% for tag in tags_pop %}
     <p><a href="{{ tag.get_absolute_url }}">{{ forloop.counter }}. {{ tag }}</a></p>
   {% endfor %}
@@ -101,9 +101,9 @@
   <br>
   <br>
   <section aria-labelledby="lastUpdated">
-  <dh-heading id="lastUpdated">Last updated</dh-heading>
+  <heading1 id="lastUpdated">Last updated</heading1>
   {% for draft in drafts_updated %}
-    <dh-article
+    <draftarticle
       title="{{ draft.title }}"
       href="{{ draft.get_absolute_url }}"
       author="{{ draft.blog }}"
@@ -114,16 +114,16 @@
       {% for tag in draft.tags.all %}
         <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
       {% endfor %}
-    </dh-article>
+    </draftarticle>
   {% endfor %}
   </section>
 
   <br>
   <br>
   <section aria-labelledby="lastChanceToRead">
-  <dh-heading id="lastChanceToRead">Last chance to read</dh-heading>
+  <heading1 id="lastChanceToRead">Last chance to read</heading1>
   {% for draft in drafts_random %}
-    <dh-article
+    <draftarticle
       title="{{ draft.title }}"
       href="{{ draft.get_absolute_url }}"
       author="{{ draft.blog }}"
@@ -135,7 +135,7 @@
       {% for tag in draft.tags.all %}
         <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
       {% endfor %}
-    </dh-article>
+    </draftarticle>
   {% endfor %}
   </section>
 {% endblock aside %}

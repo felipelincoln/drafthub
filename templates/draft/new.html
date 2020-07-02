@@ -28,7 +28,7 @@
 
 {% block start %}
   <div class="navbar-item">
-    <dh-search action="{% url 'search' %}" placeholder="Search"></dh-search>
+    <searchform action="{% url 'search' %}" placeholder="Search"></searchform>
   </div>
 {% endblock start %}
 
@@ -128,12 +128,12 @@
 
 
 {% block main %}
-        <preview :url="newArticle.url"></preview>
+        <markdownpreview :url="newArticle.url"></markdownpreview>
 {% endblock main %}
 
 
 {% block aside %}
-  <articlecover :src="newArticle.image"></articlecover>
+  <coverpreview :src="newArticle.image"></coverpreview>
 
         <p><small>
           <a rel="author" href="#">

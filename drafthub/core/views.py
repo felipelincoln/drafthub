@@ -97,13 +97,12 @@ class SearchEngine:
 
     multi_who = []
 
-    def __init__(self, request, q='', who=None, where=None):
+    def __init__(self, request, q, who=None, where=None):
         self.request = request
         self.q = q
         self.who = who
         self.where = where
-
-        self.what = q.split()
+        self.what = q.split() if q else []
 
         self._set_content_from_where()
         self._filter_content_from_who()

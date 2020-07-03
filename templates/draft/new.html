@@ -22,7 +22,7 @@
 
 {% block breadcrumb %}
   <li><a href="{% url 'home' %}">DRAFTHUB</a></li>
-  <li><a href="#" aria-current="page">New</a></li>
+  <li class="is-active"><a aria-current="page">New</a></li>
   <li class="is-hidden-mobile" aria-hidden="true"></li>
 {% endblock breadcrumb %}
 
@@ -121,10 +121,6 @@
   </form>
 </div>
 {% endblock container %}
-
-
-
-
 
 
 {% block main %}

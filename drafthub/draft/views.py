@@ -10,6 +10,7 @@ from django.utils import timezone
 
 from .models import Draft, Tag, Comment, Activity
 from .forms import DraftForm
+from drafthub.utils import PageContext
 
 
 Blog = get_user_model()
@@ -37,6 +38,14 @@ class AccessRequired:
 class DraftCreateView(LoginRequiredMixin, CreateView):
     form_class = DraftForm
     template_name = 'draft/new.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        page_meta = PageContext(self.request)
+        page_meta.title = 'publishing a new article'
+
+        context.update(page_meta.context)
+        return context
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

@@ -32,44 +32,14 @@
   </div>
 {% endblock start %}
 
-
-
-{% block container %}
-<div style="border: 1px solid #ddd" class="box">
+{% block main %}
   <form
+    class="is-hidden-tablet"
     action=""
     method="POST"
     autocomplete="off"
     @keydown.enter.prevent>
-
     {% csrf_token %}
-    <b-field label="Title" :type="{'is-danger': newArticle.formError.title}">
-      <b-input
-        @input="newArticle.formError.title=false"
-        v-model="newArticle.title"
-        maxlength="{{ form.fields.title.max_length }}"
-        autocomplete="off"
-        name="title"
-        type="text">
-      </b-input>
-      <template v-if="newArticle.formError.title" slot="message">
-        {{ form.title.errors }}
-      </template>
-    </b-field>
-
-    <b-field label="Description" :type="{'is-danger': newArticle.formError.description}">
-      <b-input
-        @input.once="newArticle.formError.description=false"
-        v-model="newArticle.description"
-        maxlength="{{ form.fields.description.max_length }}"
-        name="description"
-        type="textarea"
-        autocomplete="off">
-      </b-input>
-      <template v-if="newArticle.formError.description" slot="message">
-        {{ form.description.errors }}
-      </template>
-    </b-field>
 
     <b-field label="GitHub url" :type="{'is-danger': newArticle.formError.url}">
       <b-input
@@ -100,6 +70,36 @@
         {{ form.image.errors }}
       </template>
     </b-field>
+    <coverpreview :src="newArticle.image"></coverpreview>
+
+    <b-field label="Title" :type="{'is-danger': newArticle.formError.title}">
+      <b-input
+        @input="newArticle.formError.title=false"
+        v-model="newArticle.title"
+        maxlength="{{ form.fields.title.max_length }}"
+        autocomplete="off"
+        name="title"
+        type="text">
+      </b-input>
+      <template v-if="newArticle.formError.title" slot="message">
+        {{ form.title.errors }}
+      </template>
+    </b-field>
+
+    <b-field label="Description" :type="{'is-danger': newArticle.formError.description}">
+      <b-input
+        @input.once="newArticle.formError.description=false"
+        v-model="newArticle.description"
+        maxlength="{{ form.fields.description.max_length }}"
+        name="description"
+        type="textarea"
+        rows="7"
+        autocomplete="off">
+      </b-input>
+      <template v-if="newArticle.formError.description" slot="message">
+        {{ form.description.errors }}
+      </template>
+    </b-field>
 
     <b-field
       label="Tags"
@@ -116,51 +116,98 @@
     </b-field>
 
     <p class="control">
-      <button class="button is-dark">Submit</button>
+      <button class="button is-dark">Publish</button>
     </p>
   </form>
-</div>
-{% endblock container %}
-
-
-{% block main %}
-        <markdownpreview :url="newArticle.url"></markdownpreview>
+  <markdownpreview :url="newArticle.url"></markdownpreview>
 {% endblock main %}
 
-
 {% block aside %}
-  <coverpreview :src="newArticle.image"></coverpreview>
+  <form
+    action=""
+    method="POST"
+    autocomplete="off"
+    @keydown.enter.prevent>
+    {% csrf_token %}
 
-        <p><small>
-          <a rel="author" href="#">
-            <address class="is-inline">
-              felipelincoln,
-            </address>
-          </a>
-          <a href="#">
-            <time pubdate>
-              {% now "M j"%}
-            </time>
-          </a>  
-        </small></p>
-        <h2 style="word-wrap: break-word;text-transform: capitalize;">
-          <a href="#"><strong>
-            [[ newArticle.title ]]
-          </strong></a>
-            <b-skeleton v-if="!newArticle.title" :animated="false" height="19px"></b-skeleton>
-        </h2>
-        <p><small>
-          <a v-for="tag in newArticle.tags" href="#">#[[ tag ]] </a>
-        </small></p>
-        <br>
-        <p><b>tl;dr</b> 
-          [[ newArticle.description ]]
-            <b-skeleton v-if="!newArticle.description" :animated="false"></b-skeleton>
-            <b-skeleton v-if="!newArticle.description" :animated="false"></b-skeleton>
-            <b-skeleton v-if="!newArticle.description" :animated="false"></b-skeleton>
-            <b-skeleton v-if="!newArticle.description" :animated="false"></b-skeleton>
-        </p>
-  
+    <b-field label="GitHub url" :type="{'is-danger': newArticle.formError.url}">
+      <b-input
+        @input.once="newArticle.formError.url=false"
+        :value="newArticle.url"
+        @change.native="newArticle.url = $event.target.value"
+        name="github_url"
+        type="url"
+        :use-html5-validation="false"
+        autocomplete="off">
+      </b-input>
+      <template v-if="newArticle.formError.url" slot="message">
+        {{ form.github_url.errors }}
+      </template>
+    </b-field>
+
+    <b-field label="Cover image" :type="{'is-danger': newArticle.formError.image}">
+      <b-input 
+        @input.once="newArticle.formError.image=false"
+        :value="newArticle.image"
+        @change.native="newArticle.image = $event.target.value"
+        name="image"
+        type="url"
+        :use-html5-validation="false"
+        autocomplete="off">
+      </b-input>
+      <template v-if="newArticle.formError.image" slot="message">
+        {{ form.image.errors }}
+      </template>
+    </b-field>
+    <coverpreview :src="newArticle.image"></coverpreview>
+
+    <b-field label="Title" :type="{'is-danger': newArticle.formError.title}">
+      <b-input
+        @input="newArticle.formError.title=false"
+        v-model="newArticle.title"
+        maxlength="{{ form.fields.title.max_length }}"
+        autocomplete="off"
+        name="title"
+        type="text">
+      </b-input>
+      <template v-if="newArticle.formError.title" slot="message">
+        {{ form.title.errors }}
+      </template>
+    </b-field>
+
+    <b-field label="Description" :type="{'is-danger': newArticle.formError.description}">
+      <b-input
+        @input.once="newArticle.formError.description=false"
+        v-model="newArticle.description"
+        maxlength="{{ form.fields.description.max_length }}"
+        name="description"
+        type="textarea"
+        rows="7"
+        autocomplete="off">
+      </b-input>
+      <template v-if="newArticle.formError.description" slot="message">
+        {{ form.description.errors }}
+      </template>
+    </b-field>
+
+    <b-field
+      label="Tags"
+      :type="{'is-danger': newArticle.formError.tags}">
+      <inputtags
+        @input.once="newArticle.formError.tags=false"
+        :api="newArticle.apiTags"
+        name="tags"
+        v-model="newArticle.tags">
+      </inputtags>
+      <template v-if="newArticle.formError.tags" slot="message">
+        {{ form.tags.errors }}
+      </template>
+    </b-field>
+
+    <p class="control">
+      <button class="button is-dark">Publish</button>
+    </p>
+  </form>
 {% endblock aside %}
 
 

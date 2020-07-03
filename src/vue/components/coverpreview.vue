@@ -1,8 +1,8 @@
 <template>
-  <figure class="image">
+  <figure class="image mb-3">
     <b-skeleton
       v-if="imgPlaceholder"
-      height="300px"
+      height="200px"
       :animated="imgLoading">
     </b-skeleton>
     <img

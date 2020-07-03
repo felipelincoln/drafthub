@@ -34,6 +34,14 @@
 
 
 {% block main %}
+  <section class="is-hidden-tablet" aria-labelledby="mostActiveTopicsMobile">
+    <heading1 id="mostActiveTopicsMobile">Most active topics</heading1>
+    {% for tag in tags_pop %}
+      <p><a href="{{ tag.get_absolute_url }}">{{ forloop.counter }}. {{ tag }}</a></p>
+    {% endfor %}
+  </section>
+  <br>
+  <br>
   {% if page_obj.has_previous is False %}
   <section aria-labelledby="mostPopular">
   <heading1 id="mostPopular" >Most popular</heading1>
@@ -92,50 +100,50 @@
 
 {% block aside %}
   <section aria-labelledby="mostActiveTopics">
-  <heading1 id="mostActiveTopics">Most active topics</heading1>
-  {% for tag in tags_pop %}
-    <p><a href="{{ tag.get_absolute_url }}">{{ forloop.counter }}. {{ tag }}</a></p>
-  {% endfor %}
+    <heading1 id="mostActiveTopics">Most active topics</heading1>
+    {% for tag in tags_pop %}
+      <p><a href="{{ tag.get_absolute_url }}">{{ forloop.counter }}. {{ tag }}</a></p>
+    {% endfor %}
   </section>
+  <br>
+  <br>
 
-  <br>
-  <br>
   <section aria-labelledby="lastUpdated">
-  <heading1 id="lastUpdated">Last updated</heading1>
-  {% for draft in drafts_updated %}
-    <draftarticle
-      title="{{ draft.title }}"
-      href="{{ draft.get_absolute_url }}"
-      author="{{ draft.blog }}"
-      blog="{{ draft.blog.get_absolute_url }}"
-      latest="{{ draft.updated|timesince|timesince_format }}"
-      tiny="true"
-      src="{{ draft.image }}">
-      {% for tag in draft.tags.all %}
-        <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
-      {% endfor %}
-    </draftarticle>
-  {% endfor %}
+    <heading1 id="lastUpdated">Last updated</heading1>
+    {% for draft in drafts_updated %}
+      <draftarticle
+        title="{{ draft.title }}"
+        href="{{ draft.get_absolute_url }}"
+        author="{{ draft.blog }}"
+        blog="{{ draft.blog.get_absolute_url }}"
+        latest="{{ draft.updated|timesince|timesince_format }}"
+        tiny="true"
+        src="{{ draft.image }}">
+        {% for tag in draft.tags.all %}
+          <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
+        {% endfor %}
+      </draftarticle>
+    {% endfor %}
   </section>
+  <br>
+  <br>
 
-  <br>
-  <br>
   <section aria-labelledby="lastChanceToRead">
-  <heading1 id="lastChanceToRead">Last chance to read</heading1>
-  {% for draft in drafts_random %}
-    <draftarticle
-      title="{{ draft.title }}"
-      href="{{ draft.get_absolute_url }}"
-      author="{{ draft.blog }}"
-      blog="{{ draft.blog.get_absolute_url }}"
-      created="{{ draft.created|date:'M j'}}"
-      updated="{{ draft.updated|timesince|timesince_format }}"
-      tiny="true"
-      src="{{ draft.image }}">
-      {% for tag in draft.tags.all %}
-        <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
-      {% endfor %}
-    </draftarticle>
-  {% endfor %}
+    <heading1 id="lastChanceToRead">Last chance to read</heading1>
+    {% for draft in drafts_random %}
+      <draftarticle
+        title="{{ draft.title }}"
+        href="{{ draft.get_absolute_url }}"
+        author="{{ draft.blog }}"
+        blog="{{ draft.blog.get_absolute_url }}"
+        created="{{ draft.created|date:'M j'}}"
+        updated="{{ draft.updated|timesince|timesince_format }}"
+        tiny="true"
+        src="{{ draft.image }}">
+        {% for tag in draft.tags.all %}
+          <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
+        {% endfor %}
+      </draftarticle>
+    {% endfor %}
   </section>
 {% endblock aside %}

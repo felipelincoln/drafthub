@@ -175,7 +175,7 @@ import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
 sentry_sdk.init(
-    dsn="https://cfd7b305f82846c3ace859c0ed819c8f@o415334.ingest.sentry.io/5306263",
+    dsn="https://03c458ab845541e584ff834d9d05c389@o415439.ingest.sentry.io/5306538",
     integrations=[DjangoIntegration()],
 
     # If you wish to associate users to errors (assuming you are using

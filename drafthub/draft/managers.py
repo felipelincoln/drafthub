@@ -35,9 +35,9 @@ class DraftManager(models.Manager):
 
     def get_random_queryset(self, n):
         from random import randint
-        count = self.model.objects.all().count() -1
+        count = self.model.objects.all().count()
         rand = randint(0, count)
-        queryset = self.all()[rand:rand+1]
+        queryset = self.all()[rand:rand+1] # interval yields queryset
 
         while len(queryset) < min(n, count):
             rand = randint(0, count)

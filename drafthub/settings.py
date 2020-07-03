@@ -168,3 +168,17 @@ DATABASES['default'].update(db_from_env)
 
 # CSRF view
 CSRF_FAILURE_VIEW = 'drafthub.views.error403csrf_view'
+
+
+# Sentry
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+sentry_sdk.init(
+    dsn="https://cfd7b305f82846c3ace859c0ed819c8f@o415334.ingest.sentry.io/5306263",
+    integrations=[DjangoIntegration()],
+
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True
+)

@@ -37,6 +37,14 @@ drafthub.urls module
    :undoc-members:
    :show-inheritance:
 
+drafthub.utils module
+---------------------
+
+.. automodule:: drafthub.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 drafthub.views module
 ---------------------
 

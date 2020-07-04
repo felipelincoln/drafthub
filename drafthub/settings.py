@@ -11,7 +11,7 @@ SOCIAL_AUTH_GITHUB_SECRET = os.environ.get('SOCIAL_AUTH_GITHUB_SECRET')
 
 if ENVIRONMENT == 'production':
     DEBUG = 0
-    ALLOWED_HOSTS = ['drafthub-development.herokuapp.com',] # change b4 merge
+    ALLOWED_HOSTS = ['drafthub.herokuapp.com',] # change b4 merge
     SECURE_BROWSER_XSS_FILTER = True
     X_FRAME_OPTIONS = 'DENY'
     SECURE_SSL_REDIRECT = True

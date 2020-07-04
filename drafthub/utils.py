@@ -17,7 +17,7 @@ class BaseError:
 
 class PageContext:
     request = None
-    url = 'https://drafthub-development.herokuapp.com' #change before merge
+    url = 'https://drafthub.herokuapp.com' #change before merge
 
     def __init__(self, request):
         self.request = request

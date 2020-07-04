@@ -1,76 +1,136 @@
-{% extends 'core/base.html' %}
+{% extends 'core/base2.html' %}
 {% load drafthub_extras %}
-{% block content %}
 
-	<div class="container-lg">
-		<div class="row">
-			<div class="col">
-				<h2>Trending tags</h2>
-			</div>
-		</div>
-		<hr>
-		<div class="row">
-			{% for tag in home_tags %}
-				<div class="col-auto pr-0">
-					<h3 class=""><a href="{{ tag.get_absolute_url }}" class="badge badge-secondary">
-						{% if tag.icon %}
-						<i class="{{ tag.icon }}"></i>
-						{% endif %}
-						{{ tag }}
-						</a></h3>
-				</div>
-			{% endfor %}
-		</div>
-	</div>
-
-	<div class="container-lg my-5">
-		<div class="row">
-			<div class="col">
-				<h2>Trending articles</h2>
-			</div>
-		</div>
-		<hr>
-		<div class="row row-cols-1 row-cols-md-2">
-			{% for draft in home_drafts %}
-			<div class="col mb-5">
-				<div class="card bg-light">
-					<div class="card-body">
-						<h5 class="card-title"><a class="inherit-color" href="{{ draft.get_absolute_url }}">{{ draft.title }}</a></h5>
-						<h6 class="card-subtitle mb-2 text-muted">
-							<a class="inherit-color" href="{{ draft.blog.get_absolute_url }}">{{ draft.blog }}</a>
-							, <a class="inherit-color" href="{{ draft.get_absolute_url }}">
-								{{ draft.created|date:"M d, Y" }}
-								{% if draft.updated %} (updated {{ draft.updated|date:"M d, Y" }}){% endif %}
-							</a></h6>
-						<p class="card-text">{{ draft.abstract }}</p>
-						{% for tag in draft.tags.all %}
-							<a href="{{ tag.get_absolute_url }}" class="card-link badge badge-pill badge-light border">
-								{% if tag.icon %}
-								<i class="{{ tag.icon }}"></i>
-								{% endif %}
-								{{ tag }}
-								</a>
-						{% endfor %}
-					</div>
-				</div>
-			</div>
-			{% endfor %}
-		</div>
+{% block meta %}
+  <title>{{ page_title }}</title>
+  <meta name="title" content="{{ page_title }}">
+  <meta name="description" content="{{ page_description }}">
+  <meta name="author" content="{{ page_author }}">
+  <meta name="keywords" content="{{ page_keywords }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ page_url }}">
+  <meta property="og:title" content="{{ page_title }}">
+  <meta property="og:description" content="{{ page_description }}">
+  <meta property="og:image" content="{{ page_image }}">
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="{{ page_url }}">
+  <meta property="twitter:title" content="{{ page_title }}">
+  <meta property="twitter:description" content="{{ page_description }}">
+  <meta property="twitter:image" content="{{ page_image }}">
+{% endblock meta %}
 
 
-	<nav aria-label="...">
-		<ul class="pagination ">
-			{% for page in page_obj.paginator.num_pages|count_range %}
-				{% if page == page_obj.number %}
-				<li class="page-item disabled"><a class="page-link" href="" tabindex="-1">{{ page }}</a></li>
-				{% else %}
-				<li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
-				{% endif %}
-			{% endfor %}
-		</ul>
-	</nav>
+
+{% block breadcrumb %}
+  <li><a aria-current="page" href="{% url 'home' %}">DRAFTHUB</a></li>
+  {{ block.super }}
+{% endblock breadcrumb %}
+
+{% block container %}
+<main style="flex:0 0 70%;" class="mb-6">
+  {% if page_obj.has_previous is False %}
+  <section aria-labelledby="mostPopular">
+  <heading1 id="mostPopular" >Most popular</heading1>
+    {% for draft in drafts_pop %}
+      <draftarticle
+        title="{{ draft.title }}"
+        href="{{ draft.get_absolute_url }}"
+        author="{{ draft.blog }}"
+        blog="{{ draft.blog.get_absolute_url }}"
+        created="{{ draft.created|date:'M j' }}"
+        updated="{{ draft.updated|timesince|timesince_format }}"
+        datetime="{{ draft.created|date:'Y-m-d' }}"
+        src="{{ draft.image }}">
+        {% for tag in draft.tags.all %}
+          <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
+        {% endfor %}
+      </draftarticle>
+    {% endfor %}
+  <br>
+  <br>
+  </section>
+  {% endif %}
+
+  <section role="feed" aria-labelledby="latestArticle">
+    <heading1 id="latestArticle">Latest articles</heading1>
+    {% for draft in drafts_new %}
+      <draftarticle
+        title="{{ draft.title }}"
+        href="{{ draft.get_absolute_url }}"
+        author="{{ draft.blog }}"
+        blog="{{ draft.blog.get_absolute_url }}"
+        latest="{{ draft.created|timesince|timesince_format }}"
+        src="{{ draft.image }}">
+        {% for tag in draft.tags.all %}
+          <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
+        {% endfor %}
+      </draftarticle>
+    {% endfor %}
+    <br>
+    <br>
+    <nav
+      style="justify-content:center"
+      class="pagination"
+      aria-label="pagination">
+      {% if page_obj.has_previous %}
+        <a rel="prev" href="?page={{ page_obj.previous_page_number }}" class="pagination-previous px-2">Previous</a>
+      {% endif %}
+
+      {% if page_obj.has_next %}
+        <a rel="next" href="?page={{ page_obj.next_page_number }}" class="pagination-next px-2">Next</a>
+      {% endif %}
+    </nav>
+  </section>
+</main>
 
 
-	</div>
+<aside role="complementary" style="flex:0 0 25%;">
+  <section aria-labelledby="mostActiveTopics">
+    <heading1 id="mostActiveTopics">Most active topics</heading1>
+    {% for tag in tags_pop %}
+      <p><a href="{{ tag.get_absolute_url }}">{{ forloop.counter }}. {{ tag }}</a></p>
+    {% endfor %}
+  </section>
+  <br>
+  <br>
 
-{% endblock content %}
+  <section aria-labelledby="lastUpdated">
+    <heading1 id="lastUpdated">Last updated</heading1>
+    {% for draft in drafts_updated %}
+      <draftarticle
+        title="{{ draft.title }}"
+        href="{{ draft.get_absolute_url }}"
+        author="{{ draft.blog }}"
+        blog="{{ draft.blog.get_absolute_url }}"
+        latest="{{ draft.updated|timesince|timesince_format }}"
+        tiny="true"
+        src="{{ draft.image }}">
+        {% for tag in draft.tags.all %}
+          <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
+        {% endfor %}
+      </draftarticle>
+    {% endfor %}
+  </section>
+  <br>
+  <br>
+
+  <section aria-labelledby="lastChanceToRead">
+    <heading1 id="lastChanceToRead">Last chance to read</heading1>
+    {% for draft in drafts_random %}
+      <draftarticle
+        title="{{ draft.title }}"
+        href="{{ draft.get_absolute_url }}"
+        author="{{ draft.blog }}"
+        blog="{{ draft.blog.get_absolute_url }}"
+        created="{{ draft.created|date:'M j'}}"
+        updated="{{ draft.updated|timesince|timesince_format }}"
+        tiny="true"
+        src="{{ draft.image }}">
+        {% for tag in draft.tags.all %}
+          <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
+        {% endfor %}
+      </draftarticle>
+    {% endfor %}
+  </section>
+</aside>
+{% endblock container %}

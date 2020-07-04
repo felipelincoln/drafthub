@@ -5,10 +5,12 @@ from datetime import timedelta
 
 from .metadata import TAG_METADATA
 
+pop_timedelta = timedelta(days=1)
+
 
 class DraftManager(models.Manager):
     def get_queryset(self):
-        last_week = timezone.now() - timedelta(days=7)
+        last_week = timezone.now() - pop_timedelta
         queryset = super().get_queryset().annotate(
             last_views=Count(
                 'activities',
@@ -31,14 +33,33 @@ class DraftManager(models.Manager):
 
         return queryset
 
+    def get_random_queryset(self, n):
+        from random import randint
+        count = self.model.objects.all().count()
+        rand = randint(0, count)
+        queryset = self.all()[rand:rand+1] # interval yields queryset
+
+        while len(queryset) < min(n, count):
+            rand = randint(0, count)
+            queryset |= self.all()[rand:rand+1]
+
+        return queryset
+
 
 class TagManager(models.Manager):
     def get_queryset(self):
-        last_week = timezone.now() - timedelta(days=7)
+        last_week = timezone.now() - pop_timedelta
         queryset = super().get_queryset().annotate(
+            pack=Case(
+                *[When(name=k, then=Value(v['pack'])) \
+                for k, v in TAG_METADATA.items()],
+                default=Value(''),
+                output_field=models.CharField()
+            ),
             icon=Case(
                 *[When(name=k, then=Value(v['icon'])) \
                 for k, v in TAG_METADATA.items()],
+                default=Value(''),
                 output_field=models.CharField()
             ),
             description=Case(

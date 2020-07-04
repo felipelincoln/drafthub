@@ -1,14 +1,17 @@
 TAG_METADATA = {
     'python': {
-        'icon': 'fab fa-python',
+        'pack': 'fab',
+        'icon': 'python',
         'description': 'Python is a programming language'
     },
     'albion-pvp':{
-        'icon': 'fas fa-skull-crossbones',
+        'pack': 'fas',
+        'icon': 'skull-crossbones',
         'description': ''
     },
     'competitive-programming':{
-        'icon': 'fas fa-trophy',
+        'pack': 'fas',
+        'icon': 'trophy',
         'description': ''
     },
 }

@@ -1,128 +1,66 @@
-{% extends "core/base.html" %}
+{% extends 'core/base2.html' %}
 {% load drafthub_extras %}
 
-{% block search %}{{ search_input_value }}{% endblock search %}
-{% block content %}
+{% block meta %}
+  <title>{{ page_title }}</title>
+  <meta name="title" content="{{ page_title }}">
+  <meta name="description" content="{{ page_description }}">
+  <meta name="author" content="{{ page_author }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ page_url }}">
+  <meta property="og:title" content="{{ page_title }}">
+  <meta property="og:description" content="{{ page_description }}">
+  <meta property="og:image" content="{{ page_image }}">
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="{{ page_url }}">
+  <meta property="twitter:title" content="{{ page_title }}">
+  <meta property="twitter:description" content="{{ page_description }}">
+  <meta property="twitter:image" content="{{ page_image }}">
+{% endblock meta %}
 
-<div class="container-lg my-5">
-	{% if search_content_tags %}
-	<div class="row">
-		<div class="col">
-			<h2>{{ search_content_tags.count }} tags found</h2>
-		</div>
-	</div>
-	<hr>
-	<div class="row">
-		{% for tag in search_content_tags %}
-			<div class="col-auto pr-0">
-				<h3 class=""><a href="{{ tag.get_absolute_url }}" class="badge badge-secondary">
-					{% if tag.icon %}
-					<i class="{{ tag.icon }}"></i>
-					{% endif %}
-					{{ tag }}
-					{{ tag.num_drafts }} (+{{ tag.tagged_drafts_last_activities }})
-					</a></h3>
-			</div>
-		{% endfor %}
-	</div>
-	<br>
-	{% endif %}
 
-	{% if search_content_blogs %}
-	<div class="row">
-		<div class="col">
-			<h2>{{ search_content_blogs.count }} blogs found</h2>
-		</div>
-	</div>
-	<hr>
-	<div class="row">
-		{% for blog in search_content_blogs %}
-			<div class="col-auto pr-0">
-				<h3 class=""><a href="{{ blog.get_absolute_url }}" class="badge badge-secondary">
-					{{ blog }}
-					</a></h3>
-			</div>
-		{% endfor %}
-	</div>
-	<br>
-	{% endif %}
 
-  <h2>{{ search_content.count }} results
-  {% if search_where == 'tags' %}
-    in tags
-    {% for tag in search_multi_who %}
-			<a href="/tag/{{ tag }}/" class="badge badge-secondary">{{ tag }}</a>
+{% block breadcrumb %}
+  <li><a href="{% url 'home' %}">DRAFTHUB</a></li>
+  <li class="is-active"><a aria-current="page">Search</a></li>
+  {{ block.super }}
+{% endblock breadcrumb %}
+
+{% block container %}
+<main style="flex:0 0 70%;" class="mb-6" aria-labelledby="searchResults">
+  <heading1 id="searchResults" >Articles: {{ search_content.count }}</heading1>
+    {% for draft in search_content %}
+      <draftarticle
+        title="{{ draft.title }}"
+        href="{{ draft.get_absolute_url }}"
+        author="{{ draft.blog }}"
+        blog="{{ draft.blog.get_absolute_url }}"
+        created="{{ draft.created|date:'M j' }}"
+        updated="{{ draft.updated|timesince|timesince_format }}"
+        datetime="{{ draft.created|date:'Y-m-d' }}"
+        src="{{ draft.image }}">
+        {% for tag in draft.tags.all %}
+          <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
+        {% endfor %}
+      </draftarticle>
     {% endfor %}
-  {% elif search_where == 'blogs' or search_where == 'favorites' and search_who %}
-    in blogs
-    {% for blog in search_multi_who %}
-			<a href="#">{{ blog }}</a>
+</main>
+
+<aside style="flex:0 0 25%;">
+  <section v-if="{{ search_content_tags.count }}"aria-labelledby="topicsFound">
+    <heading1 id="topicsFound">Topics: {{ search_content_tags.count }}</heading1>
+    {% for tag in search_content_tags %}
+      <p><a href="{{ tag.get_absolute_url }}">{{ tag }}</a></p>
     {% endfor %}
-    {% if search_where == 'favorites' %}
-    favorites
-    {% endif %}
-  {% endif %}
-  {% if search_what %}
-    for "{{ search_what|join:" " }}"
-  {% endif %}
-  </h2>
-	<hr>
+    <br>
+    <br>
+  </section>
 
-	{% if search_content|get_model_name == 'draft' %}
-		<div class="row row-cols-1 row-cols-md-2">
-			{% for draft in search_content %}
-			<div class="col mb-5">
-				<div class="card bg-light">
-					<div class="card-body">
-						<h5 class="card-title"><a class="inherit-color" href="{{ draft.get_absolute_url }}">{{ draft.title }}</a></h5>
-						<h6 class="card-subtitle mb-2 text-muted">
-							<a class="inherit-color" href="{{ draft.blog.get_absolute_url }}">{{ draft.blog }}</a>
-							, <a class="inherit-color" href="{{ draft.get_absolute_url }}">
-								{{ draft.created|date:"M d, Y" }}
-								{% if draft.updated %} (updated {{ draft.updated|date:"M d, Y" }}){% endif %}
-							</a></h6>
-						<p class="card-text">{{ draft.abstract }}</p>
-						{% for tag in draft.tags.all %}
-							<a href="{{ tag.get_absolute_url }}" class="card-link badge badge-pill badge-light border">
-								{% if tag.icon %}
-								<i class="{{ tag.icon }}"></i>
-								{% endif %}
-								{{ tag }}
-								</a>
-						{% endfor %}
-					</div>
-				</div>
-			</div>
-			{% endfor %}
-		</div>
-
-	{% elif search_content|get_model_name == 'tag' %}
-		<div class="row">
-			{% for tag in search_content %}
-				<div class="col-auto pr-0">
-					<h3 class=""><a href="{{ tag.get_absolute_url }}" class="badge badge-secondary">
-						{% if tag.icon %}
-						<i class="{{ tag.icon }}"></i>
-						{% endif %}
-						{{ tag }}
-						{{ tag.num_drafts }} (+{{ tag.tagged_drafts_last_activities }})
-						</a></h3>
-				</div>
-			{% endfor %}
-		</div>
-	{% elif search_content|get_model_name == 'blog' %}
-		<div class="row">
-			{% for blog in search_content %}
-				<div class="col-auto pr-0">
-					<h3 class=""><a href="{{ blog.get_absolute_url }}" class="badge badge-secondary">
-						{{ blog }}
-						</a></h3>
-				</div>
-			{% endfor %}
-		</div>
-	{% endif %}
-
-	
-</div>
-
-{% endblock content %}
+  <section v-if="{{ search_content_blogs.count }}" aria-labelledby="blogsFound">
+    <heading1 id="blogsFound">Blogs: {{ search_content_blogs.count }}</heading1>
+    {% for blog in search_content_blogs %}
+      <p><a href="{{ blog.get_absolute_url }}">{{ blog }}</a></p>
+    {% endfor %}
+  </section>
+</aside>
+{% endblock container %}

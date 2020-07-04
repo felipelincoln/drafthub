@@ -7,6 +7,7 @@ from django.views.generic import ListView, UpdateView, TemplateView
 from django.shortcuts import get_object_or_404
 
 from drafthub.draft.models import Draft, Tag
+from drafthub.utils import PageContext
 
 
 Blog = get_user_model()
@@ -38,27 +39,52 @@ class BlogListView(ListView):
             context['github'] = self.blog.social_auth.get().extra_data
         context.update({
             'blog': self.blog,
-            })
+        })
 
         return context
 
 
 class HomeView(ListView):
     model = Draft
-    context_object_name = 'home_drafts'
+    context_object_name = 'drafts_new'
     template_name = 'core/home.html'
-    paginate_by = 20
+    paginate_by = 3
+
+    def get_queryset(self):
+        return Draft.objects.all().order_by('-created')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['home_tags'] = Tag.objects.all()
+        page_meta = PageContext(self.request)
+        popular_tags_by_name = [tag.name for tag in Tag.objects.all()[:10]]
+        page_meta.keywords = ', '.join(popular_tags_by_name)
+        context.update({
+            'tags_pop': Tag.objects.all()[:10],
+            'drafts_pop': Draft.objects.all()[:5],
+            'drafts_random': Draft.objects.get_random_queryset(3),
+            'drafts_updated': Draft.objects.filter(
+                updated__isnull=False).order_by('-updated')[:5],
+             **page_meta.context,
+        })
 
         return context
 
 
 class LoginView(auth_views.LoginView):
-    template_name = 'core/login.html'
+    template_name = 'error.html'
     redirect_authenticated_user = True
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        page_meta = PageContext(self.request)
+        page_meta.title = 'drafthub: login required'
+        page_meta.error.status = 'To performe this action you must be logged in'
+        page_meta.error.verbose = ''
+        page_meta.error.message = 'Is it a bug?'
+        context.update({
+             **page_meta.context,
+        })
+
+        return context
 
 
 class SearchEngine:
@@ -71,18 +97,16 @@ class SearchEngine:
 
     multi_who = []
 
-    def __init__(self, request):
+    def __init__(self, request, q, who=None, where=None):
         self.request = request
-        if 'q' in request.GET.keys():
-            q = request.GET.get('q')
-            template = '^(?:(favorites|blogs|tags)(?:\.(\w+))?:)?\s*(.*?)\s*$'
-            re_object = re.compile(template)
-            self.where, self.who, self.what = re_object.match(q).groups()
-            self.what = self.what.split()
+        self.q = q
+        self.who = who
+        self.where = where
+        self.what = q.split() if q else []
 
-            self._set_content_from_where()
-            self._filter_content_from_who()
-            self._filter_content_from_what()
+        self._set_content_from_where()
+        self._filter_content_from_who()
+        self._filter_content_from_what()
 
 
     @property
@@ -90,19 +114,13 @@ class SearchEngine:
         content = {'search_content': self.content.all()[:self.MAX_RESULTS]}
 
         if not self.where:
-            q = self.request.GET.get('q')
-            self.request.GET._mutable = True
-            self.request.GET.__setitem__('q', f'tags:{q}')
-
-            tag_search = SearchEngine(self.request)
+            tag_search = SearchEngine(self.request, self.q, where='tags')
             tag_results = tag_search.results['search_content']
             content.update({'search_content_tags': tag_results})
 
-            self.request.GET.__setitem__('q', f'blogs:{q}')
-            blog_search = SearchEngine(self.request)
+            blog_search = SearchEngine(self.request, self.q, where='blogs')
             blog_results = blog_search.results['search_content']
             content.update({'search_content_blogs': blog_results})
-            self.request.GET._mutable = False
 
         return content
 
@@ -184,7 +202,7 @@ class SearchEngine:
             else:
                 querysets = (
                     [content.filter(title__icontains=x) for x in self.what]
-                    +[content.filter(abstract__icontains=x) for x in self.what]
+                    +[content.filter(description__icontains=x) for x in self.what]
                 )
 
                 if not self.where and not self.who:
@@ -211,6 +229,8 @@ class SearchEngine:
                 ),
             )
             content = content.order_by('-score', *content.query.order_by)
+        else:
+            content = Draft.objects.none()
         self.content = content
 
 
@@ -225,9 +245,14 @@ class SearchListView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        search = SearchEngine(self.request)
+        q = self.request.GET.get('q')
+        search = SearchEngine(self.request, q)
+        page_meta = PageContext(self.request)
+        page_meta.title = 'search results for: ' + ' '.join(search.what)
+
         context.update({
              **search.results,
-             **search.metadata
+             **search.metadata,
+             **page_meta.context
         })
         return context

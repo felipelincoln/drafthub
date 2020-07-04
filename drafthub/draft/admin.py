@@ -44,8 +44,8 @@ class DraftAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': (
-                'did', 'blog', 'github_url', 'title', 'slug', 'abstract',
-                'created', 'updated', 'tags',
+                'did', 'blog', 'github_url', 'title', 'slug', 'description',
+                'image', 'created', 'updated', 'tags',
             ),
         }),
         ('Activities', {

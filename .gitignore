@@ -1,4 +1,9 @@
 docs/_build/
+staticfiles/
 
 .coverage
 coverage.xml
+
+node_modules/
+static/css/
+static/js/

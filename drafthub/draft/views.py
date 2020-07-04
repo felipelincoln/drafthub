@@ -10,6 +10,7 @@ from django.utils import timezone
 
 from .models import Draft, Tag, Comment, Activity
 from .forms import DraftForm
+from drafthub.utils import PageContext
 
 
 Blog = get_user_model()
@@ -36,14 +37,14 @@ class AccessRequired:
 
 class DraftCreateView(LoginRequiredMixin, CreateView):
     form_class = DraftForm
-    template_name = 'draft/form.html'
+    template_name = 'draft/new.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({
-            'form_type': 'draft_create',
-        })
+        page_meta = PageContext(self.request)
+        page_meta.title = 'publishing a new article'
 
+        context.update(page_meta.context)
         return context
 
     def get_form_kwargs(self):
@@ -118,8 +119,8 @@ class DraftDetailView(QueryFromBlog, DetailView):
                 activity.save(update_fields=['viewed'])
 
             if self.request.user.social_auth.exists():
-                obj.last_update = self._get_updated(obj)
-                if obj.last_update:
+                obj.updated = self._get_updated(obj)
+                if obj.updated:
                     obj.save(update_fields=['updated'])
 
         return obj
@@ -421,3 +422,24 @@ class TagListView(ListView):
         })
 
         return context
+
+
+# API
+from django.http import JsonResponse
+
+def tag_list_api(request):
+    tag_list = [tag.name for tag in Tag.objects.all()]
+    return JsonResponse({'tags': tag_list})
+
+def render_markdown_api(request):
+    from .utils import markdown
+    try:
+        url = request.GET.get('url')
+        return JsonResponse({'markdown': markdown(url)})
+    except:
+        if url == '':
+            return JsonResponse({'markdown': ''})
+
+        return JsonResponse({'markdown': 'No data could be retrieved.'})
+        
+    

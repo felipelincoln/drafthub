@@ -1,0 +1,29 @@
+{% extends 'core/base2.html' %}
+
+{% block meta %}
+  <title>{{ page_title }}</title>
+  <meta name="title" content="{{ page_title }}">
+  <meta name="description" content="{{ page_description }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ page_url }}">
+  <meta property="og:title" content="{{ page_title }}">
+  <meta property="og:description" content="{{ page_description }}">
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="{{ page_url }}">
+  <meta property="twitter:title" content="{{ page_title }}">
+  <meta property="twitter:description" content="{{ page_description }}">
+{% endblock meta %}
+
+{% block breadcrumb %}
+  <li><a aria-current="page" href="{% url 'home' %}">DRAFTHUB</a></li>
+  {{ block.super }}
+{% endblock breadcrumb %}
+
+{% block container %}
+<main class="px-3" style="text-align:center;width:100%;">
+  <p>{{ page_error.status }}</p>
+  <p>{{ page_error.verbose }}</p>
+  <p>{{ page_error.message }} Take a look into the <a target="_blank" href="https://github.com/drafthub/drafthub/pulls?q=is%3Aissue+{{ page_error.status }}">issues results</a> for this.
+  </p>
+</main>
+{% endblock container %}

@@ -47,7 +47,7 @@
 		</div>
 		<div class="row">
 			<div class="col" style="word-break:break-all;">
-				{{ draft.abstract }}
+				{{ draft.description }}
 			</div>
 		</div>
 		<div class="row align-items-end line-height-1">
@@ -101,7 +101,7 @@
 	<hr>
 	<div class="container-lg my-5">
 		<div class="markdown-body">
-			{{ draft | markdown }}
+			{{ draft.github_url | markdown }}
 		</div>
 	</div>
 

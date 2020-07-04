@@ -1,16 +1,17 @@
 import os
+from django.core.management.utils import get_random_secret_key
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 ENVIRONMENT = os.environ.get('ENVIRONMENT')
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY', default=get_random_secret_key())
 ADMIN_URL = os.environ.get('ADMIN_URL')
 SOCIAL_AUTH_GITHUB_KEY = os.environ.get('SOCIAL_AUTH_GITHUB_KEY')
 SOCIAL_AUTH_GITHUB_SECRET = os.environ.get('SOCIAL_AUTH_GITHUB_SECRET')
 
 if ENVIRONMENT == 'production':
     DEBUG = 0
-    ALLOWED_HOSTS = ['drafthub.herokuapp.com',]
+    ALLOWED_HOSTS = ['drafthub.herokuapp.com',] # change b4 merge
     SECURE_BROWSER_XSS_FILTER = True
     X_FRAME_OPTIONS = 'DENY'
     SECURE_SSL_REDIRECT = True
@@ -25,7 +26,7 @@ if ENVIRONMENT == 'production':
 
 elif ENVIRONMENT == 'development':
     DEBUG = 1
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = ['*']
     
 
 
@@ -43,7 +44,6 @@ INSTALLED_APPS = [
     # third parties
     'django_extensions',
     'social_django',
-    'crispy_forms',
 
     # our apps
     'drafthub.core.apps.CoreConfig',
@@ -166,5 +166,19 @@ db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
 
-# Crispy forms
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+# CSRF view
+CSRF_FAILURE_VIEW = 'drafthub.views.error403csrf_view'
+
+
+# Sentry
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+sentry_sdk.init(
+    dsn="https://03c458ab845541e584ff834d9d05c389@o415439.ingest.sentry.io/5306538",
+    integrations=[DjangoIntegration()],
+
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True
+)

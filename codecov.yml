@@ -1,4 +1,5 @@
 comment: off
 coverage:
+  range: 0..100
   status:
     patch: off

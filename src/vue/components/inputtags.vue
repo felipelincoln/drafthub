@@ -9,7 +9,7 @@
       maxlength="25"
       maxtags="5"
       icon="label"
-      :confirm-key-codes="[13, 188, 9]"
+      :confirm-key-codes="getKeyCodes()"
       @input="$emit('input', $event)"
       @remove="showDeletedTag"
       @typing="getFilteredTags">
@@ -42,6 +42,13 @@ export default {
       if(deletedTag == lastTag){
         this.$refs.taginput.newTag = lastTag;
       }
+    },
+    getKeyCodes: function(){
+      console.log('keycode changed!');
+      if('taginput' in this.$refs){
+        if(this.$refs.taginput.newTag) return [13, 188, 9]
+      }
+      return [13, 188]
     },
   },
   computed: {

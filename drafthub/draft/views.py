@@ -437,6 +437,9 @@ def render_markdown_api(request):
         url = request.GET.get('url')
         return JsonResponse({'markdown': markdown(url)})
     except:
-        return JsonResponse({'markdown': 'Data could not be retrieved.'})
+        if url == '':
+            return JsonResponse({'markdown': ''})
+
+        return JsonResponse({'markdown': 'No data could be retrieved.'})
         
     

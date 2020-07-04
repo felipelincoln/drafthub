@@ -39,9 +39,9 @@
     {% for tag in tags_pop %}
       <p><a href="{{ tag.get_absolute_url }}">{{ forloop.counter }}. {{ tag }}</a></p>
     {% endfor %}
+    <br>
+    <br>
   </section>
-  <br>
-  <br>
   {% if page_obj.has_previous is False %}
   <section aria-labelledby="mostPopular">
   <heading1 id="mostPopular" >Most popular</heading1>

@@ -20,10 +20,10 @@
 {% endblock breadcrumb %}
 
 {% block container %}
-  <div class="px-3" style="text-align:center;flex-grow:1;">
-    <p>{{ page_error.status }}</p>
-    <p>{{ page_error.verbose }}</p>
-    <p>{{ page_error.message }} Take a look into the <a target="_blank" href="https://github.com/drafthub/drafthub/pulls?q=is%3Aissue+{{ page_error.status }}">issues results</a> for this.
-    </p>
-  </div>
+<main class="px-3" style="text-align:center;width:100%;">
+  <p>{{ page_error.status }}</p>
+  <p>{{ page_error.verbose }}</p>
+  <p>{{ page_error.message }} Take a look into the <a target="_blank" href="https://github.com/drafthub/drafthub/pulls?q=is%3Aissue+{{ page_error.status }}">issues results</a> for this.
+  </p>
+</main>
 {% endblock container %}

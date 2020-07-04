@@ -25,47 +25,27 @@
   {{ block.super }}
 {% endblock breadcrumb %}
 
-{% block main %}
-  <section aria-labelledby="searchResults">
-    <heading1 id="searchResults" >Articles: {{ search_content.count }}</heading1>
-      {% for draft in search_content %}
-        <draftarticle
-          title="{{ draft.title }}"
-          href="{{ draft.get_absolute_url }}"
-          author="{{ draft.blog }}"
-          blog="{{ draft.blog.get_absolute_url }}"
-          created="{{ draft.created|date:'M j' }}"
-          updated="{{ draft.updated|timesince|timesince_format }}"
-          datetime="{{ draft.created|date:'Y-m-d' }}"
-          src="{{ draft.image }}">
-          {% for tag in draft.tags.all %}
-            <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
-          {% endfor %}
-        </draftarticle>
-      {% endfor %}
-    <br>
-    <br>
-  </section>
-  <div class="is-hidden-tablet">
-    <section v-if="{{ search_content_tags.count }}"aria-labelledby="topicsFound">
-      <heading1 id="topicsFound">Topics: {{ search_content_tags.count }}</heading1>
-      {% for tag in search_content_tags %}
-        <p><a href="{{ tag.get_absolute_url }}">{{ tag }}</a></p>
-      {% endfor %}
-      <br>
-      <br>
-    </section>
+{% block container %}
+<main style="flex:0 0 70%;" class="mb-6" aria-labelledby="searchResults">
+  <heading1 id="searchResults" >Articles: {{ search_content.count }}</heading1>
+    {% for draft in search_content %}
+      <draftarticle
+        title="{{ draft.title }}"
+        href="{{ draft.get_absolute_url }}"
+        author="{{ draft.blog }}"
+        blog="{{ draft.blog.get_absolute_url }}"
+        created="{{ draft.created|date:'M j' }}"
+        updated="{{ draft.updated|timesince|timesince_format }}"
+        datetime="{{ draft.created|date:'Y-m-d' }}"
+        src="{{ draft.image }}">
+        {% for tag in draft.tags.all %}
+          <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
+        {% endfor %}
+      </draftarticle>
+    {% endfor %}
+</main>
 
-    <section v-if="{{ search_content_blogs.count }}" aria-labelledby="blogsFound">
-      <heading1 id="blogsFound">Blogs: {{ search_content_blogs.count }}</heading1>
-      {% for blog in search_content_blogs %}
-        <p><a href="{{ blog.get_absolute_url }}">{{ blog }}</a></p>
-      {% endfor %}
-    </section>
-  </div>
-{% endblock main %}
-
-{% block aside %}
+<aside style="flex:0 0 25%;">
   <section v-if="{{ search_content_tags.count }}"aria-labelledby="topicsFound">
     <heading1 id="topicsFound">Topics: {{ search_content_tags.count }}</heading1>
     {% for tag in search_content_tags %}
@@ -81,4 +61,5 @@
       <p><a href="{{ blog.get_absolute_url }}">{{ blog }}</a></p>
     {% endfor %}
   </section>
-{% endblock aside %}
+</aside>
+{% endblock container %}

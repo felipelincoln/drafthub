@@ -26,15 +26,8 @@
   {{ block.super }}
 {% endblock breadcrumb %}
 
-{% block main %}
-  <section class="is-hidden-tablet" aria-labelledby="mostActiveTopicsMobile">
-    <heading1 id="mostActiveTopicsMobile">Most active topics</heading1>
-    {% for tag in tags_pop %}
-      <p><a href="{{ tag.get_absolute_url }}">{{ forloop.counter }}. {{ tag }}</a></p>
-    {% endfor %}
-    <br>
-    <br>
-  </section>
+{% block container %}
+<main style="flex:0 0 70%;" class="mb-6">
   {% if page_obj.has_previous is False %}
   <section aria-labelledby="mostPopular">
   <heading1 id="mostPopular" >Most popular</heading1>
@@ -88,10 +81,10 @@
       {% endif %}
     </nav>
   </section>
+</main>
 
-{% endblock main %}
 
-{% block aside %}
+<aside role="complementary" style="flex:0 0 25%;">
   <section aria-labelledby="mostActiveTopics">
     <heading1 id="mostActiveTopics">Most active topics</heading1>
     {% for tag in tags_pop %}
@@ -139,4 +132,5 @@
       </draftarticle>
     {% endfor %}
   </section>
-{% endblock aside %}
+</aside>
+{% endblock container %}

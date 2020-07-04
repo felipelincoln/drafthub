@@ -52,9 +52,22 @@ a {
     text-decoration: underline;
   }
 }
-
 .image img {
   border-radius: $radius;
+}
+.is-48x48,
+.is-64x64,
+.is-128x128, {
+  height: auto !important;
+}
+.is-48x48 {
+  max-height: 48px;
+}
+.is-64x64 {
+  max-height: 64px;
+}
+.is-128x128 {
+  max-height: 128px;
 }
 #ariaLink {
   position: absolute;

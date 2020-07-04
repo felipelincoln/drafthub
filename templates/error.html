@@ -16,14 +16,8 @@
 
 {% block breadcrumb %}
   <li><a aria-current="page" href="{% url 'home' %}">DRAFTHUB</a></li>
-  <li class="is-hidden-mobile" aria-hidden="true"></li>
+  {{ block.super }}
 {% endblock breadcrumb %}
-
-{% block start %}
-  <div class="navbar-item">
-    <searchform action="{% url 'search' %}" placeholder="Search"></searchform>
-  </div>
-{% endblock start %}
 
 {% block container %}
   <div class="px-3" style="text-align:center;flex-grow:1;">

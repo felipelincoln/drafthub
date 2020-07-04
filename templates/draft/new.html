@@ -23,22 +23,18 @@
 {% block breadcrumb %}
   <li><a href="{% url 'home' %}">DRAFTHUB</a></li>
   <li class="is-active"><a aria-current="page">New</a></li>
-  <li class="is-hidden-mobile" aria-hidden="true"></li>
+  {{ block.super }}
 {% endblock breadcrumb %}
 
-{% block start %}
-  <div class="navbar-item">
-    <searchform action="{% url 'search' %}" placeholder="Search"></searchform>
-  </div>
-{% endblock start %}
-
 {% block main %}
-  <heading1 id="nn" >Preview</heading1>
-  <markdownpreview :url="newArticle.url"></markdownpreview>
+  <section aria-labelledby="preview" role="alert">
+    <heading1 id="preview">Preview</heading1>
+    <markdownpreview :url="newArticle.url"></markdownpreview>
+  </section>
 {% endblock main %}
 
 {% block aside %}
-  <heading1 id="nn" >New article</heading1>
+  <heading1>New article</heading1>
   <form
     action=""
     method="POST"

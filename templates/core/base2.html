@@ -23,13 +23,19 @@
       <div class="navbar-item pr-0">
         <nav class="breadcrumb" aria-label="breadcrumbs">
           <ul style="align-items:center;">
-            {% block breadcrumb %}{% endblock breadcrumb %}
+            {% block breadcrumb %}
+              <li class="is-hidden-mobile" aria-hidden="true"></li>
+            {% endblock breadcrumb %}
           </ul>
         </nav>
       </div>
     </template>
     <template slot="start">
-      {% block start %}{% endblock start %}
+      {% block start %}
+        <div class="navbar-item">
+          <searchform action="{% url 'search' %}" placeholder="Search"></searchform>
+        </div>
+      {% endblock start %}
     </template>
     <template slot="end">
       {% if user.is_authenticated %}

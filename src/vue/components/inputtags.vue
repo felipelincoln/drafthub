@@ -1,6 +1,7 @@
 <template>
-  <div>
+  <div @keydown="getCurrentOption()">
     <b-taginput
+      :id="id"
       ref="taginput"
       :value="value"
       :data="filteredTags"
@@ -12,9 +13,22 @@
       :confirm-key-codes="getKeyCodes()"
       @input="$emit('input', $event)"
       @remove="showDeletedTag"
-      @typing="getFilteredTags">
+      @add="filteredTags = []"
+      @typing="getFilteredTags"
+      role="combobox"
+      aria-autocomplete="list"
+      aria-haspopup="true"
+      :aria-expanded="filteredTags.length? 'true':'false'"
+      :aria-describedby="ariaDescribedby"
+      :aria-required="ariaRequired"
+      :aria-invalid="ariaInvalid">
+      <template v-slot:default="item">
+        <span :role="option == item.option? 'alert' : undefined">
+          {{ item.option }}
+        </span>
+      </template>
     </b-taginput>
-  <input type="hidden" :name="name" :value="getTagsInputValue">
+    <input type="hidden" :name="name" :value="getTagsInputValue">
   </div>
 </template>
 
@@ -24,17 +38,26 @@ export default {
     'api',
     'value',
     'name',
+    'id',
+    'ariaDescribedby',
+    'ariaRequired',
+    'ariaInvalid',
   ],
   data: function(){
     return {
       filteredTags: [],
+      option: undefined,
     }
   },
   methods: {
     getFilteredTags: function(text){
-      this.filteredTags = this.api.filter((item) => {
-        return item.indexOf(text.toLowerCase()) >= 0
-      })
+      if(text){
+        this.filteredTags = this.api
+          .filter(x => !this.value.includes(x))
+          .filter(x => x.indexOf(text.toLowerCase()) >= 0)
+      }else{
+        this.filteredTags = []
+      }
     },
     showDeletedTag: function(){
       let deletedTag = this.value.filter(x => !vm.newArticle.tags.includes(x));
@@ -49,6 +72,12 @@ export default {
         if(this.$refs.taginput.newTag) return [13, 188, 9]
       }
       return [13, 188]
+    },
+    getCurrentOption: function(){
+      let el = document.querySelector('.is-hovered');
+      if(el) this.option = el.innerText;
+      else { this.option = undefined }
+      console.log('update aria-label', this.option);
     },
   },
   computed: {

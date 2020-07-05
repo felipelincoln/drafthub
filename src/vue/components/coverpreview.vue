@@ -8,6 +8,7 @@
     <img
       v-show="!imgPlaceholder"
       :src="src"
+      :alt="alt"
       @load="imgPlaceholder=false"
       @error="imgNotLoaded()">
   </figure>
@@ -15,9 +16,10 @@
 
 <script>
 export default {
-  props: {
-    'src': '',
-  },
+  props: [
+    'src',
+    'alt',
+  ],
   data: function(){
     return {
       imgLoading: false,

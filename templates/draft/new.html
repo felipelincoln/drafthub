@@ -37,79 +37,127 @@
 
     <div @keydown.enter.prevent>
     <b-field
-      message="* Must be a .md file from your GitHub"
+      :type="{'is-danger': newArticle.formError.url}"
       label="Markdown url"
-      :type="{'is-danger': newArticle.formError.url}">
+      label-for="githubUrl">
       <b-input
+        id="githubUrl"
+        name="github_url"
         @input.once="newArticle.formError.url=false"
         :value="newArticle.url"
         @change.native="newArticle.url = $event.target.value"
-        name="github_url"
         type="url"
         :use-html5-validation="false"
-        autocomplete="off">
-      </b-input>
-      <template v-if="newArticle.formError.url" slot="message">
-        {{ form.github_url.errors }}
-      </template>
-    </b-field>
-
-    <b-field label="Cover image url" :type="{'is-danger': newArticle.formError.image}">
-      <b-input 
-        @input.once="newArticle.formError.image=false"
-        :value="newArticle.image"
-        @change.native="newArticle.image = $event.target.value"
-        name="image"
-        type="url"
-        :use-html5-validation="false"
-        autocomplete="off">
-      </b-input>
-      <template v-if="newArticle.formError.image" slot="message">
-        {{ form.image.errors }}
-      </template>
-    </b-field>
-    <coverpreview :src="newArticle.image"></coverpreview>
-
-    <b-field label="Title" :type="{'is-danger': newArticle.formError.title}">
-      <b-input
-        @input="newArticle.formError.title=false"
-        v-model="newArticle.title"
-        maxlength="{{ form.fields.title.max_length }}"
         autocomplete="off"
-        name="title"
-        type="text">
+        aria-describedby="githubUrlDescription"
+        aria-required="true"
+        :aria-invalid="newArticle.formError.url"
+        aria-controls="preview">
       </b-input>
-      <template v-if="newArticle.formError.title" slot="message">
-        {{ form.title.errors }}
-      </template>
-    </b-field>
-
-    <b-field label="Description" :type="{'is-danger': newArticle.formError.description}">
-      <b-input
-        @input.once="newArticle.formError.description=false"
-        v-model="newArticle.description"
-        maxlength="{{ form.fields.description.max_length }}"
-        name="description"
-        type="textarea"
-        rows="7"
-        autocomplete="off">
-      </b-input>
-      <template v-if="newArticle.formError.description" slot="message">
-        {{ form.description.errors }}
+      <template slot="message">
+        <span id="githubUrlDescription">
+          <span v-if="newArticle.formError.url">{{ form.github_url.errors }}</span>
+          <span v-else>* Must be a .md file from your GitHub</span>
+        </span>
       </template>
     </b-field>
 
     <b-field
+      :type="{'is-danger': newArticle.formError.image}"
+      label="Cover image url"
+      label-for="image">
+      <b-input 
+        id="image"
+        name="image"
+        @input.once="newArticle.formError.image=false"
+        :value="newArticle.image"
+        @change.native="newArticle.image = $event.target.value"
+        type="url"
+        :use-html5-validation="false"
+        autocomplete="off"
+        aria-describedby="imageDescription"
+        aria-required="true"
+        :aria-invalid="newArticle.formError.image">
+      </b-input>
+      <template slot="message">
+        <span id="imageDescription">
+          <span v-if="newArticle.formError.image">{{ form.image.errors }}</span>
+        </span>
+      </template>
+    </b-field>
+    <coverpreview alt="Cover image for the article" :src="newArticle.image"></coverpreview>
+
+    <b-field
+      :type="{'is-danger': newArticle.formError.title}"
+      label="Title"
+      label-for="title">
+      <b-input
+        id="title"
+        name="title"
+        @input="newArticle.formError.title=false"
+        v-model="newArticle.title"
+        maxlength="{{ form.fields.title.max_length }}"
+        autocomplete="off"
+        type="text"
+        aria-describedby="titleDescription"
+        aria-required="true"
+        :aria-invalid="newArticle.formError.title">
+      </b-input>
+      <template slot="message">
+        <span id="titleDescription">
+          <span v-if="newArticle.formError.title">{{ form.title.errors }}</span>
+        </span>
+      </template>
+    </b-field>
+
+    <b-field
+      :type="{'is-danger': newArticle.formError.description}"
+      label="Description"
+      label-for="description">
+      <b-input
+        id="description"
+        name="description"
+        @input.once="newArticle.formError.description=false"
+        v-model="newArticle.description"
+        maxlength="{{ form.fields.description.max_length }}"
+        type="textarea"
+        rows="7"
+        autocomplete="off"
+        aria-describedby="descriptionDescription"
+        aria-required="true"
+        :aria-invalid="newArticle.formError.description">
+      </b-input>
+      <template slot="message">
+        <span id="descriptionDescription">
+          <span v-if="newArticle.formError.description">{{ form.description.errors }}</span>
+        </span>
+      </template>
+    </b-field>
+
+    <b-field
+      :type="{'is-danger': newArticle.formError.tags}"
       label="Tags"
-      :type="{'is-danger': newArticle.formError.tags}">
+      label-for="tags">
       <inputtags
+        id="tags"
+        name="tags"
         @input.once="newArticle.formError.tags=false"
         :api="newArticle.apiTags"
-        name="tags"
-        v-model="newArticle.tags">
+        v-model="newArticle.tags"
+        aria-describedby="tagsDescription"
+        aria-required="true"
+        :aria-invalid="newArticle.formError.tags">
       </inputtags>
-      <template v-if="newArticle.formError.tags" slot="message">
-        {{ form.tags.errors }}
+      <template slot="message">
+        <span id="tagsDescription">
+          <span
+            v-if="newArticle.tags.length"
+            :aria-label="'Selected tags: ' + newArticle.tags.join(', ') + '.'">
+          </span>
+          <span v-if="newArticle.formError.tags">{{ form.tags.errors }}</span>
+          <span v-else>* Pick at least one tag.<span>
+          <span aria-label="Pick up to 5 tags containing up to 25 characters each."></span>
+        </span>
       </template>
     </b-field>
     </div>
@@ -120,7 +168,13 @@
   </form>
 </section>
 
-<section role="alert" style="flex:0 0 70%;order:-1" aria-labelledby="preview">
+<section
+  id="preview"
+  style="flex:0 0 70%;order:-1"
+  role="region"
+  aria-labelledby="preview"
+  aria-live="assertive"
+  aria-atomic="true">
   <heading1 id="preview">Preview</heading1>
   <markdownpreview :url="newArticle.url"></markdownpreview>
 </section>

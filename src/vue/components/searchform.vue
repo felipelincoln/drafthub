@@ -7,8 +7,10 @@
       name="q"
       :placeholder="placeholder"
       type="search"
-      aria-label="Search">
+      :aria-label="placeholder">
     </b-input>
+    <input v-if="where" type="hidden" name="where" :value="where">
+    <input v-if="who" type="hidden" name="who" :value="who">
   </form>
 </template>
 
@@ -18,6 +20,8 @@ export default {
     'value',
     'action',
     'placeholder',
+    'where',
+    'who',
   ],
 }
 </script>

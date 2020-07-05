@@ -97,7 +97,7 @@ class SearchEngine:
 
     multi_who = []
 
-    def __init__(self, request, q, who=None, where=None):
+    def __init__(self, request, q, where=None, who=None):
         self.request = request
         self.q = q
         self.who = who
@@ -107,7 +107,6 @@ class SearchEngine:
         self._set_content_from_where()
         self._filter_content_from_who()
         self._filter_content_from_what()
-
 
     @property
     def results(self):
@@ -245,8 +244,12 @@ class SearchListView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         q = self.request.GET.get('q')
-        search = SearchEngine(self.request, q)
+        where = self.request.GET.get('where')
+        who = self.request.GET.get('who')
+        search = SearchEngine(self.request, q, where, who)
+
         page_meta = PageContext(self.request)
         page_meta.title = 'search results for: ' + ' '.join(search.what)
 

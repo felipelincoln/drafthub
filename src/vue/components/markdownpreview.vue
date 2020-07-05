@@ -28,8 +28,8 @@ export default {
       mdPreview: '',
     }
   },
-  watch: {
-    url: function(){
+  methods: {
+    renderMarkdown: function(){
       console.log('url changed');
       this.mdLoading = true;
       this.mdPlaceholder = true;
@@ -45,6 +45,16 @@ export default {
             }
         })
     },
+  },
+  watch: {
+    url: function(){
+      this.renderMarkdown();
+    },
+  },
+  created: function(){
+    if(this.url){
+      this.renderMarkdown();
+    }
   },
 }
 </script>

@@ -101,6 +101,19 @@ class DraftDetailView(QueryFromBlog, DetailView):
     template_name = 'draft/draft.html'
     context_object_name = 'draft'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        draft = self.get_object()
+        page_meta = PageContext(self.request)
+        page_meta.author = draft.blog.username
+        page_meta.title = draft.title
+        page_meta.description = draft.description
+        page_meta.keywords = ', '.join([tag.name for tag in draft.tags.all()])
+        page_meta.image = draft.image
+
+        context.update(page_meta.context)
+        return context
+
     def get_object(self):
         obj = super().get_object()
         referer = self.request.META.get('HTTP_REFERER') or ''

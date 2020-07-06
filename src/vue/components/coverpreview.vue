@@ -40,5 +40,10 @@ export default {
       this.imgPlaceholder = true;
     },
   },
+  created: function(){
+    if(this.src){
+      this.imgLoading = true;
+    }
+  },
 }
 </script>

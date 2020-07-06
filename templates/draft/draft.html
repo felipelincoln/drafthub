@@ -35,6 +35,10 @@
   <markdownpreview url="{{ draft.github_url }}"></markdownpreview>
 </main>
 <aside style="flex:0 0 25%;">
+{{ draft.title }}
+<coverpreview src="{{ draft.image }}"></coverpreview>
+{{ draft.description }}
+{{ draft.tags.all }}
 </aside>
 {% endblock container %}
 

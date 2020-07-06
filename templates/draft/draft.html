@@ -31,16 +31,38 @@
 
 
 {% block container %}
-<main style="flex:0 0 70%;" class="mb-6">
+<aside style="flex:0 0 25%;" class="mb-6">
+  <coverpreview src="{{ draft.image }}"></coverpreview>
+  <p><small>
+    <a rel="author" href="{{ draft.blog.get_absolute_url }}">
+      <address class="is-inline">
+        {{ draft.blog.username }},
+      </address>
+    </a>
+    <a href="">
+      <time pubdate datetime="{{ draft.created|date:'Y-m-d' }}">
+        {{ draft.created|date:'M j' }}
+      </time>
+      {% if draft.updated %}
+      <span>
+        (updated <time>{{ draft.updated|timesince|timesince_format }}</time> ago)
+      </span>
+      {% endif %}
+    </a>
+  </small></p>
+  <h2 style="word-wrap: break-word;text-transform: capitalize;">
+    <strong>{{ draft.title }}</strong>
+  </h2>
+  <p><small>
+  {% for tag in draft.tags.all %}
+    <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
+  {% endfor %}
+  </small></p>
+  <br>
+  <p><strong>tl;dr</strong> {{ draft.description }}</p>
+</aside>
+
+<main style="flex:0 0 70%; order:-1">
   <markdownpreview url="{{ draft.github_url }}"></markdownpreview>
 </main>
-<aside style="flex:0 0 25%;">
-{{ draft.title }}
-<coverpreview src="{{ draft.image }}"></coverpreview>
-{{ draft.description }}
-{{ draft.tags.all }}
-</aside>
 {% endblock container %}
-
-{% block script %}
-{% endblock script %}

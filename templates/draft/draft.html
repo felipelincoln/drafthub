@@ -43,23 +43,70 @@
       <time pubdate datetime="{{ draft.created|date:'Y-m-d' }}">
         {{ draft.created|date:'M j' }}
       </time>
+      {% comment %}
       {% if draft.updated %}
       <span>
         (updated <time>{{ draft.updated|timesince|timesince_format }}</time> ago)
       </span>
       {% endif %}
+      {% endcomment %}
     </a>
   </small></p>
   <h2 style="word-wrap: break-word;text-transform: capitalize;">
     <strong>{{ draft.title }}</strong>
   </h2>
   <p><small>
+  {% comment %}
   {% for tag in draft.tags.all %}
     <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
   {% endfor %}
+  {% endcomment %}
   </small></p>
   <br>
   <p><strong>tl;dr</strong> {{ draft.description }}</p>
+  <br>
+
+  {% comment %}
+  <b-collapse v-if="{{ draft.comments.count }}" :open="false">
+    <a slot="trigger" slot-scope="props">
+      [[ !props.open? 'Show': 'Hide' ]]
+      {{ draft.comments.count }} comments
+    </a>
+    {% for comment in draft.comments.all %}
+      <p><small>
+        <a rel="author" href="{{ comment.blog.get_absolute_url }}">
+          <address class="is-inline">
+            {{ comment.blog.username }},
+          </address>
+        </a>
+        <a href="#{{ comment.id }}">
+          <time pubdate datetime="{{ comment.created|date:'Y-m-d' }}">
+            {% if comment.updated %}
+              {{ comment.updated|date:'M j' }}
+            {% else %}
+              {{ comment.created|date:'M j' }}
+            {% endif %}
+          </time>
+        </a>
+      </small></p>
+      <p>{{ comment.content|plaintext_markdown }}</p>
+      <br>
+    {% endfor %}
+      <br>
+    <form action="{% url 'comment-new' draft.blog draft.slug %}" method="post">
+    {% csrf_token %}
+      <b-input
+        name="content"
+        placeholder="placeholder"
+        type="textarea"
+        aria-label="placeholder">
+      </b-input>
+      <p class="control pt-3">
+        <button class="button is-dark is-fullwidth">Comment</button>
+      </p>
+    </form>
+  </b-collapse>
+  {% endcomment %}
 </aside>
 
 <main style="flex:0 0 70%; order:-1">

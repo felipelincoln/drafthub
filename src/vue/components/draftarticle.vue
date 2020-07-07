@@ -51,7 +51,7 @@
           <time pubdate :datetime="datetime">
             {{ created }}
           </time>
-          <span v-if="updated">
+          <span v-if="updated && !tiny">
             (updated <time v-html="updated">{{ updated }}</time> ago)
           </span>
         </a>

@@ -26,33 +26,38 @@
   {{ block.super }}
 {% endblock breadcrumb %}
 
+{% block header %}
+<nav>
+  <a href="">PAGE 1</a>
+  <a href="">PAGE 2</a>
+</nav>
+{% endblock header %}
+
+
+
 {% block container %}
-<main style="flex:0 0 70%;" class="mb-6">
+<main style="flex:0 0 65%;" class="mb-6">
   {% if page_obj.has_previous is False %}
-  <section aria-labelledby="mostPopular">
-  <heading1 id="mostPopular" >Most popular</heading1>
-    {% for draft in drafts_pop %}
-      <draftarticle
-        title="{{ draft.title }}"
-        href="{{ draft.get_absolute_url }}"
-        author="{{ draft.blog }}"
-        blog="{{ draft.blog.get_absolute_url }}"
-        created="{{ draft.created|date:'M j' }}"
-        updated="{{ draft.updated|timesince|timesince_format }}"
-        datetime="{{ draft.created|date:'Y-m-d' }}"
-        src="{{ draft.image }}">
-        {% for tag in draft.tags.all %}
-          <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
-        {% endfor %}
-      </draftarticle>
-    {% endfor %}
-  <br>
-  <br>
-  </section>
+    <block heading="most popular" id="mostPopular">
+      {% for draft in drafts_pop %}
+        <draftarticle
+          title="{{ draft.title }}"
+          href="{{ draft.get_absolute_url }}"
+          author="{{ draft.blog }}"
+          blog="{{ draft.blog.get_absolute_url }}"
+          datetime="{{ draft.created|date:'Y-m-d' }}"
+          created="{{ draft.created|date:'M j' }}"
+          updated="{{ draft.updated|timesince|timesince_format }}"
+          src="{{ draft.image }}">
+          {% for tag in draft.tags.all %}
+            <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
+          {% endfor %}
+        </draftarticle>
+      {% endfor %}
+    </block>
   {% endif %}
 
-  <section role="feed" aria-labelledby="latestArticle">
-    <heading1 id="latestArticle">Latest articles</heading1>
+  <block id="latestArticle" heading="latest articles" v-bind="{role: 'feed'}">
     {% for draft in drafts_new %}
       <draftarticle
         title="{{ draft.title }}"
@@ -66,38 +71,28 @@
         {% endfor %}
       </draftarticle>
     {% endfor %}
-    <br>
-    <br>
-    <nav
-      style="justify-content:center"
-      class="pagination"
-      aria-label="pagination">
+    <nav style="justify-content:center" class="pagination mt-5" aria-label="pagination">
       {% if page_obj.has_previous %}
         <a rel="prev" href="?page={{ page_obj.previous_page_number }}" class="pagination-previous px-2">Previous</a>
       {% endif %}
-
       {% if page_obj.has_next %}
         <a rel="next" href="?page={{ page_obj.next_page_number }}" class="pagination-next px-2">Next</a>
       {% endif %}
     </nav>
-  </section>
+  </block>
 </main>
 
 
-<aside role="complementary" style="flex:0 0 25%;">
-  <section  aria-labelledby="explore">
-    <heading1 id="explore">Explore</heading1>
+<aside role="complementary" style="flex:0 0 30%;">
+  <block id="explore" heading="explore">
     <b-taglist>
     {% for tag in tags_pop %}
       <a class="tag is-light is-primary is-medium" href="{{ tag.get_absolute_url }}">{{ tag }}</a>
     {% endfor %}
     </b-taglist>
-  </section>
-  <br>
-  <br>
+  </block>
 
-  <section aria-labelledby="lastUpdated">
-    <heading1 id="lastUpdated">Last updated</heading1>
+  <block id="lastUpdated" heading="last updated">
     {% for draft in drafts_updated %}
       <draftarticle
         title="{{ draft.title }}"
@@ -112,12 +107,9 @@
         {% endfor %}
       </draftarticle>
     {% endfor %}
-  </section>
-  <br>
-  <br>
+  </block>
 
-  <section aria-labelledby="lastChanceToRead">
-    <heading1 id="lastChanceToRead">Last chance to read</heading1>
+  <block id="lastChanceToRead" heading="last chance to read">
     {% for draft in drafts_random %}
       <draftarticle
         title="{{ draft.title }}"
@@ -133,6 +125,6 @@
         {% endfor %}
       </draftarticle>
     {% endfor %}
-  </section>
+  </block>
 </aside>
 {% endblock container %}

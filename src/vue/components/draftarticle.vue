@@ -10,8 +10,8 @@
             @load="isLoading=false"
             @error="isLoading=false"
             :alt="alt">
+          <b-skeleton height="48px" :active="isLoading"></b-skeleton>
         </a>
-        <b-skeleton height="48px" :active="isLoading"></b-skeleton>
       </p>
     </figure>
     <figure v-else class="media-left" :aria-label="alt">
@@ -24,8 +24,8 @@
             @load="isLoading=false"
             @error="isLoading=false"
             :alt="alt">
+          <b-skeleton height="85px" :active="isLoading"></b-skeleton>
         </a>
-        <b-skeleton height="85px" :active="isLoading"></b-skeleton>
       </p>
       <p class="image is-64x64 is-hidden-tablet">
         <a :href="href">
@@ -36,8 +36,8 @@
             @load="isLoading=false"
             @error="isLoading=false"
             :alt="alt">
+          <b-skeleton height="64px" :active="isLoading"></b-skeleton>
         </a>
-        <b-skeleton height="64px" :active="isLoading"></b-skeleton>
       </p>
     </figure>
     <div class="media-content" style="min-width:20%">

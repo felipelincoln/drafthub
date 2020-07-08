@@ -44,13 +44,23 @@ export default {
     scrollLeft: function(){
       this.x += this.dx;
     },
+    makeScroll: function(e) {
+      this.x = 0;
+      this.navWidth = this.$el.querySelector('.scrollnav-span').getBoundingClientRect().width
+      this.containerWidth = this.$el.getBoundingClientRect().width
+      if(this.navWidth > this.containerWidth){
+        this.dx = Math.min(this.containerWidth, this.navWidth - this.containerWidth)
+      }
+    },
   },
   mounted: function(){
-    this.navWidth = this.$el.querySelector('.scrollnav-span').getBoundingClientRect().width
-    this.containerWidth = this.$el.getBoundingClientRect().width
-    if(this.navWidth > this.containerWidth){
-      this.dx = Math.min(this.containerWidth, this.navWidth - this.containerWidth)
-    }
+    this.makeScroll();
+  },
+  created: function() {
+    window.addEventListener("resize", this.makeScroll);
+  },
+  destroyed: function() {
+    window.removeEventListener("resize", this.makeScroll);
   },
 }
 </script>
@@ -63,6 +73,7 @@ export default {
 }
 .button {
   position: absolute;
+  z-index: 1;
   top:0;
 }
 .btn-left {
@@ -76,7 +87,6 @@ export default {
   width: 100%;
   height: 40px;
   line-height: 40px;
-  z-index: -1;
   white-space: nowrap;
   transition: all 250ms ease-out 0s;
 }

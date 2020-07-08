@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar" role="navigation" aria-label="page navigation">
+  <nav class="scrollnav" role="navigation" aria-label="page navigation">
     <button
       v-if="x < 0"
       class="button btn-left"
@@ -16,8 +16,8 @@
       tabindex="-1">
       <b-icon icon="chevron-right"></b-icon>
     </button>
-    <div class="navbar-menu" :style="style()">
-      <div class="navbar-start"><slot></slot></div>
+    <div class="scrollnav-list" :style="style()">
+      <span class="scrollnav-span"><slot></slot></span>
     </div>
   </nav>
 </template>
@@ -46,7 +46,7 @@ export default {
     },
   },
   mounted: function(){
-    this.navWidth = this.$el.querySelector('.navbar-start').getBoundingClientRect().width
+    this.navWidth = this.$el.querySelector('.scrollnav-span').getBoundingClientRect().width
     this.containerWidth = this.$el.getBoundingClientRect().width
     if(this.navWidth > this.containerWidth){
       this.dx = Math.min(this.containerWidth, this.navWidth - this.containerWidth)
@@ -56,14 +56,14 @@ export default {
 </script>
 
 <style scoped>
-.navbar {
+.scrollnav {
   position: relative;
   overflow: hidden;
   width: 100%;
 }
 .button {
   position: absolute;
-  top:6px;
+  top:0;
 }
 .btn-left {
   left:0;
@@ -71,10 +71,12 @@ export default {
 .btn-right {
   right:0;
 }
-.navbar-menu {
+.scrollnav-list {
   position: relative;
-  z-index: -1;
   width: 100%;
+  height: 40px;
+  line-height: 40px;
+  z-index: -1;
   white-space: nowrap;
   transition: all 250ms ease-out 0s;
 }

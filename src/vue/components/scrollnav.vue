@@ -1,15 +1,25 @@
 <template>
-  <div id="scrollContainer">
-    <b-button id="btnLeft" v-if="x < 0" @click="scrollLeft()" aria-hidden="true">
+  <nav class="navbar" role="navigation" aria-label="page navigation">
+    <button
+      v-if="x < 0"
+      class="button btn-left"
+      @click="scrollLeft()"
+      aria-hidden="true"
+      tabindex="-1">
       <b-icon icon="chevron-left"></b-icon>
-    </b-button>
-    <b-button id="btnRight" v-if="x > containerWidth -navWidth" @click="scrollRight()" aria-hidden="true">
+    </button>
+    <button
+      v-if="x > containerWidth -navWidth"
+      class="button btn-right"
+      @click="scrollRight()"
+      aria-hidden="true"
+      tabindex="-1">
       <b-icon icon="chevron-right"></b-icon>
-    </b-button>
-    <nav id="scrollNav" :style="style()">
-      <span id="scrollSpan"><slot></slot></span>
-    </nav>
-  </div>
+    </button>
+    <div class="navbar-menu" :style="style()">
+      <div class="navbar-start"><slot></slot></div>
+    </div>
+  </nav>
 </template>
 
 <script>
@@ -36,8 +46,8 @@ export default {
     },
   },
   mounted: function(){
-    this.navWidth = document.getElementById('scrollSpan').getBoundingClientRect().width
-    this.containerWidth = document.getElementById('scrollContainer').getBoundingClientRect().width
+    this.navWidth = this.$el.querySelector('.navbar-start').getBoundingClientRect().width
+    this.containerWidth = this.$el.getBoundingClientRect().width
     if(this.navWidth > this.containerWidth){
       this.dx = Math.min(this.containerWidth, this.navWidth - this.containerWidth)
     }
@@ -46,28 +56,25 @@ export default {
 </script>
 
 <style scoped>
-#scrollContainer {
+.navbar {
   position: relative;
   overflow: hidden;
   width: 100%;
 }
-#btnLeft,
-#btnRight {
+.button {
   position: absolute;
-  top:0;
+  top:6px;
 }
-#btnLeft {
+.btn-left {
   left:0;
 }
-#btnRight {
+.btn-right {
   right:0;
 }
-#scrollNav {
+.navbar-menu {
   position: relative;
   z-index: -1;
   width: 100%;
-  height: 40px;
-  line-height: 40px;
   white-space: nowrap;
   transition: all 250ms ease-out 0s;
 }

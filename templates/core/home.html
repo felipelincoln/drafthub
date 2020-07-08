@@ -20,7 +20,6 @@
 {% endblock meta %}
 
 
-
 {% block breadcrumb %}
   <li><a aria-current="page" href="{% url 'home' %}">DRAFTHUB</a></li>
   {{ block.super }}
@@ -35,7 +34,6 @@
   <a href="#" class="pr-3">current issues</a>
 </scrollnav>
 {% endblock header %}
-
 
 
 {% block container %}
@@ -90,10 +88,9 @@
   <block id="explore" heading="explore">
     <b-taglist>
     {% for tag in tags_pop %}
-      <a class="tag is-light is-primary is-medium" href="{{ tag.get_absolute_url }}">{{ tag }}</a>
+      <a class="tag is-primary is-medium" href="{{ tag.get_absolute_url }}">{{ tag }}</a>
     {% endfor %}
   </block>
-
 
   <block id="lastUpdated" heading="last updated">
     {% for draft in drafts_updated %}
@@ -112,8 +109,6 @@
     {% endfor %}
   </block>
 
-  {% comment %}
-
   <block id="lastChanceToRead" heading="last chance to read">
     {% for draft in drafts_random %}
       <draftarticle
@@ -131,6 +126,5 @@
       </draftarticle>
     {% endfor %}
   </block>
-  {% endcomment %}
 </aside>
 {% endblock container %}

@@ -18,6 +18,8 @@ $warning: $yellow;
 $danger: $red;
 $info: $blue;
 
+$primary: #527871;
+
 $link: $grey-dark;
 $link-focus-border: $grey-dark;
 @import "../../node_modules/bulma/sass/utilities/derived-variables";
@@ -25,6 +27,7 @@ $link-focus-border: $grey-dark;
 // Generic variables
 $navbar-breakpoint: $tablet;
 $fullhd-enabled: false;
+$widescreen-enabled: false;
 $input-placeholder-color: $text-light;
 $footer-background-color: $white;
 $radius: 12px;

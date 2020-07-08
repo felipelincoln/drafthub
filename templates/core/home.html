@@ -26,11 +26,13 @@
   {{ block.super }}
 {% endblock breadcrumb %}
 
+
 {% block header %}
-<nav>
-  <a href="">PAGE 1</a>
-  <a href="">PAGE 2</a>
-</nav>
+
+<scrollnav>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. In blandit, purus eget maximus pretium, nisi eros ornare neque, sed suscipit ipsum ligula ac sapien. Sed et massa non nisi finibus pharetra. Nulla in est a ligula consectetur efficitur et in leo. Fusce tincidunt, leo ut iaculis euismod, velit nunc scelerisque odio, quis aliquam justo tortor non lacus. Nam sollicitudin sed velit a varius. Nulla in blandit augue. Vestibulum placerat, massa quis scelerisque pulvinar, augue tortor pretium arcu, in facilisis erat libero eget neque. Nam eleifend maximus ornare. Donec non neque luctus, finibus libero at, tempor arcu. Donec feugiat, nibh sed condimentum placerat, tellus erat facilisis dolor, eget scelerisque dui massa id mi. Praesent ut fermentum turpis. Fusce in dignissim purus. In nec massa maximus, tincidunt lacus in, elementum ligula.
+</scrollnav>
+
 {% endblock header %}
 
 
@@ -49,11 +51,11 @@
           created="{{ draft.created|date:'M j' }}"
           updated="{{ draft.updated|timesince|timesince_format }}"
           src="{{ draft.image }}">
-          {% for tag in draft.tags.all %}
-            <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
-          {% endfor %}
         </draftarticle>
       {% endfor %}
+      <nav style="justify-content:center" class="pagination mt-5" aria-label="pagination">
+          <a href="" class="pagination-previous px-2">More</a>
+      </nav>
     </block>
   {% endif %}
 
@@ -89,8 +91,8 @@
     {% for tag in tags_pop %}
       <a class="tag is-light is-primary is-medium" href="{{ tag.get_absolute_url }}">{{ tag }}</a>
     {% endfor %}
-    </b-taglist>
   </block>
+
 
   <block id="lastUpdated" heading="last updated">
     {% for draft in drafts_updated %}
@@ -109,6 +111,8 @@
     {% endfor %}
   </block>
 
+  {% comment %}
+
   <block id="lastChanceToRead" heading="last chance to read">
     {% for draft in drafts_random %}
       <draftarticle
@@ -126,5 +130,6 @@
       </draftarticle>
     {% endfor %}
   </block>
+  {% endcomment %}
 </aside>
 {% endblock container %}

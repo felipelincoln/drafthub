@@ -41,6 +41,11 @@
       </p>
     </figure>
     <div class="media-content" style="min-width:20%">
+      <h2 style="word-wrap: break-word;text-transform: capitalize;">
+        <a :href="href"><strong>
+          {{ title }}
+        </strong></a>
+      </h2>
       <p><small>
         <a rel="author" :href="blog">
           <address class="is-inline">
@@ -59,12 +64,6 @@
           <time v-html="latest">{{ latest }}</time> ago
         </a>
       </small></p>
-      <h2 style="word-wrap: break-word;text-transform: capitalize;">
-        <a :href="href"><strong>
-          {{ title }}
-        </strong></a>
-      </h2>
-      <p v-if="!tiny"><small><slot></slot></small></p>
     </div>
   </article>
 </template>

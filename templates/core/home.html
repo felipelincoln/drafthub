@@ -41,6 +41,7 @@
 
 {% block container %}
 <main style="flex:0 0 65%;" class="mb-6">
+
   {% with featured=drafts_popular.first %}
     <draftarticle
       type="large"
@@ -54,8 +55,6 @@
       src="{{ featured.image }}">
     </draftarticle>
   {% endwith %}
-
-
   
 
   <block heading="most popular" id="mostPopular">

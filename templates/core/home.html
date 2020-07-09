@@ -29,92 +29,61 @@
 {% block header %}
 <scrollnav>
     <a class="pr-3" href="/" style="color:black">home</a>
-    <a class="pr-3" href="/">popular</a>
     <a class="pr-3" href="/">latest</a>
     <a class="pr-3" href="/">updated</a>
-  {% for tag in tags_pop %}
+  {% for tag in tags_popular %}
     <a class="pr-3" href="{{ tag.get_absolute_url }}">{{ tag }}</a>
   {% endfor %}
 </scrollnav>
+
 {% endblock header %}
 
 
 {% block container %}
 <main style="flex:0 0 65%;" class="mb-6">
-  {% if page_obj.has_previous is False %}
-    <block heading="most popular" id="mostPopular">
-      {% for draft in drafts_pop %}
-        <draftarticle
-          title="{{ draft.title }}"
-          href="{{ draft.get_absolute_url }}"
-          author="{{ draft.blog }}"
-          blog="{{ draft.blog.get_absolute_url }}"
-          datetime="{{ draft.created|date:'Y-m-d' }}"
-          created="{{ draft.created|date:'M j' }}"
-          updated="{{ draft.updated|timesince|timesince_format }}"
-          src="{{ draft.image }}">
-        </draftarticle>
-      {% endfor %}
-      <nav style="justify-content:center" class="pagination mt-5" aria-label="pagination">
-          <a href="" class="pagination-previous px-2">More</a>
-      </nav>
-    </block>
-  {% endif %}
+  {% with featured=drafts_popular.first %}
+    <draftarticle
+      type="large"
+      title="{{ featured.title }}"
+      href="{{ featured.get_absolute_url }}"
+      author="{{ featured.blog }}"
+      blog="{{ featured.blog.get_absolute_url }}"
+      datetime="{{ featured.created|date:'Y-m-d' }}"
+      created="{{ featured.created|date:'M j' }}"
+      updated="{{ featured.updated|timesince|timesince_format }}"
+      src="{{ featured.image }}">
+    </draftarticle>
+  {% endwith %}
 
-  <block id="latestArticle" heading="latest articles" v-bind="{role: 'feed'}">
-    {% for draft in drafts_new %}
+
+  
+
+  <block heading="most popular" id="mostPopular">
+    {% for draft in drafts_popular|slice:'1:' %}
       <draftarticle
         title="{{ draft.title }}"
         href="{{ draft.get_absolute_url }}"
         author="{{ draft.blog }}"
         blog="{{ draft.blog.get_absolute_url }}"
-        latest="{{ draft.created|timesince|timesince_format }}"
+        datetime="{{ draft.created|date:'Y-m-d' }}"
+        created="{{ draft.created|date:'M j' }}"
+        updated="{{ draft.updated|timesince|timesince_format }}"
         src="{{ draft.image }}">
-        {% for tag in draft.tags.all %}
-          <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
-        {% endfor %}
       </draftarticle>
     {% endfor %}
     <nav style="justify-content:center" class="pagination mt-5" aria-label="pagination">
-      {% if page_obj.has_previous %}
-        <a rel="prev" href="?page={{ page_obj.previous_page_number }}" class="pagination-previous px-2">Previous</a>
-      {% endif %}
-      {% if page_obj.has_next %}
-        <a rel="next" href="?page={{ page_obj.next_page_number }}" class="pagination-next px-2">Next</a>
-      {% endif %}
+        <a href="" class="pagination-previous px-2">More</a>
     </nav>
   </block>
+
 </main>
 
 
 <aside role="complementary" style="flex:0 0 30%;">
-  <block id="explore" heading="explore">
-    <b-taglist>
-    {% for tag in tags_pop %}
-      <a class="tag is-primary is-medium" href="{{ tag.get_absolute_url }}">{{ tag }}</a>
-    {% endfor %}
-  </block>
-
-  <block id="lastUpdated" heading="last updated">
-    {% for draft in drafts_updated %}
+  <block id="latest" heading="latest">
+    {% for draft in drafts_latest %}
       <draftarticle
-        title="{{ draft.title }}"
-        href="{{ draft.get_absolute_url }}"
-        author="{{ draft.blog }}"
-        blog="{{ draft.blog.get_absolute_url }}"
-        latest="{{ draft.updated|timesince|timesince_format }}"
-        tiny="true"
-        src="{{ draft.image }}">
-        {% for tag in draft.tags.all %}
-          <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
-        {% endfor %}
-      </draftarticle>
-    {% endfor %}
-  </block>
-
-  <block id="lastChanceToRead" heading="last chance to read">
-    {% for draft in drafts_random %}
-      <draftarticle
+        type="small"
         title="{{ draft.title }}"
         href="{{ draft.get_absolute_url }}"
         author="{{ draft.blog }}"
@@ -123,9 +92,6 @@
         updated="{{ draft.updated|timesince|timesince_format }}"
         tiny="true"
         src="{{ draft.image }}">
-        {% for tag in draft.tags.all %}
-          <a rel="tag" href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
-        {% endfor %}
       </draftarticle>
     {% endfor %}
   </block>

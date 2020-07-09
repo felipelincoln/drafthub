@@ -1,31 +1,20 @@
 <template>
   <article :aria-label="title" tabindex="0" :class="cls.article">
     <figure :class="cls.figure">
-      <draftimage :href="href" :src="src" :cls="cls.img" :alt="alt"></draftimage>
-      <draftimage :href="href" :src="src" :cls="cls.imgMobile" :alt="alt"></draftimage>
+      <draftimage :href="href" :src="src" :cls="cls.img" :alt="alt" />
+      <draftimage :href="href" :src="src" :cls="cls.imgMobile" :alt="alt" />
     </figure>
-    <div class="media-content" style="min-width:20%">
-      <h2 style="word-wrap: break-word;text-transform: capitalize;">
-        <a :href="href"><strong>
-          {{ title }}
-        </strong></a>
+    <div :class="cls.content">
+      <h2 :class="cls.h2">
+        <a :href="href"><strong>{{ title }}</strong></a>
       </h2>
       <p><small>
         <a rel="author" :href="blog">
-          <address class="is-inline">
-            {{ author }},
-          </address>
+          <address class="is-inline">{{ author }},</address>
         </a>
-        <a v-if="!latest" :href="href">
-          <time pubdate :datetime="datetime">
-            {{ created }}
-          </time>
-          <span v-if="updated && !tiny">
-            (updated <time v-html="updated">{{ updated }}</time> ago)
-          </span>
-        </a>
-        <a v-if="latest" :href="href">
-          <time v-html="latest">{{ latest }}</time> ago
+        <a :href="href">
+          <time v-html="pubdate" :datetime="pubdateDatetime"></time>
+          <time v-if="updated" v-html="updatedStr" :datetime="updatedDatetime"></time>
         </a>
       </small></p>
     </div>
@@ -41,20 +30,22 @@ export default {
   },
   props: [
     'title',
+    'type',
     'href',
+    'src',
     'blog',
     'author',
-    'created',
+    'pubdate',
     'updated',
-    'datetime',
-    'src',
-    'tiny',
-    'latest',
-    'type',
+    'pubdateDatetime',
+    'updatedDatetime',
   ],
   computed: {
     alt: function(){
       return `Cover image for: ${this.title}`
+    },
+    updatedStr: function(){
+      return `(updated ${this.updated})`
     },
     cls: function(){
       return {
@@ -65,6 +56,10 @@ export default {
           'media-left': this.type != 'large',
           'image': this.type == 'large',
           'is-3by1': this.type == 'large',
+          'mr-2': this.type == 'small',
+        },
+        content: {
+          'media-content': this.type != 'large',
         },
         img: {
           'a-img-default': !this.type,
@@ -76,6 +71,11 @@ export default {
         imgMobile: {
           'is-hidden-tablet': this.type != 'large',
           'is-hidden': this.type == 'large',
+        },
+        h2: {
+          'is-capitalized': true,
+          'is-size-5': this.type == 'large',
+          'mt-2': this.type == 'large',
         },
       }
     },
@@ -98,5 +98,11 @@ export default {
 .is-hidden-tablet {
   width: 64px;
   height: 64px;
+}
+.media-content {
+  min-width:20%;
+}
+h2 {
+  word-wrap:break-word;
 }
 </style>

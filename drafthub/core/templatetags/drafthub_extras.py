@@ -118,7 +118,10 @@ def get_model_name(queryset):
 
 @register.filter
 def timesince_format(value):
-    return value.split(',')[0]
+    value_str = value.split(',')[0]
+    if value_str:
+        value_str = value_str + ' ago'
+    return value_str
 
 @register.filter
 def js_bool(value):

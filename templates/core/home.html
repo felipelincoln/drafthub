@@ -27,72 +27,68 @@
 
 
 {% block header %}
-<scrollnav>
-    <a class="pr-3" href="/" style="color:black">home</a>
-    <a class="pr-3" href="/">latest</a>
-    <a class="pr-3" href="/">updated</a>
-  {% for tag in tags_popular %}
-    <a class="pr-3" href="{{ tag.get_absolute_url }}">{{ tag }}</a>
-  {% endfor %}
-</scrollnav>
-
+  <scrollnav>
+      <a class="pr-3" href="/" style="color:black">home</a>
+      <a class="pr-3" href="/">latest</a>
+      <a class="pr-3" href="/">updated</a>
+    {% for tag in tags_popular %}
+      <a class="pr-3" href="{{ tag.get_absolute_url }}">{{ tag }}</a>
+    {% endfor %}
+  </scrollnav>
 {% endblock header %}
 
 
 {% block container %}
-<main style="flex:0 0 65%;" class="mb-6">
-
-  {% with featured=drafts_popular.first %}
-    <draftarticle
-      type="large"
-      title="{{ featured.title }}"
-      href="{{ featured.get_absolute_url }}"
-      author="{{ featured.blog }}"
-      blog="{{ featured.blog.get_absolute_url }}"
-      datetime="{{ featured.created|date:'Y-m-d' }}"
-      created="{{ featured.created|date:'M j' }}"
-      updated="{{ featured.updated|timesince|timesince_format }}"
-      src="{{ featured.image }}">
-    </draftarticle>
-  {% endwith %}
-  
-
-  <block heading="most popular" id="mostPopular">
-    {% for draft in drafts_popular|slice:'1:' %}
+  <main style="flex:0 0 65%;" class="mb-6">
+    {% with featured=drafts_popular.first %}
       <draftarticle
-        title="{{ draft.title }}"
-        href="{{ draft.get_absolute_url }}"
-        author="{{ draft.blog }}"
-        blog="{{ draft.blog.get_absolute_url }}"
-        datetime="{{ draft.created|date:'Y-m-d' }}"
-        created="{{ draft.created|date:'M j' }}"
-        updated="{{ draft.updated|timesince|timesince_format }}"
-        src="{{ draft.image }}">
+        title="{{ featured.title }}"
+        type="large"
+        href="{{ featured.get_absolute_url }}"
+        src="{{ featured.image }}"
+        author="{{ featured.blog }}"
+        blog="{{ featured.blog.get_absolute_url }}"
+        pubdate="{{ featured.created|date:'M j' }}"
+        updated="{{ featured.updated|timesince|timesince_format }}"
+        pubdate-datetime="{{ featured.created|date:'Y-m-d' }}"
+        updated-datetime="{{ featured.updated|date:'Y-m-d' }}">
       </draftarticle>
-    {% endfor %}
-    <nav style="justify-content:center" class="pagination mt-5" aria-label="pagination">
-        <a href="" class="pagination-previous px-2">More</a>
-    </nav>
-  </block>
+    {% endwith %}
 
-</main>
+    <block heading="most popular" id="mostPopular">
+      {% for draft in drafts_popular|slice:'1:' %}
+        <draftarticle
+          title="{{ draft.title }}"
+          href="{{ draft.get_absolute_url }}"
+          src="{{ draft.image }}"
+          author="{{ draft.blog }}"
+          blog="{{ draft.blog.get_absolute_url }}"
+          pubdate="{{ draft.created|date:'M j' }}"
+          updated="{{ draft.updated|timesince|timesince_format }}"
+          pubdate-datetime="{{ draft.created|date:'Y-m-d' }}"
+          updated-datetime="{{ draft.updated|date:'Y-m-d' }}">
+        </draftarticle>
+      {% endfor %}
+      <nav style="justify-content:center" class="pagination mt-5" aria-label="pagination">
+          <a href="" class="pagination-previous px-2">More</a>
+      </nav>
+    </block>
+  </main>
 
-
-<aside role="complementary" style="flex:0 0 30%;">
-  <block id="latest" heading="latest">
-    {% for draft in drafts_latest %}
-      <draftarticle
-        type="small"
-        title="{{ draft.title }}"
-        href="{{ draft.get_absolute_url }}"
-        author="{{ draft.blog }}"
-        blog="{{ draft.blog.get_absolute_url }}"
-        created="{{ draft.created|date:'M j'}}"
-        updated="{{ draft.updated|timesince|timesince_format }}"
-        tiny="true"
-        src="{{ draft.image }}">
-      </draftarticle>
-    {% endfor %}
-  </block>
-</aside>
+  <aside role="complementary" style="flex:0 0 30%;">
+    <block id="latest" heading="latest">
+      {% for draft in drafts_latest %}
+        <draftarticle
+          title="{{ draft.title }}"
+          type="small"
+          href="{{ draft.get_absolute_url }}"
+          src="{{ draft.image }}"
+          author="{{ draft.blog }}"
+          blog="{{ draft.blog.get_absolute_url }}"
+          pubdate="{{ draft.created|timesince|timesince_format }}"
+          pubdate-datetime="{{ draft.created|date:'Y-m-d' }}">
+        </draftarticle>
+      {% endfor %}
+    </block>
+  </aside>
 {% endblock container %}

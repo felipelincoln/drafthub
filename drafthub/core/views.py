@@ -56,7 +56,7 @@ class HomeView(ListView):
         popular_tags_by_name = [tag.name for tag in Tag.objects.all()[:10]]
         page_meta.keywords = ', '.join(popular_tags_by_name)
         context.update({
-            'tags_popular': Tag.objects.all()[:10],
+            'tags_popular': Tag.objects.all()[:7],
             'drafts_latest': Draft.objects.all().order_by('-created')[:10],
             'drafts_random': Draft.objects.get_random_queryset(3),
             'drafts_updated': Draft.objects.filter(

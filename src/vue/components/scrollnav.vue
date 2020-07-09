@@ -41,7 +41,7 @@ export default {
     },
     scrollRight: function(){
       this.x -= this.dx;
-      if(this.x < -this.delta) this.x = -this.delta
+      if(this.x < -this.delta) this.x = -this.delta;
     },
     scrollLeft: function(){
       this.x += this.dx;
@@ -49,10 +49,10 @@ export default {
     },
     makeScroll: function(e) {
       this.x = 0;
-      this.navWidth = this.$el.querySelector('.scrollnav-span').getBoundingClientRect().width
-      this.containerWidth = this.$el.getBoundingClientRect().width
-      this.dx = this.containerWidth*2/3
-      this.delta = this.navWidth - this.containerWidth
+      this.navWidth = this.$el.querySelector('.scrollnav-span').getBoundingClientRect().width;
+      this.containerWidth = this.$el.getBoundingClientRect().width;
+      this.dx = this.containerWidth*2/3;
+      this.delta = this.navWidth - this.containerWidth;
     },
   },
   mounted: function(){
@@ -91,5 +91,9 @@ export default {
   line-height: 40px;
   white-space: nowrap;
   transition: all 500ms cubic-bezier(.19,1,.22,1) 0s;
+}
+li {
+  display: inline;
+  margin-right: 0.75rem;
 }
 </style>

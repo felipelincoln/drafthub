@@ -28,12 +28,14 @@
 
 {% block header %}
   <scrollnav>
-      <a class="pr-3" href="/" style="color:black">home</a>
-      <a class="pr-3" href="/">latest</a>
-      <a class="pr-3" href="/">updated</a>
-    {% for tag in tags_popular %}
-      <a class="pr-3" href="{{ tag.get_absolute_url }}">{{ tag }}</a>
-    {% endfor %}
+    <ul>
+      <li><a href="/" style="color:black">home</a></li>
+      <li><a href="/">latest</a></li>
+      <li><a  href="/">updated</a></li>
+      {% for tag in tags_popular %}
+        <li><a href="{{ tag.get_absolute_url }}">{{ tag }}</a></li>
+      {% endfor %}
+    </ul>
   </scrollnav>
 {% endblock header %}
 

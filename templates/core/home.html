@@ -28,10 +28,13 @@
 
 {% block header %}
 <scrollnav>
-  <a href="#" class="pr-3">start your blog</a>
-  <a href="#" class="pr-3">markdown cheatsheet</a>
-  <a href="#" class="pr-3">contributing to drafthub</a>
-  <a href="#" class="pr-3">current issues</a>
+    <a class="pr-3" href="/" style="color:black">home</a>
+    <a class="pr-3" href="/">popular</a>
+    <a class="pr-3" href="/">latest</a>
+    <a class="pr-3" href="/">updated</a>
+  {% for tag in tags_pop %}
+    <a class="pr-3" href="{{ tag.get_absolute_url }}">{{ tag }}</a>
+  {% endfor %}
 </scrollnav>
 {% endblock header %}
 

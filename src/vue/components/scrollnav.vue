@@ -29,6 +29,7 @@ export default {
       navWidth: 0,
       containerWidth: 0,
       x: 0,
+      delta: 0,
       dx: 0,
     }
   },
@@ -40,17 +41,18 @@ export default {
     },
     scrollRight: function(){
       this.x -= this.dx;
+      if(this.x < -this.delta) this.x = -this.delta
     },
     scrollLeft: function(){
       this.x += this.dx;
+      if(this.x > 0) this.x = 0;
     },
     makeScroll: function(e) {
       this.x = 0;
       this.navWidth = this.$el.querySelector('.scrollnav-span').getBoundingClientRect().width
       this.containerWidth = this.$el.getBoundingClientRect().width
-      if(this.navWidth > this.containerWidth){
-        this.dx = Math.min(this.containerWidth, this.navWidth - this.containerWidth)
-      }
+      this.dx = this.containerWidth*2/3
+      this.delta = this.navWidth - this.containerWidth
     },
   },
   mounted: function(){
@@ -88,6 +90,6 @@ export default {
   height: 40px;
   line-height: 40px;
   white-space: nowrap;
-  transition: all 250ms ease-out 0s;
+  transition: all 500ms cubic-bezier(.19,1,.22,1) 0s;
 }
 </style>

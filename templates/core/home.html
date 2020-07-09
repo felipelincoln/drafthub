@@ -57,6 +57,8 @@
       </draftarticle>
     {% endwith %}
 
+    <hr>
+
     <block heading="most popular" id="mostPopular">
       {% for draft in drafts_popular|slice:'1:' %}
         <draftarticle

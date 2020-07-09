@@ -17,7 +17,7 @@
       <b-icon icon="chevron-right"></b-icon>
     </button>
     <div class="scrollnav-list" :style="style()">
-      <span class="scrollnav-span"><slot></slot></span>
+      <ul><slot></slot></ul>
     </div>
   </nav>
 </template>
@@ -49,7 +49,7 @@ export default {
     },
     makeScroll: function(e) {
       this.x = 0;
-      this.navWidth = this.$el.querySelector('.scrollnav-span').getBoundingClientRect().width;
+      this.navWidth = this.$el.querySelector('ul').getBoundingClientRect().width;
       this.containerWidth = this.$el.getBoundingClientRect().width;
       this.dx = this.containerWidth*2/3;
       this.delta = this.navWidth - this.containerWidth;
@@ -95,5 +95,8 @@ export default {
 li {
   display: inline;
   margin-right: 0.75rem;
+}
+ul {
+  display: inline;
 }
 </style>

@@ -46,12 +46,9 @@ class BlogListView(ListView):
 
 class HomeView(ListView):
     model = Draft
-    context_object_name = 'drafts_new'
+    context_object_name = 'drafts_popular'
     template_name = 'core/home.html'
-    paginate_by = 3
-
-    def get_queryset(self):
-        return Draft.objects.all().order_by('-created')
+    paginate_by = 30
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -59,8 +56,8 @@ class HomeView(ListView):
         popular_tags_by_name = [tag.name for tag in Tag.objects.all()[:10]]
         page_meta.keywords = ', '.join(popular_tags_by_name)
         context.update({
-            'tags_pop': Tag.objects.all()[:10],
-            'drafts_pop': Draft.objects.all()[:10],
+            'tags_popular': Tag.objects.all()[:10],
+            'drafts_latest': Draft.objects.all().order_by('-created')[:10],
             'drafts_random': Draft.objects.get_random_queryset(3),
             'drafts_updated': Draft.objects.filter(
                 updated__isnull=False).order_by('-updated')[:5],

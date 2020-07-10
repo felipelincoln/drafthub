@@ -2,7 +2,7 @@
   <nav class="scrollnav" role="navigation" aria-label="page navigation">
     <a
       v-if="x < 0"
-      class="btn-a btn-left is-small px-1"
+      class="btn-a btn-left is-small"
       @click="scrollLeft()"
       aria-hidden="true"
       tabindex="-1">
@@ -10,7 +10,7 @@
     </a>
     <a
       v-if="x > containerWidth -navWidth"
-      class="btn-a btn-right is-small px-1"
+      class="btn-a btn-right is-small"
       @click="scrollRight()"
       aria-hidden="true"
       tabindex="-1">

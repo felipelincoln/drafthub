@@ -1,21 +1,21 @@
 <template>
   <nav class="scrollnav" role="navigation" aria-label="page navigation">
-    <div
+    <a
       v-if="x < 0"
-      class="btn-div btn-left is-small px-1"
+      class="btn-a btn-left is-small px-1"
       @click="scrollLeft()"
       aria-hidden="true"
       tabindex="-1">
       <b-icon icon="chevron-left"></b-icon>
-    </div>
-    <div
+    </a>
+    <a
       v-if="x > containerWidth -navWidth"
-      class="btn-div btn-right is-small px-1"
+      class="btn-a btn-right is-small px-1"
       @click="scrollRight()"
       aria-hidden="true"
       tabindex="-1">
       <b-icon icon="chevron-right"></b-icon>
-    </div>
+    </a>
     <div class="scrollnav-list" :style="style()">
       <ul><slot></slot></ul>
     </div>
@@ -73,15 +73,11 @@ export default {
   overflow: hidden;
   width: 100%;
 }
-.btn-div {
+.btn-a {
   background-color: white;
-  cursor: pointer;
   position: absolute;
   z-index: 1;
   top:0;
-}
-.btn-div:hover {
-  color: black;
 }
 .btn-left {
   left:0;

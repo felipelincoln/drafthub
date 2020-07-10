@@ -27,9 +27,9 @@
 
 {% block header %}
   <scrollnav>
-    <li><a href="/" style="color:black">home</a></li>
+    <li><a href="/">home</a></li>
     <li><a href="/">latest</a></li>
-    <li><a  href="/">updated</a></li>
+    <li><a href="/">updated</a></li>
     {% for tag in tags_popular %}
       <li><a href="{{ tag.get_absolute_url }}">{{ tag }}</a></li>
     {% endfor %}
@@ -81,7 +81,7 @@
     <block id="latest" heading="latest">
       {% for draft in drafts_latest %}
         <draftarticle
-          title="{{ draft.title }}"
+          title="{{ draft.get_short_title}}"
           type="small"
           href="{{ draft.get_absolute_url }}"
           src="{{ draft.image }}"

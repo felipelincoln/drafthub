@@ -18,7 +18,10 @@
 <body>
 <a aria-labelledby="ariaLink" id="ariaLink" href="#main">Skip to main content</a>
 <div id="app">
-  <b-navbar class="container" :close-on-click="false">
+  <b-navbar
+    class="container"
+    :mobile-burger="false"
+    :transparent="true">
     <template slot="brand">
       <div class="navbar-item pr-0">
         <nav class="breadcrumb" aria-label="breadcrumbs">
@@ -31,17 +34,27 @@
     </template>
     <template slot="end">
       {% if user.is_authenticated %}
-      <b-navbar-dropdown right label="{{ user.username }}" role="menu">
+      <b-navbar-dropdown
+        role="menu"
+        right
+        :arrowless="true"
+        :boxed="true">
+        <template slot="label">
+            <draftimage
+              style="width:32px; height:32px"
+              src="{{ user.social_auth.get.extra_data.avatar_url }}">
+            </draftimage>
+        </template>
         <b-navbar-item href="{% url 'new' %}" role="menuitem">
           New article
-        </b-navbar-item>
-        <b-navbar-item href="{{ user.get_absolute_url }}" role="menuitem">
-          Blog
         </b-navbar-item>
         <b-navbar-item href="{% url 'search' %}?q=favorites:" role="menuitem">
           Favorites
         </b-navbar-item>
         <hr class="dropdown-divider">
+        <b-navbar-item href="{{ user.get_absolute_url }}" role="menuitem">
+          <strong>{{ user }}/</strong>
+        </b-navbar-item>
         <b-navbar-item href="{% url 'logout' %}?next={{ request.path }}" role="menuitem">
           Logout
         </b-navbar-item>

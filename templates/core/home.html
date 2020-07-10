@@ -25,6 +25,10 @@
   {{ block.super }}
 {% endblock breadcrumb %}
 
+{% block start %}
+
+{% endblock start %}
+
 
 {% block header %}
   <scrollnav>
@@ -78,6 +82,7 @@
   </main>
 
   <aside role="complementary" style="flex:0 0 30%;">
+    <searchform action="{% url 'search' %}" placeholder="Search"></searchform>
     <block id="latest" heading="latest">
       {% for draft in drafts_latest %}
         <draftarticle

@@ -23,19 +23,11 @@
       <div class="navbar-item pr-0">
         <nav class="breadcrumb" aria-label="breadcrumbs">
           <ul style="align-items:center;">
-            {% block breadcrumb %}
-              <li class="is-hidden-mobile" aria-hidden="true"></li>
-            {% endblock breadcrumb %}
+            {% block breadcrumb %}{% endblock breadcrumb %}
+            <li aria-hidden="true"></li>
           </ul>
         </nav>
       </div>
-    </template>
-    <template slot="start">
-      {% block start %}
-        <div class="navbar-item">
-          <searchform action="{% url 'search' %}" placeholder="Search"></searchform>
-        </div>
-      {% endblock start %}
     </template>
     <template slot="end">
       {% if user.is_authenticated %}
@@ -60,6 +52,7 @@
           tag="a"
           href="{% url 'social:begin' 'github' %}?next={{ request.GET.next }}"
           type="is-dark"
+          size="is-small"
           icon-left="github"
           aria-label="Sign in using your GitHub account">
           <strong>Sign in</strong>
@@ -73,9 +66,7 @@
     {% block header %}{% endblock header %}
   </header>
 
-  <hr class="mt-2">
-
-  <div id="main" class="container is-flex-tablet px-3" style="justify-content:space-between">
+  <div id="main" class="container is-flex-tablet mt-3 px-3" style="justify-content:space-between">
     {% block container %}{% endblock %}
   </div>
 

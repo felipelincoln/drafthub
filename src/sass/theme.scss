@@ -10,6 +10,7 @@ $green: #45BF17;
 $yellow: #D0A81C;
 $red: #D25C46;
 $blue: #097ABA;
+$size-7: 0.80rem;
 @import "../../node_modules/bulma/sass/utilities/initial-variables";
 
 // Derived variables
@@ -30,7 +31,7 @@ $fullhd-enabled: false;
 $widescreen-enabled: false;
 $input-placeholder-color: $text-light;
 $footer-background-color: $white;
-$radius: 12px;
+$radius: 2px;
 
 // CSS
 ::placeholder {

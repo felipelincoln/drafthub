@@ -34,7 +34,7 @@ a {
   display: block;
   background-size: cover;
   background-position: center center;
-  border-radius: 12px;
+  border-radius: 2px;
 }
 a:hover {
   text-decoration: none;

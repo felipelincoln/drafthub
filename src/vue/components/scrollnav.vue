@@ -2,7 +2,7 @@
   <nav class="scrollnav" role="navigation" aria-label="page navigation">
     <button
       v-if="x < 0"
-      class="button btn-left"
+      class="button btn-left is-small"
       @click="scrollLeft()"
       aria-hidden="true"
       tabindex="-1">
@@ -10,7 +10,7 @@
     </button>
     <button
       v-if="x > containerWidth -navWidth"
-      class="button btn-right"
+      class="button btn-right is-small"
       @click="scrollRight()"
       aria-hidden="true"
       tabindex="-1">
@@ -87,8 +87,8 @@ export default {
 .scrollnav-list {
   position: relative;
   width: 100%;
-  height: 40px;
-  line-height: 40px;
+  height: 32px;
+  line-height: 32px;
   white-space: nowrap;
   transition: all 500ms cubic-bezier(.19,1,.22,1) 0s;
 }

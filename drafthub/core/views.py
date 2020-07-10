@@ -44,20 +44,24 @@ class BlogListView(ListView):
         return context
 
 
-class HomeView(ListView):
-    model = Draft
-    context_object_name = 'drafts_popular'
+class HomeView(TemplateView):
     template_name = 'core/home.html'
-    paginate_by = 30
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        tags = Tag.objects.all()
+        drafts = Draft.objects.all()
+        drafts_latest = drafts.difference(drafts[:10]).order_by('-created')
+
+        popular_tags_by_name = [tag.name for tag in tags[:7]]
         page_meta = PageContext(self.request)
-        popular_tags_by_name = [tag.name for tag in Tag.objects.all()[:10]]
         page_meta.keywords = ', '.join(popular_tags_by_name)
+
         context.update({
-            'tags_popular': Tag.objects.all()[:7],
-            'drafts_latest': Draft.objects.all().order_by('-created')[:10],
+            'tags_popular': tags[:7],
+            'drafts_popular': drafts[:10],
+            'drafts_latest': drafts_latest[:10],
             'drafts_random': Draft.objects.get_random_queryset(3),
             'drafts_updated': Draft.objects.filter(
                 updated__isnull=False).order_by('-updated')[:5],

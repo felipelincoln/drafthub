@@ -1,5 +1,5 @@
 <template>
-  <a :href="href" :class="cls" :style="stl" :aria-label="alt">
+  <a :href="href" :class="[cls, 'draftimage']" :style="stl" :aria-label="alt">
     <b-skeleton :active="loading"></b-skeleton>
   </a>
 </template>
@@ -34,7 +34,6 @@ a {
   display: block;
   background-size: cover;
   background-position: center center;
-  border-radius: 2px;
 }
 a:hover {
   text-decoration: none;

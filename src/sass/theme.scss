@@ -28,7 +28,7 @@ $link-focus-border: $grey-dark;
 @import "../../node_modules/bulma/sass/utilities/derived-variables";
 
 // Generic variables
-$navbar-breakpoint: $tablet;
+$navbar-breakpoint: 0;
 $fullhd-enabled: false;
 $widescreen-enabled: false;
 $input-placeholder-color: $text-light;
@@ -46,10 +46,6 @@ aside,
 main {
   min-width: 1%;
 }
-img {
-  overflow: hidden;
-  word-wrap: break-word;
-}
 textarea {
   resize: none !important;
 }
@@ -58,7 +54,7 @@ a {
     text-decoration: underline;
   }
 }
-.image img {
+.draftimage {
   border-radius: $radius;
 }
 .is-48x48,

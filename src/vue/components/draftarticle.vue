@@ -7,11 +7,6 @@
     <div :class="cls.content">
       <h2 :class="cls.h2">
         <a :href="href"><strong>{{ title }}</strong></a>
-        <b-tooltip v-if="type == 'large'" label="Most popular today"
-          type="is-dark"
-          position="is-bottom">
-          <i class="fas fa-chart-line"></i>
-        </b-tooltip>
       </h2>
       <p v-if="type == 'large'" class="has-text-grey"><small>{{ description }}</small></p>
       <p><small>
@@ -20,8 +15,14 @@
         </a>
         <a :href="href">
           <time v-html="pubdate" :datetime="pubdateDatetime"></time>
+          <br class="is-hidden-tablet">
           <time v-if="updated" v-html="updatedStr" :datetime="updatedDatetime"></time>
         </a>
+        <b-tooltip v-if="type == 'large'" label="Most popular today"
+          type="is-dark"
+          position="is-bottom">
+          <i class="fas fa-chart-line"></i>
+        </b-tooltip>
       </small></p>
     </div>
   </article>
@@ -112,6 +113,9 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+.media {
+  border: 0;
 }
 article {
   align-items: stretch;

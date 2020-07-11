@@ -7,7 +7,13 @@
     <div :class="cls.content">
       <h2 :class="cls.h2">
         <a :href="href"><strong>{{ title }}</strong></a>
+        <b-tooltip v-if="type == 'large'" label="Most popular today"
+          type="is-dark"
+          position="is-bottom">
+          <i class="fas fa-chart-line"></i>
+        </b-tooltip>
       </h2>
+      <p v-if="type == 'large'" class="has-text-grey"><small>{{ description }}</small></p>
       <p><small>
         <a rel="author" :href="blog">
           <address class="is-inline">{{ author }},</address>
@@ -30,6 +36,7 @@ export default {
   },
   props: [
     'title',
+    'description',
     'type',
     'href',
     'src',
@@ -93,7 +100,8 @@ export default {
 }
 .a-img-default {
   width: 128px;
-  height: 85px;
+  height: 100%;
+  min-height: 72px;
 }
 .is-hidden-tablet {
   width: 64px;
@@ -101,6 +109,12 @@ export default {
 }
 .media-content {
   min-width:20%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+article {
+  align-items: stretch;
 }
 h2 {
   word-wrap:break-word;

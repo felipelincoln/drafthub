@@ -42,6 +42,7 @@
     {% with featured=drafts_popular.first %}
       <draftarticle
         title="{{ featured.title }}"
+        description="{{ featured.description }}"
         type="large"
         href="{{ featured.get_absolute_url }}"
         src="{{ featured.image }}"
@@ -78,6 +79,7 @@
 
   <aside role="complementary" style="flex:0 0 30%;">
     <searchform action="{% url 'search' %}" placeholder="Search"></searchform>
+    <markdownpreview url="https://github.com/felipelincoln/denovo/blob/master/contas.md"></markdownpreview>
     <block id="latest" heading="latest">
       {% for draft in drafts_latest %}
         <draftarticle

@@ -42,6 +42,7 @@
         :boxed="true">
         <template slot="label">
             <draftimage
+              alt="{{ user }}"
               style="width:32px; height:32px"
               src="{{ user.social_auth.get.extra_data.avatar_url }}">
             </draftimage>

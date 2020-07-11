@@ -80,19 +80,24 @@
   <aside role="complementary" style="flex:0 0 30%;">
     <searchform action="{% url 'search' %}" placeholder="Search"></searchform>
     <markdownpreview url="https://github.com/felipelincoln/denovo/blob/master/contas.md"></markdownpreview>
-    <block id="latest" heading="latest">
-      {% for draft in drafts_latest %}
-        <draftarticle
-          title="{{ draft.get_short_title}}"
-          type="small"
-          href="{{ draft.get_absolute_url }}"
-          src="{{ draft.image }}"
-          author="{{ draft.blog }}"
-          blog="{{ draft.blog.get_absolute_url }}"
-          pubdate="{{ draft.created|timesince|timesince_format }}"
-          pubdate-datetime="{{ draft.created|date:'Y-m-d' }}">
-        </draftarticle>
-      {% endfor %}
-    </block>
+    {% if drafts_latest %}
+      <block id="latest" heading="latest">
+        {% for draft in drafts_latest %}
+          <draftarticle
+            title="{{ draft.get_short_title}}"
+            type="small"
+            href="{{ draft.get_absolute_url }}"
+            src="{{ draft.image }}"
+            author="{{ draft.blog }}"
+            blog="{{ draft.blog.get_absolute_url }}"
+            pubdate="{{ draft.created|timesince|timesince_format }}"
+            pubdate-datetime="{{ draft.created|date:'Y-m-d' }}">
+          </draftarticle>
+        {% endfor %}
+        <nav style="justify-content:center" class="pagination mt-5" aria-label="pagination">
+            <a href="" class="pagination-previous px-2">More</a>
+        </nav>
+      </block>
+    {% endif %}
   </aside>
 {% endblock container %}

@@ -15,7 +15,7 @@
         </a>
         <a :href="href">
           <time v-html="pubdate" :datetime="pubdateDatetime"></time>
-          <br class="is-hidden-tablet">
+          <br v-if="type != 'large'" class="is-hidden-tablet">
           <time v-if="updated" v-html="updatedStr" :datetime="updatedDatetime"></time>
         </a>
         <b-tooltip v-if="type == 'large'" label="Most popular today"

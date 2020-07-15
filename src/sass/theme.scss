@@ -35,6 +35,12 @@ $input-placeholder-color: $text-light;
 $footer-background-color: $white;
 $radius: 2px;
 
+// Components
+$dropdown-content-radius: $radius-large;
+$dropdown-content-padding-bottom: 0;
+$dropdown-content-padding-top: 0;
+$dropdown-content-shadow: 0 8px 8px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+
 // CSS
 ::placeholder {
   opacity: 0.8;

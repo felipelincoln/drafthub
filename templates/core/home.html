@@ -22,8 +22,10 @@
 
 {% block breadcrumb %}
   <li><a aria-current="page" href="{% url 'home' %}">DRAFTHUB</a></li>
-  {{ block.super }}
 {% endblock breadcrumb %}
+{% block search %}
+  <searchitem action="{% url 'search' %}" placeholder="Search for articles, topics and blogs"></searchitem>
+{% endblock search %}
 
 {% block header %}
   <scrollnav>
@@ -77,8 +79,7 @@
     </block>
   </main>
 
-  <aside role="complementary" style="flex:0 0 30%;">
-    <searchform action="{% url 'search' %}" placeholder="Search"></searchform>
+  <aside class="is-hidden-mobile" role="complementary" style="flex:0 0 30%;">
     <markdownpreview url="https://github.com/felipelincoln/denovo/blob/master/contas.md"></markdownpreview>
     {% if drafts_latest %}
       <block id="latest" heading="latest">

@@ -32,6 +32,9 @@
           </ul>
         </nav>
       </div>
+      <div class="navbar-item">
+        {% block search %}{% endblock search %}
+      </div>
     </template>
     <template slot="end">
       {% if user.is_authenticated %}

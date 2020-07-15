@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Buefy from 'buefy'
 import searchform from './components/searchform.vue';
+import searchitem from './components/searchitem.vue';
 import block from './components/block.vue';
 import draftarticle from './components/draftarticle.vue';
 import coverpreview from './components/coverpreview.vue';
@@ -16,6 +17,7 @@ window.vm = new Vue({
   delimiters: ['[[', ']]'],
   components: {
     'searchform': searchform,
+    'searchitem': searchitem,
     'block': block,
     'draftarticle': draftarticle,
     'coverpreview': coverpreview,

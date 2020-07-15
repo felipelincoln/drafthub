@@ -38,32 +38,32 @@
     </template>
     <template slot="end">
       {% if user.is_authenticated %}
-      <b-navbar-dropdown
-        role="menu"
-        right
-        :arrowless="true"
-        :boxed="true">
-        <template slot="label">
-            <draftimage
-              alt="{{ user }}"
-              style="width:32px; height:32px"
-              src="{{ user.social_auth.get.extra_data.avatar_url }}">
-            </draftimage>
-        </template>
-        <b-navbar-item href="{% url 'new' %}" role="menuitem">
-          New article
-        </b-navbar-item>
-        <b-navbar-item href="{% url 'search' %}?q=favorites:" role="menuitem">
-          Favorites
-        </b-navbar-item>
-        <hr class="dropdown-divider">
-        <b-navbar-item href="{{ user.get_absolute_url }}" role="menuitem">
-          <strong>{{ user }}/</strong>
-        </b-navbar-item>
-        <b-navbar-item href="{% url 'logout' %}?next={{ request.path }}" role="menuitem">
-          Logout
-        </b-navbar-item>
-      </b-navbar-dropdown>
+          <b-dropdown position="is-bottom-left" :mobile-modal="false" role="menu">
+            <a href="javascript:void(0);" class="navbar-item" slot="trigger" role="button">
+              <b-tooltip label="{{ user }}"
+                type="is-dark"
+                position="is-left">
+                <draftimage
+                  alt="{{ user }}"
+                  style="width:32px; height:32px"
+                  src="{{ user.social_auth.get.extra_data.avatar_url }}">
+                </draftimage>
+              </b-tooltip>
+            </a>
+            <b-dropdown-item has-link role="menuitem">
+              <a href="{% url 'new' %}">New article</a>
+            </b-dropdown-item>
+            <b-dropdown-item has-link role="menuitem">
+              <a href="{% url 'search' %}?q=favorites:">Favorites</a>
+            </b-dropdown-item>
+            <hr class="dropdown-divider">
+            <b-dropdown-item has-link role="menuitem">
+              <a href="{{ user.get_absolute_url }}"><strong>{{ user }}/</strong></a>
+            </b-dropdown-item>
+            <b-dropdown-item has-link role="menuitem">
+              <a href="{% url 'logout' %}?next={{ request.path }}">Logout</a>
+            </b-dropdown-item>
+          </b-dropdown>
       {% else %}
       <div class="navbar-item">
         <b-button

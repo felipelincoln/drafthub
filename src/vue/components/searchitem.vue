@@ -1,9 +1,9 @@
 <template>
 <b-dropdown role="menu">
-  <a href="javascript:void(0);" slot="trigger" aria-label="search">
+  <a href="javascript:void(0);" class="navbar-item" slot="trigger" role="button" aria-label="search">
     <b-tooltip label="Search"
       type="is-dark"
-      position="is-bottom">
+      position="is-right">
       <b-icon icon="magnify"></b-icon>
     </b-tooltip>
   </a>
@@ -43,6 +43,6 @@ export default {
 <style scoped>
 .dropdown-box {
   min-width:300px;
-  padding: 0.5rem;
+  padding: 0 0.5rem;
 }
 </style>

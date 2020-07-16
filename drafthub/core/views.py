@@ -48,23 +48,34 @@ class HomeView(TemplateView):
     template_name = 'core/home.html'
 
     def get_context_data(self, **kwargs):
+        def skip_n(queryset, n):
+            dids = queryset.values_list('did', flat=True)[n:]
+            return Draft.objects.filter(did__in=dids)
+
         context = super().get_context_data(**kwargs)
+
+        n_tags = 7
+        n_popular = 25
+        n_latest = 10
+        n_updated = 5
 
         tags = Tag.objects.all()
         drafts = Draft.objects.all()
-        drafts_latest = drafts.difference(drafts[:10]).order_by('-created')
+        drafts_latest = skip_n(drafts, n_popular).order_by('-created')
+        drafts_updated = skip_n(drafts_latest, n_latest).filter(
+            updated__isnull=False
+        ).order_by('-updated')
+        popular_tags_by_name = [tag.name for tag in tags[:n_tags]]
 
-        popular_tags_by_name = [tag.name for tag in tags[:7]]
         page_meta = PageContext(self.request)
         page_meta.keywords = ', '.join(popular_tags_by_name)
 
         context.update({
-            'tags_popular': tags[:7],
-            'drafts_popular': drafts[:10],
-            'drafts_latest': drafts_latest[:10],
-            'drafts_random': Draft.objects.get_random_queryset(3),
-            'drafts_updated': Draft.objects.filter(
-                updated__isnull=False).order_by('-updated')[:5],
+            'tags_popular': tags[:n_tags],
+            'drafts_popular': drafts[:n_popular],
+            'drafts_latest': drafts_latest[:n_latest],
+            #'drafts_random': Draft.objects.get_random_queryset(3),
+            'drafts_updated': drafts_updated[:n_updated],
              **page_meta.context,
         })
 

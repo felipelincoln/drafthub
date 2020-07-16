@@ -73,9 +73,7 @@
           updated-datetime="{{ draft.updated|date:'Y-m-d' }}">
         </draftarticle>
       {% endfor %}
-      <nav style="justify-content:center" class="pagination mt-5" aria-label="pagination">
-        <a href="" class="pagination-next px-2">More</a>
-      </nav>
+      <pagination></pagination>
     </block>
   </main>
 
@@ -94,13 +92,11 @@
             pubdate-datetime="{{ draft.created|date:'Y-m-d' }}">
           </draftarticle>
         {% endfor %}
-        <nav style="justify-content:center" class="pagination mt-5" aria-label="pagination">
-          <a href="" class="pagination-next px-2">More</a>
-        </nav>
+        <pagination></pagination>
       </block>
     {% endif %}
     {% if drafts_updated %}
-      <block id="latest" heading="latest">
+      <block id="updated" heading="updated">
         {% for draft in drafts_updated %}
           <draftarticle
             title="{{ draft.get_short_title}}"
@@ -113,9 +109,7 @@
             pubdate-datetime="{{ draft.updated|date:'Y-m-d' }}">
           </draftarticle>
         {% endfor %}
-        <nav style="justify-content:center" class="pagination mt-5" aria-label="pagination">
-          <a href="" class="pagination-next px-2">More</a>
-        </nav>
+        <pagination></pagination>
       </block>
     {% endif %}
   </aside>

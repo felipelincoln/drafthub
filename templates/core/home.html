@@ -74,13 +74,12 @@
         </draftarticle>
       {% endfor %}
       <nav style="justify-content:center" class="pagination mt-5" aria-label="pagination">
-          <a href="" class="pagination-previous px-2">More</a>
+        <a href="" class="pagination-next px-2">More</a>
       </nav>
     </block>
   </main>
 
   <aside class="is-hidden-mobile" role="complementary" style="flex:0 0 30%;">
-    <markdownpreview url="https://github.com/felipelincoln/denovo/blob/master/contas.md"></markdownpreview>
     {% if drafts_latest %}
       <block id="latest" heading="latest">
         {% for draft in drafts_latest %}
@@ -96,7 +95,26 @@
           </draftarticle>
         {% endfor %}
         <nav style="justify-content:center" class="pagination mt-5" aria-label="pagination">
-            <a href="" class="pagination-previous px-2">More</a>
+          <a href="" class="pagination-next px-2">More</a>
+        </nav>
+      </block>
+    {% endif %}
+    {% if drafts_updated %}
+      <block id="latest" heading="latest">
+        {% for draft in drafts_updated %}
+          <draftarticle
+            title="{{ draft.get_short_title}}"
+            type="small"
+            href="{{ draft.get_absolute_url }}"
+            src="{{ draft.image }}"
+            author="{{ draft.blog }}"
+            blog="{{ draft.blog.get_absolute_url }}"
+            pubdate="{{ draft.updated|timesince|timesince_format }}"
+            pubdate-datetime="{{ draft.updated|date:'Y-m-d' }}">
+          </draftarticle>
+        {% endfor %}
+        <nav style="justify-content:center" class="pagination mt-5" aria-label="pagination">
+          <a href="" class="pagination-next px-2">More</a>
         </nav>
       </block>
     {% endif %}

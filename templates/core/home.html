@@ -75,7 +75,7 @@
         </draftarticle>
       {% endfor %}
       {% if has_more_popular %}
-        <pagination href="topics/?s=popular" :page="1"></pagination>
+        <pagination href="{% url 'topics' %}?s=popular" :page="1"></pagination>
       {% endif %}
     </block>
   </main>
@@ -95,7 +95,7 @@
             pubdate-datetime="{{ draft.created|date:'Y-m-d' }}">
           </draftarticle>
         {% endfor %}
-        <pagination href="topics/?s=latest"></pagination>
+        <pagination href="{% url 'topics' %}?s=latest"></pagination>
       </block>
     {% endif %}
     {% if drafts_updated %}
@@ -112,7 +112,7 @@
             pubdate-datetime="{{ draft.updated|date:'Y-m-d' }}">
           </draftarticle>
         {% endfor %}
-        <pagination href="topics/?s=updated"></pagination>
+        <pagination href="{% url 'topics' %}?s=updated"></pagination>
       </block>
     {% endif %}
   </aside>

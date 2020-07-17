@@ -1,9 +1,9 @@
 <template>
   <nav class="pagination mt-5" :style="!hasNext? 'flex-direction: row': ''">
-    <a v-if="hasNext" :href="href+nextPage">
+    <a rel="next" v-if="hasNext" :href="href+nextPage">
       <span>{{ nextText }}</span><b-icon icon="chevron-right"></b-icon>
     </a>
-    <a v-if="hasPrev" :href="href+prevPage">
+    <a rel="prev" v-if="hasPrev" :href="href+prevPage">
       <b-icon icon="chevron-left"></b-icon><span>{{ prevText }}</span>
     </a>
   </nav>

@@ -55,8 +55,8 @@ class HomeView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         n_tags = 7
-        n_popular = 5
-        n_latest = 5
+        n_popular = 30
+        n_latest = 10
         n_updated = 5
 
         tags = Tag.objects.all()

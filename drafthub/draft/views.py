@@ -448,10 +448,16 @@ class TopicsListView(ListView):
         drafts = Draft.objects.all()
 
         if sort == 'latest':
+            self.heading = 'latest'
+            self.description = 'The latest published articles'
             return drafts.order_by('-created')
         elif sort == 'updated':
+            self.heading = 'updated'
+            self.description = 'The latest updated articles'
             return drafts.filter(updated__isnull=False).order_by('-updated')
 
+        self.heading = 'popular'
+        self.description = 'The most popular articles today'
         return drafts
         
         
@@ -467,6 +473,8 @@ class TopicsListView(ListView):
 
         context.update({
             'tags_popular': tags[:n_tags],
+            'heading': self.heading,
+            'description': self.description,
              **page_meta.context,
         })
 

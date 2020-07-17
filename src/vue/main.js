@@ -10,6 +10,7 @@ import inputtags from './components/inputtags.vue';
 import scrollnav from './components/scrollnav.vue';
 import draftimage from './components/draftimage.vue';
 import pagination from './components/pagination.vue';
+import heading from './components/heading.vue';
 
 Vue.use(Buefy);
 
@@ -27,6 +28,7 @@ window.vm = new Vue({
     'scrollnav': scrollnav,
     'draftimage': draftimage,
     'pagination': pagination,
+    'heading': heading,
   },
   data: {
     newArticle: {

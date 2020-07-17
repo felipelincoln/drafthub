@@ -38,9 +38,14 @@
   </scrollnav>
 {% endblock header %}
 
-
 {% block container %}
-  <main style="flex:0 0 65%;">
+  <aside class="mb-5" style="flex:0 0 30%;">
+    <heading id="pageHeading">{{ heading }}</heading>
+    <p id="pageDescription">{{ description }}</p>
+  </aside>
+  <main
+    style="flex:0 0 65%; order:-1;"
+    aria-labelledby="pageDescription">
     {% for draft in topics_drafts %}
       <draftarticle
         :type="!{{ page_obj.has_previous|js_bool }} && !{{ forloop.counter0|js_bool }}?'large':''"
@@ -67,7 +72,4 @@
     </pagination>
   </main>
 
-  <aside class="is-hidden-mobile" role="complementary" style="flex:0 0 30%;">
-    page context
-  </aside>
 {% endblock container %}

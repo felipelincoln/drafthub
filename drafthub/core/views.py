@@ -55,8 +55,8 @@ class HomeView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         n_tags = 7
-        n_popular = 25
-        n_latest = 10
+        n_popular = 5
+        n_latest = 5
         n_updated = 5
 
         tags = Tag.objects.all()
@@ -76,6 +76,7 @@ class HomeView(TemplateView):
             'drafts_latest': drafts_latest[:n_latest],
             #'drafts_random': Draft.objects.get_random_queryset(3),
             'drafts_updated': drafts_updated[:n_updated],
+            'has_more_popular': drafts.count() > n_popular,
              **page_meta.context,
         })
 

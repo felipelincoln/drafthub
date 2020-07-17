@@ -18,7 +18,7 @@
           <br v-if="type != 'large'" class="is-hidden-tablet">
           <time v-if="updated" v-html="updatedStr" :datetime="updatedDatetime"></time>
         </a>
-        <b-tooltip v-if="type == 'large'" label="Most popular today"
+        <b-tooltip v-if="badge" label="Most popular today"
           type="is-dark"
           position="is-bottom">
           <i class="fas fa-chart-line"></i>
@@ -47,6 +47,7 @@ export default {
     'updated',
     'pubdateDatetime',
     'updatedDatetime',
+    'badge',
   ],
   computed: {
     alt: function(){

@@ -437,6 +437,42 @@ class TagListView(ListView):
         return context
 
 
+class TopicsListView(ListView):
+    model = Draft
+    template_name = 'draft/topics.html'
+    context_object_name = 'topics_drafts'
+    paginate_by = 5
+
+    def get_queryset(self):
+        sort = self.request.GET.get('s')
+        drafts = Draft.objects.all()
+
+        if sort == 'latest':
+            return drafts.order_by('-created')
+        elif sort == 'updated':
+            return drafts.filter(updated__isnull=False).order_by('-updated')
+
+        return drafts
+        
+        
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        n_tags = 7
+        tags = Tag.objects.all()
+        popular_tags_by_name = [tag.name for tag in tags[:n_tags]]
+        page_meta = PageContext(self.request)
+        page_meta.keywords = ', '.join(popular_tags_by_name)
+
+        context.update({
+            'tags_popular': tags[:n_tags],
+             **page_meta.context,
+        })
+
+        return context
+
+
 # API
 from django.http import JsonResponse
 

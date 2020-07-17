@@ -1,0 +1,73 @@
+{% extends 'core/base2.html' %}
+{% load drafthub_extras %}
+
+{% block meta %}
+  <title>{{ page_title }}</title>
+  <meta name="title" content="{{ page_title }}">
+  <meta name="description" content="{{ page_description }}">
+  <meta name="author" content="{{ page_author }}">
+  <meta name="keywords" content="{{ page_keywords }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ page_url }}">
+  <meta property="og:title" content="{{ page_title }}">
+  <meta property="og:description" content="{{ page_description }}">
+  <meta property="og:image" content="{{ page_image }}">
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="{{ page_url }}">
+  <meta property="twitter:title" content="{{ page_title }}">
+  <meta property="twitter:description" content="{{ page_description }}">
+  <meta property="twitter:image" content="{{ page_image }}">
+{% endblock meta %}
+
+
+{% block breadcrumb %}
+  <li><a aria-current="page" href="{% url 'home' %}">DRAFTHUB</a></li>
+{% endblock breadcrumb %}
+{% block search %}
+  <searchitem action="{% url 'search' %}" placeholder="Search for articles topics and blogs"></searchitem>
+{% endblock search %}
+
+{% block header %}
+  <scrollnav>
+    <li><a href="{% url 'topics' %}?s=popular">popular</a></li>
+    <li><a href="{% url 'topics' %}?s=latest">latest</a></li>
+    <li><a href="{% url 'topics' %}?s=updated">updated</a></li>
+    {% for tag in tags_popular %}
+      <li><a href="{{ tag.get_absolute_url }}">{{ tag }}</a></li>
+    {% endfor %}
+  </scrollnav>
+{% endblock header %}
+
+
+{% block container %}
+  <main style="flex:0 0 65%;">
+    {% for draft in topics_drafts %}
+      <draftarticle
+        :type="!{{ page_obj.has_previous|js_bool }} && !{{ forloop.counter0|js_bool }}?'large':''"
+        title="{{ draft.title }}"
+        href="{{ draft.get_absolute_url }}"
+        src="{{ draft.image }}"
+        description="{{ draft.description }}"
+        author="{{ draft.blog }}"
+        blog="{{ draft.blog.get_absolute_url }}"
+        :pubdate="'{{ request.GET.s }}' == 'latest'?'{{ draft.created|timesince|timesince_format }}':'{{ draft.created|date:'M j' }}'"
+        updated="{{ draft.updated|timesince|timesince_format }}"
+        pubdate-datetime="{{ draft.created|date:'Y-m-d' }}"
+        updated-datetime="{{ draft.updated|date:'Y-m-d' }}">
+      </draftarticle>
+      <hr v-if="!{{ page_obj.has_previous|js_bool }} && !{{ forloop.counter0|js_bool }}">
+    {% endfor %}
+    <pagination 
+      :has-next="{{ page_obj.has_next|js_bool }}"
+      :has-prev="{{ page_obj.has_previous|js_bool }}"
+      next-text="Next"
+      prev-text="Previous"
+      href="{% url 'topics' %}?s={{ request.GET.s }}"
+      :page="{{ page_obj.number }}">
+    </pagination>
+  </main>
+
+  <aside class="is-hidden-mobile" role="complementary" style="flex:0 0 30%;">
+    page context
+  </aside>
+{% endblock container %}

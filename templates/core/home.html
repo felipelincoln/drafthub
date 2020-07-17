@@ -29,9 +29,9 @@
 
 {% block header %}
   <scrollnav>
-    <li><a href="/">home</a></li>
-    <li><a href="/">latest</a></li>
-    <li><a href="/">updated</a></li>
+    <li><a href="{% url 'topics' %}?s=popular">popular</a></li>
+    <li><a href="{% url 'topics' %}?s=latest">latest</a></li>
+    <li><a href="{% url 'topics' %}?s=updated">updated</a></li>
     {% for tag in tags_popular %}
       <li><a href="{{ tag.get_absolute_url }}">{{ tag }}</a></li>
     {% endfor %}
@@ -53,7 +53,8 @@
         pubdate="{{ featured.created|date:'M j' }}"
         updated="{{ featured.updated|timesince|timesince_format }}"
         pubdate-datetime="{{ featured.created|date:'Y-m-d' }}"
-        updated-datetime="{{ featured.updated|date:'Y-m-d' }}">
+        updated-datetime="{{ featured.updated|date:'Y-m-d' }}"
+        :badge="true">
       </draftarticle>
     {% endwith %}
 
@@ -73,7 +74,9 @@
           updated-datetime="{{ draft.updated|date:'Y-m-d' }}">
         </draftarticle>
       {% endfor %}
-      <pagination></pagination>
+      {% if has_more_popular %}
+        <pagination href="topics/?s=popular" :page="1"></pagination>
+      {% endif %}
     </block>
   </main>
 
@@ -92,7 +95,7 @@
             pubdate-datetime="{{ draft.created|date:'Y-m-d' }}">
           </draftarticle>
         {% endfor %}
-        <pagination></pagination>
+        <pagination href="topics/?s=latest"></pagination>
       </block>
     {% endif %}
     {% if drafts_updated %}
@@ -109,7 +112,7 @@
             pubdate-datetime="{{ draft.updated|date:'Y-m-d' }}">
           </draftarticle>
         {% endfor %}
-        <pagination></pagination>
+        <pagination href="topics/?s=updated"></pagination>
       </block>
     {% endif %}
   </aside>

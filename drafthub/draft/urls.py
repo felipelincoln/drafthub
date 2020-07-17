@@ -5,7 +5,7 @@ from .views import (
     CommentCreateView, CommentUpdateView, CommentDeleteView,
     LikeRedirectView,
     FavoriteRedirectView,
-    TagListView,
+    TagListView, TopicsListView,
 )
 from .views import tag_list_api, render_markdown_api
 
@@ -32,6 +32,7 @@ api_urlpatterns = [
 
 urlpatterns = [
     path('new/', DraftCreateView.as_view(), name='new'),
+    path('topics/', TopicsListView.as_view(), name='topics'),
     path('topics/<str:tag>/', TagListView.as_view(), name='tag'),
     path('api/', include(api_urlpatterns)),
     path('<str:blog>/<slug:slug>/', include(draft_urlpatterns)),

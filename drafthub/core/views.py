@@ -89,7 +89,9 @@ class LoginView(auth_views.LoginView):
         context = super().get_context_data(**kwargs)
         page_meta = PageContext(self.request)
         page_meta.title = 'drafthub: login required'
-        page_meta.error.status = 'To performe this action you must be logged in'
+        page_meta.error.status = (
+            'To performe this action you must be logged in'
+        )
         page_meta.error.verbose = ''
         page_meta.error.message = 'Is it a bug?'
         context.update({
@@ -213,7 +215,9 @@ class SearchEngine:
             else:
                 querysets = (
                     [content.filter(title__icontains=x) for x in self.what]
-                    +[content.filter(description__icontains=x) for x in self.what]
+                    +[content.filter(
+                        description__icontains=x
+                    ) for x in self.what]
                 )
 
                 if not self.where and not self.who:

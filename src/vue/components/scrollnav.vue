@@ -48,7 +48,6 @@ export default {
       if(this.x > 0) this.x = 0;
     },
     makeScroll: function(e) {
-      this.x = 0;
       this.navWidth = this.$el.querySelector('ul').getBoundingClientRect().width;
       this.containerWidth = this.$el.getBoundingClientRect().width;
       this.dx = this.containerWidth*2/3;
@@ -56,13 +55,8 @@ export default {
     },
   },
   mounted: function(){
-    this.makeScroll();
-  },
-  created: function() {
-    window.addEventListener("resize", this.makeScroll);
-  },
-  destroyed: function() {
-    window.removeEventListener("resize", this.makeScroll);
+    window.addEventListener("resize", () => {this.x = 0; this.makeScroll()});
+    setTimeout(() => this.makeScroll(), 1000);
   },
 }
 </script>
